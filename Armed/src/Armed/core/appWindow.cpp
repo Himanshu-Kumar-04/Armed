@@ -1,7 +1,7 @@
 #include"ArmPCH.h"
 #include "appWindow.h"
 
-#include"glad/glad.h"
+#include"glad.h"
 #include<GLFW/glfw3.h>
 
 namespace Arm {

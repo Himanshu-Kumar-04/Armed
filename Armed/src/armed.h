@@ -7,5 +7,7 @@
 #include"Armed/core/keyCodes.h"
 #include"Armed/core/mouseCodes.h"
 
+#include"Armed/ImGui/ImGuiLayer.h"
+
 //---EntryPoint---------
 #include "Armed/core/entryPoint.h"

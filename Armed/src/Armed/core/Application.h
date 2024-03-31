@@ -14,7 +14,7 @@ namespace Arm {
 
 		void onEvent(Event& e);
 		void pushLayer(Layer* layer);
-		void pushOverLay(Layer* layer);
+		void pushOverlay(Layer* layer);
 		inline static Application& get() { return *s_Instance; }
 		inline Window& getWindow() { return *m_Window; }
 

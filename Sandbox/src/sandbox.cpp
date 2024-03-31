@@ -11,7 +11,7 @@ public:
 	}
 	void onEvent(Arm::Event& event) override
 	{
-		if (event.getEventType() == Arm::EventType::KeyPressed) {
+		if (event.getEventType() == Arm::EventType::MouseButtonPressed) {
 			Arm::KeyPressedEvent& e = (Arm::KeyPressedEvent&)event;
 		std::cout <<  (char)e.GetKeyCode() << '\n';
 		}
@@ -22,6 +22,7 @@ class Sandbox : public Arm::Application {
 public:
 	Sandbox() {
 		pushLayer(new ExampleLayer());
+		pushOverlay(new Arm::ImGuiLayer());
 	}
 	~Sandbox() {
 

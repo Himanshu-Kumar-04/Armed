@@ -1,7 +1,7 @@
 #include"ArmPCH.h"
 #include "Application.h"
 
-#include"glad/glad.h"
+#include"glad.h"
 #include"input.h"
 
 namespace Arm {
@@ -30,7 +30,6 @@ namespace Arm {
 			for (Layer* layer : m_LayerStack)
 				layer->onUpdate();
 
-
 			m_Window->onUpdate();
 		}
 	}
@@ -51,13 +50,13 @@ namespace Arm {
 	void Application::pushLayer(Layer* layer)
 	{
 		m_LayerStack.pushLayer(layer);
-		layer->onUpdate();
+		layer->onAttach();
 	}
 
-	void Application::pushOverLay(Layer* layer)
+	void Application::pushOverlay(Layer* layer)
 	{
 		m_LayerStack.pushOverlay(layer);
-		layer->onUpdate();
+		layer->onAttach();
 	}
 
 	bool Application::onWindowClose(WindowCloseEvent& e)
