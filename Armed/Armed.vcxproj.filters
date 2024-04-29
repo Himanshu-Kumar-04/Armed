@@ -45,9 +45,6 @@
     <ClInclude Include="src\ArmPCH.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Armed\ImGui\ImGuiLayer.h">
-      <Filter>src\Armed\ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="src\Armed\ImGui\imgui_impl_opengl3.h">
       <Filter>src\Armed\ImGui</Filter>
     </ClInclude>
@@ -1351,9 +1348,6 @@
   <ItemGroup>
     <ClCompile Include="src\ArmPCH.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Armed\ImGui\ImGuiLayer.cpp">
-      <Filter>src\Armed\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Armed\ImGui\imgui_impl_opengl3.cpp">
       <Filter>src\Armed\ImGui</Filter>

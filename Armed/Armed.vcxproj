@@ -148,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\ArmPCH.h" />
-    <ClInclude Include="src\Armed\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Armed\ImGui\imgui_impl_opengl3.h" />
     <ClInclude Include="src\Armed\ImGui\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="src\Armed\core\Application.h" />
@@ -587,7 +586,6 @@
     <ClCompile Include="src\ArmPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Armed\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Armed\ImGui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\Armed\core\Application.cpp" />
     <ClCompile Include="src\Armed\core\appWindow.cpp" />
