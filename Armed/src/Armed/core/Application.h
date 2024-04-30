@@ -2,6 +2,7 @@
 #include<memory>
 #include"appWindow.h"
 #include"layerStack.h"
+#include"Armed/imGui/imGuiLayer.h"
 
 namespace Arm {
 
@@ -22,6 +23,8 @@ namespace Arm {
 		bool onWindowClose(WindowCloseEvent& e);
 	private:
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
+
 		bool m_Running = true;
 		static Application* s_Instance;
 		LayerStack m_LayerStack;

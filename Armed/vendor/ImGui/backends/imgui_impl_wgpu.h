@@ -5,6 +5,8 @@
 // Implemented features:
 //  [X] Renderer: User texture binding. Use 'WGPUTextureView' as ImTextureID. Read the FAQ about ImTextureID!
 //  [X] Renderer: Large meshes support (64k+ vertices) with 16-bit indices.
+// Missing features:
+//  [ ] Renderer: Multi-viewport support (multiple windows). Not meaningful on the web.
 
 // You can use unmodified imgui_impl_* files in your project. See examples/ folder for examples of using this.
 // Prefer including the entire imgui/ repository into your project (either as a copy or as a submodule), and only build the backends you need.
@@ -32,7 +34,7 @@ struct ImGui_ImplWGPU_InitInfo
     ImGui_ImplWGPU_InitInfo()
     {
         PipelineMultisampleState.count = 1;
-        PipelineMultisampleState.mask = -1u;
+        PipelineMultisampleState.mask = UINT32_MAX;
         PipelineMultisampleState.alphaToCoverageEnabled = false;
     }
 };

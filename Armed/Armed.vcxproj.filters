@@ -45,12 +45,6 @@
     <ClInclude Include="src\ArmPCH.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Armed\ImGui\imgui_impl_opengl3.h">
-      <Filter>src\Armed\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Armed\ImGui\imgui_impl_opengl3_loader.h">
-      <Filter>src\Armed\ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="src\Armed\core\Application.h">
       <Filter>src\Armed\core</Filter>
     </ClInclude>
@@ -1344,13 +1338,11 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Armed\imGui\imGuiLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ArmPCH.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Armed\ImGui\imgui_impl_opengl3.cpp">
-      <Filter>src\Armed\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Armed\core\Application.cpp">
       <Filter>src\Armed\core</Filter>
@@ -1370,5 +1362,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Armed\imGui\imGuiBuild.cpp" />
+    <ClCompile Include="src\Armed\imGui\imGuiLayer.cpp" />
   </ItemGroup>
 </Project>

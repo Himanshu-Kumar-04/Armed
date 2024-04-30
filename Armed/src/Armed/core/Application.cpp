@@ -1,6 +1,5 @@
 #include"ArmPCH.h"
 #include "Application.h"
-
 #include"glad.h"
 #include"input.h"
 
@@ -15,6 +14,9 @@ namespace Arm {
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->setEventCallBack(BIND_EVENT_FN(Application::onEvent));
+
+		m_ImGuiLayer = new ImGuiLayer;
+		pushOverlay(m_ImGuiLayer);
 	}
 
 	Application::~Application()
@@ -29,6 +31,11 @@ namespace Arm {
 
 			for (Layer* layer : m_LayerStack)
 				layer->onUpdate();
+
+			m_ImGuiLayer->Begin();
+			for (Layer* layer : m_LayerStack)
+				layer->onImGuiRender();
+			m_ImGuiLayer->End();
 
 			m_Window->onUpdate();
 		}

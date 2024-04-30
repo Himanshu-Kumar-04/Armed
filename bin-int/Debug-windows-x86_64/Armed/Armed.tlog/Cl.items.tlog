@@ -1,5 +1,6 @@
+C:\Dev\Armed\Armed\src\Armed\imGui\imGuiLayer.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\imGuiLayer.obj
+C:\Dev\Armed\Armed\src\Armed\imGui\imGuiBuild.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\imGuiBuild.obj
 C:\Dev\Armed\Armed\src\ArmPCH.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\ArmPCH.obj
-C:\Dev\Armed\Armed\src\Armed\ImGui\imgui_impl_opengl3.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\imgui_impl_opengl3.obj
 C:\Dev\Armed\Armed\src\Armed\core\Application.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\Application.obj
 C:\Dev\Armed\Armed\src\Armed\core\appWindow.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\appWindow.obj
 C:\Dev\Armed\Armed\src\Armed\core\input.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\input.obj
