@@ -3,10 +3,6 @@
 #include"appWindow.h"
 #include"layerStack.h"
 #include"Armed/imGui/imGuiLayer.h"
-#include "Armed/renderer/shader.h"
-#include "Armed/renderer/vertexArray.h"
-#include "Armed/renderer/orthographicCamera.h"
-
 
 namespace Arm {
 
@@ -32,12 +28,6 @@ namespace Arm {
         bool m_Running = true;
         static Application* s_Instance;
         LayerStack m_LayerStack;
-
-        std::shared_ptr<VertexArray> m_SquareVA;
-
-        std::shared_ptr<Shader> m_Shader;
-
-        OrthographicCamera m_Camera;
     };
 
     //To be defined in client
