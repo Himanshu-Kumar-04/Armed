@@ -148,6 +148,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Armed\imGui\imGuiLayer.h" />
+    <ClInclude Include="src\Armed\renderer\buffer.h" />
+    <ClInclude Include="src\Armed\renderer\graphicsContext.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLBuffer.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLContext.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLRendererAPI.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLVertexArray.h" />
+    <ClInclude Include="src\Armed\renderer\orthographicCamera.h" />
+    <ClInclude Include="src\Armed\renderer\renderer.h" />
+    <ClInclude Include="src\Armed\renderer\rendererAPI.h" />
+    <ClInclude Include="src\Armed\renderer\rendererCommand.h" />
+    <ClInclude Include="src\Armed\renderer\shader.h" />
+    <ClInclude Include="src\Armed\renderer\vertexArray.h" />
     <ClInclude Include="src\ArmPCH.h" />
     <ClInclude Include="src\Armed\core\Application.h" />
     <ClInclude Include="src\Armed\core\appWindow.h" />
@@ -584,6 +596,17 @@
   <ItemGroup>
     <ClCompile Include="src\Armed\imGui\imGuiLayer.cpp" />
     <ClCompile Include="src\Armed\imGui\imGuiBuild.cpp" />
+    <ClCompile Include="src\Armed\renderer\buffer.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLBuffer.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLContext.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLRendererAPI.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLVertexArray.cpp" />
+    <ClCompile Include="src\Armed\renderer\orthographicCamera.cpp" />
+    <ClCompile Include="src\Armed\renderer\renderer.cpp" />
+    <ClCompile Include="src\Armed\renderer\rendererAPI.cpp" />
+    <ClCompile Include="src\Armed\renderer\rendererCommand.cpp" />
+    <ClCompile Include="src\Armed\renderer\shader.cpp" />
+    <ClCompile Include="src\Armed\renderer\vertexArray.cpp" />
     <ClCompile Include="src\ArmPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

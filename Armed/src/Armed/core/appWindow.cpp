@@ -1,8 +1,8 @@
 #include"ArmPCH.h"
 #include "appWindow.h"
-
-#include"glad.h"
 #include<GLFW/glfw3.h>
+
+#include "Armed/renderer/OpenGL/openGLContext.h"
 
 namespace Arm {
 
@@ -25,7 +25,7 @@ namespace Arm {
 	void Window::onUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->swapBuffers();
 	}
 
 	void Window::setVSync(bool enabled)
@@ -62,11 +62,15 @@ namespace Arm {
 			s_GLFWInitialized = true;
 		}
 
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		if (!status)
-			std::cout << "failed to initialized glad\n";
+
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->init();
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		setVSync(true);
 

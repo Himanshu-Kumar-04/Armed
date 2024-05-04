@@ -1339,6 +1339,18 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\imGui\imGuiLayer.h" />
+    <ClInclude Include="src\Armed\renderer\buffer.h" />
+    <ClInclude Include="src\Armed\renderer\shader.h" />
+    <ClInclude Include="src\Armed\renderer\renderer.h" />
+    <ClInclude Include="src\Armed\renderer\graphicsContext.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLContext.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLBuffer.h" />
+    <ClInclude Include="src\Armed\renderer\vertexArray.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLVertexArray.h" />
+    <ClInclude Include="src\Armed\renderer\rendererAPI.h" />
+    <ClInclude Include="src\Armed\renderer\rendererCommand.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLRendererAPI.h" />
+    <ClInclude Include="src\Armed\renderer\orthographicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ArmPCH.cpp">
@@ -1364,5 +1376,16 @@
     </ClCompile>
     <ClCompile Include="src\Armed\imGui\imGuiBuild.cpp" />
     <ClCompile Include="src\Armed\imGui\imGuiLayer.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLContext.cpp" />
+    <ClCompile Include="src\Armed\renderer\shader.cpp" />
+    <ClCompile Include="src\Armed\renderer\buffer.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLBuffer.cpp" />
+    <ClCompile Include="src\Armed\renderer\renderer.cpp" />
+    <ClCompile Include="src\Armed\renderer\vertexArray.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLVertexArray.cpp" />
+    <ClCompile Include="src\Armed\renderer\rendererAPI.cpp" />
+    <ClCompile Include="src\Armed\renderer\rendererCommand.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLRendererAPI.cpp" />
+    <ClCompile Include="src\Armed\renderer\orthographicCamera.cpp" />
   </ItemGroup>
 </Project>

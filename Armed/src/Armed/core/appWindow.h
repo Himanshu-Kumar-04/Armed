@@ -3,6 +3,9 @@
 #include<memory>
 #include<iostream>
 
+#include"Armed/renderer/graphicsContext.h"
+
+
 #include"Armed/event/applicationEvent.h"
 #include"Armed/event/keyEvent.h"
 #include"Armed/event/mouseEvent.h"
@@ -43,7 +46,7 @@ namespace Arm {
 		void shutdown();
 	private:
 		GLFWwindow* m_Window;
-
+		GraphicsContext* m_Context;
 		struct WindowData
 		{
 			std::string Title = "Title";

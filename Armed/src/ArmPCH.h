@@ -8,6 +8,7 @@
 #include<algorithm>
 #include<functional>
 #include<sstream>
+#include<fstream>
 		
 #include<string>
 #include<vector>
@@ -17,3 +18,5 @@
 #ifdef ARMED_PLATFORM_WINDOWS
 #include<Windows.h>
 #endif // ARMED_PLATFORM_WINDOWS
+
+#define ASSERT(x,y) if(!(x)) {std::cout << y; __debugbreak();}
