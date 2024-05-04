@@ -23,6 +23,7 @@ namespace Arm {
     }
     void OrthographicCamera::setPosition(const glm::vec3& position) {
         m_Position = position;
+        recalculateViewMatrix();
     }
 
     float OrthographicCamera::getRotation(float rotation) const {
