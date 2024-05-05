@@ -4,6 +4,8 @@
 #include"layerStack.h"
 #include"Armed/imGui/imGuiLayer.h"
 
+#include "Armed/core/timestep.h"
+
 namespace Arm {
 
     class Application {
@@ -28,6 +30,7 @@ namespace Arm {
         bool m_Running = true;
         static Application* s_Instance;
         LayerStack m_LayerStack;
+        float m_lastFrameTime = 0.0f;
     };
 
     //To be defined in client

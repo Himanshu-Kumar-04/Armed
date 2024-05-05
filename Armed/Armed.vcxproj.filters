@@ -1351,6 +1351,7 @@
     <ClInclude Include="src\Armed\renderer\rendererCommand.h" />
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLRendererAPI.h" />
     <ClInclude Include="src\Armed\renderer\orthographicCamera.h" />
+    <ClInclude Include="src\Armed\core\timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ArmPCH.cpp">

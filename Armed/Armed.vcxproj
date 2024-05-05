@@ -147,6 +147,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Armed\core\timestep.h" />
     <ClInclude Include="src\Armed\imGui\imGuiLayer.h" />
     <ClInclude Include="src\Armed\renderer\buffer.h" />
     <ClInclude Include="src\Armed\renderer\graphicsContext.h" />

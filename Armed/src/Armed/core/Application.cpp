@@ -1,6 +1,7 @@
 #include "ArmPCH.h"
 #include "Application.h"
-#include "glad.h"
+#include <glad.h>
+#include <GLFW/glfw3.h>
 #include "input.h"
 
 namespace Arm {
@@ -24,8 +25,12 @@ namespace Arm {
     {
         while (m_Running) {
 
+            float time = (float)glfwGetTime();
+            Timestep timestep = time - m_lastFrameTime;
+            m_lastFrameTime = time;
+
             for (Layer* layer : m_LayerStack)
-                layer->onUpdate();
+                layer->onUpdate(timestep);
 
             m_ImGuiLayer->Begin();
             for (Layer* layer : m_LayerStack)

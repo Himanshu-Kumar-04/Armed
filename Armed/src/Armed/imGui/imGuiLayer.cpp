@@ -97,8 +97,7 @@ namespace Arm {
 
 	void ImGuiLayer::onImGuiRender()
 	{
-		bool show = true;
-		ImGui::ShowDemoWindow(&show);
+		ImGui::Text("Armed");
 	}
 
 	void ImGuiLayer::SetDarkThemeColors()

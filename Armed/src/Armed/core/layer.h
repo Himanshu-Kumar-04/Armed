@@ -1,5 +1,6 @@
 #pragma once
-#include"Armed/event/event.h"
+#include "Armed/event/event.h"
+#include "Armed/core/timestep.h"
 
 namespace Arm {
 	class Layer {
@@ -8,7 +9,7 @@ namespace Arm {
 		virtual ~Layer();
 		virtual void onAttach() {}
 		virtual void onDetach() {}
-		virtual void onUpdate() {}
+		virtual void onUpdate(Timestep ts) {}
 		virtual void onImGuiRender() {}
 		virtual void onEvent(Event& event) {}
 

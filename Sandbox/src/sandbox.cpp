@@ -25,22 +25,22 @@ public:
 
 		m_Shader.reset(Arm::Shader::Create());
 	}
-	void onUpdate() override
+	void onUpdate(Arm::Timestep ts) override
 	{
 		if (Arm::Input::isKeyPressed(Arm::Key::A))
-			m_CameraPosition.x -= m_CameraMoveSpeed;
+			m_CameraPosition.x -= m_CameraMoveSpeed*ts;
 		else if (Arm::Input::isKeyPressed(Arm::Key::D))
-			m_CameraPosition.x += m_CameraMoveSpeed;
+			m_CameraPosition.x += m_CameraMoveSpeed*ts;
 
 		if (Arm::Input::isKeyPressed(Arm::Key::W))
-			m_CameraPosition.y += m_CameraMoveSpeed;
+			m_CameraPosition.y += m_CameraMoveSpeed*ts;
 		else if (Arm::Input::isKeyPressed(Arm::Key::S))
-			m_CameraPosition.y -= m_CameraMoveSpeed;
+			m_CameraPosition.y -= m_CameraMoveSpeed*ts;
 
 		if (Arm::Input::isKeyPressed(Arm::Key::Q))
-			m_CameraRotation += m_CameraRotationSpeed;
+			m_CameraRotation += m_CameraRotationSpeed*ts;
 		else if (Arm::Input::isKeyPressed(Arm::Key::E))
-			m_CameraRotation -= m_CameraRotationSpeed;
+			m_CameraRotation -= m_CameraRotationSpeed*ts;
 
 		Arm::RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Arm::RendererCommand::clearColor();
@@ -65,8 +65,8 @@ private:
 
 	Arm::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition = {0.0f,0.0f,0.0f};
-	float m_CameraMoveSpeed = 0.1f;
-	float m_CameraRotationSpeed = 2.0f;
+	float m_CameraMoveSpeed = 5.0f;
+	float m_CameraRotationSpeed = 180.0f;
 	float m_CameraRotation= 0.0f;
 };
 
