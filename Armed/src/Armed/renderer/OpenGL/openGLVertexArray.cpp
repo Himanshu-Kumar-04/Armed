@@ -20,7 +20,7 @@ namespace Arm {
         case Arm::ShaderDataType::Bool:         return GL_BOOL;
         }
 
-        ASSERT(false, "Unknown ShaderDataType");
+        ARM_ASSERT(false, "Unknown ShaderDataType");
         return 0;
     }
 
@@ -40,12 +40,12 @@ namespace Arm {
     {
         glBindVertexArray(0);
     }
-    void OpenGLVertexArray::addVertexBuffer(std::shared_ptr<VertexBuffer>& vertexBuffer)
+    void OpenGLVertexArray::addVertexBuffer(Ref<VertexBuffer>& vertexBuffer)
     {
         glBindVertexArray(m_RendererID);
         vertexBuffer->bind();
 
-        ASSERT(vertexBuffer->getLayout().getElements().size(), "Vertex Buffer has no layout")
+        ARM_ASSERT(vertexBuffer->getLayout().getElements().size(), "Vertex Buffer has no layout");
 
         uint32_t index = 0;
         for (const auto& element : vertexBuffer->getLayout()) {
@@ -61,7 +61,7 @@ namespace Arm {
 
         m_VertexBuffer.push_back(vertexBuffer);
     }
-    void OpenGLVertexArray::setIndexBuffer(std::shared_ptr<IndexBuffer>& indexBuffer)
+    void OpenGLVertexArray::setIndexBuffer(Ref<IndexBuffer>& indexBuffer)
     {
         glBindVertexArray(m_RendererID);
         indexBuffer->bind();

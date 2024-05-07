@@ -19,6 +19,5 @@
 #include<Windows.h>
 #endif // ARMED_PLATFORM_WINDOWS
 
-#define ASSERT(x,y) if(!(x)) {std::cout << y; __debugbreak();}
+#include"Armed/core/core.h"
 
-#define ARM_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)

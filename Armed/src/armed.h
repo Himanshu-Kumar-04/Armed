@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Armed/core/core.h"
 #include"Armed/core/Application.h"
 
 #include "Armed/core/timestep.h"
@@ -16,6 +17,7 @@
 #include "Armed/renderer/buffer.h"
 #include "Armed/renderer/vertexArray.h"
 #include "Armed/renderer/shader.h"
+#include "Armed/renderer/texture.h"
 
 #include "Armed/renderer/orthographicCamera.h"
 

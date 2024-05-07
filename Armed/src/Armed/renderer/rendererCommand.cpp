@@ -3,5 +3,5 @@
 #include "Armed/renderer/OpenGL/openglRendererAPI.h"
 
 namespace Arm {
-    RendererAPI* RendererCommand::m_RendererAPI = new OpenGLRendererAPI;
+    RendererAPI* RendererCommand::s_RendererAPI = new OpenGLRendererAPI;
 }

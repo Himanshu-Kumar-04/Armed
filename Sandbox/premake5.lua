@@ -14,8 +14,8 @@ project "Sandbox"
 
 	includedirs{
 		"%{wks.location}/Armed/src",
-		"%{wks.location}/Hazel/vendor",
-		"%{IncludeDir.glm}",
+		"%{wks.location}/Armed/vendor",
+		"%{IncludeDir.glm}"
 	}
 
 	links{

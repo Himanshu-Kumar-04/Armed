@@ -22,7 +22,7 @@ namespace Arm {
         case RendererAPI::API::OpenGL:   return new OpenGLIndexBuffer(data, count);
         }
 
-        ASSERT(false, "Unknown Renderer API");
+        ARM_ASSERT(false, "Unknown Renderer API");
         return nullptr;
     }
 }

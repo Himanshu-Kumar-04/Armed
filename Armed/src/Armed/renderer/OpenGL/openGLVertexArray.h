@@ -10,14 +10,14 @@ namespace Arm {
         virtual void bind() const override;
         virtual void unbind() const override;
 
-        virtual void addVertexBuffer(std::shared_ptr<VertexBuffer>& vertexBuffer) override;
-        virtual void setIndexBuffer(std::shared_ptr<IndexBuffer>& indexBuffer) override;
+        virtual void addVertexBuffer(Ref<VertexBuffer>& vertexBuffer) override;
+        virtual void setIndexBuffer(Ref<IndexBuffer>& indexBuffer) override;
 
-        virtual const std::vector<std::shared_ptr<VertexBuffer>>& getVertexBuffer() const { return m_VertexBuffer; }
-        virtual const std::shared_ptr<IndexBuffer>& getIndexBuffer() const { return m_IndexBuffer; }
+        virtual const std::vector<Ref<VertexBuffer>>& getVertexBuffer() const { return m_VertexBuffer; }
+        virtual const Ref<IndexBuffer>& getIndexBuffer() const { return m_IndexBuffer; }
     private:
         uint32_t m_RendererID;
-        std::vector<std::shared_ptr<VertexBuffer>> m_VertexBuffer;
-        std::shared_ptr<IndexBuffer> m_IndexBuffer;
+        std::vector<Ref<VertexBuffer>> m_VertexBuffer;
+        Ref<IndexBuffer> m_IndexBuffer;
     };
 }

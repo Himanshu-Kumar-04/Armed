@@ -2,6 +2,9 @@
 #include "Application.h"
 #include <glad.h>
 #include <GLFW/glfw3.h>
+
+#include "Armed/renderer/renderer.h"
+
 #include "input.h"
 
 namespace Arm {
@@ -10,8 +13,10 @@ namespace Arm {
     Application::Application()
     {
         s_Instance = this;
-        m_Window = std::unique_ptr<Window>(Window::Create());
+        m_Window = Scope<Window>(Window::Create());
         m_Window->setEventCallBack(ARM_BIND_EVENT_FN(Application::onEvent));
+
+        Renderer::init();
 
         m_ImGuiLayer = new ImGuiLayer;
         pushOverlay(m_ImGuiLayer);

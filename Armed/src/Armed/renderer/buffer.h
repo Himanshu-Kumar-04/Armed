@@ -24,7 +24,7 @@ namespace Arm {
         case ShaderDataType::Bool:     return 1;
         }
 
-        ASSERT(false, "Unknown ShaderDataType!");
+        ARM_ASSERT(false, "Unknown ShaderDataType!");
         return 0;
     }
 
@@ -59,7 +59,7 @@ namespace Arm {
             case ShaderDataType::Bool:    return 1;
             }
 
-            ASSERT(false, "Unknown ShaderDataType!");
+            ARM_ASSERT(false, "Unknown ShaderDataType!");
             return 0;
         }
     };
@@ -97,7 +97,7 @@ namespace Arm {
 
     class VertexBuffer {
     public:
-        ~VertexBuffer() = default;
+        virtual ~VertexBuffer() = default;
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
         virtual const BufferLayout& getLayout() const = 0;
@@ -108,7 +108,7 @@ namespace Arm {
 
     class IndexBuffer {
     public:
-        ~IndexBuffer() = default;
+        virtual ~IndexBuffer() = default;
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
         static IndexBuffer* Create(uint32_t* data, uint32_t count);
