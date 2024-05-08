@@ -20,6 +20,7 @@
 #include "Armed/renderer/texture.h"
 
 #include "Armed/renderer/orthographicCamera.h"
+#include "Armed/renderer/orthographicCameraController.h"
 
 //---EntryPoint---------
 #include "Armed/core/entryPoint.h"
