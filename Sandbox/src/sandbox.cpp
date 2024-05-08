@@ -9,7 +9,7 @@
 class ExampleLayer : public Arm::Layer {
 public:
 	ExampleLayer()
-		:m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), Layer(""), m_CameraPosition(0.0f)
+		:m_CameraController(1280.0f/720.0f), Layer("")
 	{
 		float squareVertices[4 * 5] = {
 			-0.5f ,-0.5f, 0.0f, 0.0f, 0.0f,
@@ -42,28 +42,12 @@ public:
 
 	void onUpdate(Arm::Timestep ts) override
 	{
-		if (Arm::Input::isKeyPressed(Arm::Key::A))
-			m_CameraPosition.x -= m_CameraMoveSpeed*ts;
-		else if (Arm::Input::isKeyPressed(Arm::Key::D))
-			m_CameraPosition.x += m_CameraMoveSpeed*ts;
-
-		if (Arm::Input::isKeyPressed(Arm::Key::W))
-			m_CameraPosition.y += m_CameraMoveSpeed*ts;
-		else if (Arm::Input::isKeyPressed(Arm::Key::S))
-			m_CameraPosition.y -= m_CameraMoveSpeed*ts;
-
-		if (Arm::Input::isKeyPressed(Arm::Key::Q))
-			m_CameraRotation -= m_CameraRotationSpeed*ts;
-		else if (Arm::Input::isKeyPressed(Arm::Key::E))
-			m_CameraRotation += m_CameraRotationSpeed*ts;
+		m_CameraController.onUpdate(ts);
 
 		Arm::RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Arm::RendererCommand::clearColor();
 
-		m_Camera.setPosition(m_CameraPosition);
-		m_Camera.setRotation(m_CameraRotation);
-
-		Arm::Renderer::beginScene(m_Camera);
+		Arm::Renderer::beginScene(m_CameraController.getCamera());
 
 		//static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 		//std::dynamic_pointer_cast<Arm::OpenGLShader>(m_Shader)->setUniform3f("u_Color", m_SquareColor);
@@ -82,27 +66,22 @@ public:
 
 		Arm::Renderer::endScene();
 	}
-	void onEvent(Arm::Event& event) override
+	void onEvent(Arm::Event& e) override
 	{
+		m_CameraController.onEvent(e);
 	}
-	/*void onImGuiRender() override{
+	void onImGuiRender() override{
 		ImGui::Begin("Settings");
-		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::Text("s");
 		ImGui::End();
-	}*/
+	}
 private:
 	Arm::Ref<Arm::VertexArray> m_SquareVA;
 	Arm::Ref<Arm::Shader> m_Shader;
 	Arm::Ref<Arm::Texture2D> m_Texture1;
 	Arm::Ref<Arm::Texture2D> m_Texture2;
-	Arm::OrthographicCamera m_Camera;
+	Arm::OrthographicCameraController m_CameraController;
 
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 5.0f;
-	
-	float m_CameraRotationSpeed = 180.0f;
-	float m_CameraRotation= 0.0f;
-	
 	//glm::vec3 m_SquareColor = {0.2f,0.3f,0.5f};
 };
 

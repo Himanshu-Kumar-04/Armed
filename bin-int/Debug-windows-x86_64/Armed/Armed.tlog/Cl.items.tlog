@@ -1,4 +1,5 @@
 C:\Dev\Armed\Armed\src\Armed\renderer\OpenGL\openGLTexture.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\openGLTexture.obj
+C:\Dev\Armed\Armed\src\Armed\renderer\orthographicCameraController.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\orthographicCameraController.obj
 C:\Dev\Armed\Armed\src\Armed\renderer\texture.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\texture.obj
 C:\Dev\Armed\Armed\src\ArmPCH.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\ArmPCH.obj
 C:\Dev\Armed\Armed\src\Armed\core\Application.cpp;C:\Dev\Armed\bin-int\Debug-windows-x86_64\Armed\Application.obj

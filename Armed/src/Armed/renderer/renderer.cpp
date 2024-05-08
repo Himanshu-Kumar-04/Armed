@@ -10,6 +10,10 @@ namespace Arm {
     {
         RendererCommand::init();
     }
+    void Renderer::onWindowResize(uint32_t width, uint32_t height)
+    {
+        RendererCommand::setViewport(0, 0, width, height);
+    }
     void Renderer::beginScene(OrthographicCamera& camera)
     {
         m_SceneData->viewProjectionMatrix = camera.getViewProjectionMatrix();

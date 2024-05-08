@@ -23,11 +23,12 @@ namespace Arm {
 
     private:
         bool onWindowClose(WindowCloseEvent& e);
+        bool onWindowResize(WindowResizeEvent& e);
     private:
         Scope<Window> m_Window;
         ImGuiLayer* m_ImGuiLayer;
 
-        bool m_Running = true;
+        bool m_Running = true, m_Minimized = false;
         static Application* s_Instance;
         LayerStack m_LayerStack;
         float m_lastFrameTime = 0.0f;

@@ -1,8 +1,6 @@
 #include "ArmPCH.h"
 #include "Application.h"
-#include <glad.h>
 #include <GLFW/glfw3.h>
-
 #include "Armed/renderer/renderer.h"
 
 #include "input.h"
@@ -34,13 +32,16 @@ namespace Arm {
             Timestep timestep = time - m_lastFrameTime;
             m_lastFrameTime = time;
 
-            for (Layer* layer : m_LayerStack)
+            if (!m_Minimized) {
+                for (Layer* layer : m_LayerStack)
                 layer->onUpdate(timestep);
+            }
 
             m_ImGuiLayer->Begin();
             for (Layer* layer : m_LayerStack)
                 layer->onImGuiRender();
             m_ImGuiLayer->End();
+
 
             m_Window->onUpdate();
         }
@@ -50,6 +51,7 @@ namespace Arm {
     {
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<WindowCloseEvent>(ARM_BIND_EVENT_FN(Application::onWindowClose));
+        dispatcher.dispatch<WindowResizeEvent>(ARM_BIND_EVENT_FN(Application::onWindowResize));
 
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
             (*--it)->onEvent(e);
@@ -74,5 +76,12 @@ namespace Arm {
     {
         m_Running = false;
         return true;
+    }
+    bool Application::onWindowResize(WindowResizeEvent& e)
+    {
+        if (e.getWidth() == 0 || e.getHeight() == 0) m_Minimized = true;
+        else m_Minimized = false;
+        Renderer::onWindowResize(e.getWidth(), e.getHeight());
+        return false;
     }
 }

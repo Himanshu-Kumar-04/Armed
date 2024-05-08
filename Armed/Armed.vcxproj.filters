@@ -1389,6 +1389,10 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Armed\core\core.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLTexture.h" />
+    <ClInclude Include="src\Armed\renderer\texture.h" />
+    <ClInclude Include="src\Armed\renderer\orthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ArmPCH.cpp">
@@ -1454,5 +1458,8 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLTexture.cpp" />
+    <ClCompile Include="src\Armed\renderer\texture.cpp" />
+    <ClCompile Include="src\Armed\renderer\orthographicCameraController.cpp" />
   </ItemGroup>
 </Project>
