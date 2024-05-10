@@ -150,6 +150,7 @@
     <ClInclude Include="src\Armed\core\core.h" />
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLTexture.h" />
     <ClInclude Include="src\Armed\renderer\orthographicCameraController.h" />
+    <ClInclude Include="src\Armed\renderer\renderer2D.h" />
     <ClInclude Include="src\Armed\renderer\texture.h" />
     <ClInclude Include="src\ArmPCH.h" />
     <ClInclude Include="src\Armed\core\Application.h" />
@@ -602,6 +603,7 @@
   <ItemGroup>
     <ClCompile Include="src\Armed\renderer\OpenGL\openGLTexture.cpp" />
     <ClCompile Include="src\Armed\renderer\orthographicCameraController.cpp" />
+    <ClCompile Include="src\Armed\renderer\renderer2D.cpp" />
     <ClCompile Include="src\Armed\renderer\texture.cpp" />
     <ClCompile Include="src\ArmPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

@@ -139,14 +139,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\sandbox.cpp" />
+    <ClCompile Include="src\Sandbox2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Armed\Armed.vcxproj">
       <Project>{2E99D70C-9AAD-FFBD-632F-A31DCF02FCEE}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shader\texture.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Sandbox2D.h" />

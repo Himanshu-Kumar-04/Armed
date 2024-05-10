@@ -13,6 +13,6 @@ namespace Arm {
 
         inline static void drawIndexed(const Ref<VertexArray>& vertexArray) { s_RendererAPI->drawIndexed(vertexArray); }
     private:
-        static RendererAPI* s_RendererAPI;
+        static Scope<RendererAPI> s_RendererAPI;
     };
 }

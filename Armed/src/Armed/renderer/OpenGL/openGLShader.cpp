@@ -9,7 +9,7 @@
 // createShader(); both vertex and fragment shader
 // compileShader();
 // 
-// setuniform();
+// uploadUniform();
 // uses function getUniformLocation();
 //////////////////////////////////////////////////////////////// 
 namespace Arm {
@@ -29,9 +29,17 @@ namespace Arm {
         std::string source = readFile(filepath);
         auto shaderSource = preProcess(source);
         compileShader(shaderSource);
+
+        //assets/shader/flat_color.glsl
+        auto lastSlash = filepath.find_last_of("/\\");
+        lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+        auto lastDot = filepath.rfind('.');
+        auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+        m_Name = filepath.substr(lastSlash, count);
     }
 
-    OpenGLShader::OpenGLShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
+    OpenGLShader::OpenGLShader(const std::string name, const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
+        :m_Name(name)
     {
         std::unordered_map<GLenum, std::string> shaderSource;
         shaderSource[GL_VERTEX_SHADER] = vertexShaderSource;
@@ -54,41 +62,71 @@ namespace Arm {
         glUseProgram(0);
     }
 
+    void OpenGLShader::setInt(const std::string& name, int value)
+    {
+        uploadUniformInt1(name, value);
+    }
+
+    void OpenGLShader::setFloat(const std::string& name, float value)
+    {
+        uploadUniformFloat1(name, value);
+    }
+
+    void OpenGLShader::setFloat2(const std::string& name, const glm::vec2& value)
+    {
+        uploadUniformFloat2(name, value);
+    }
+
+    void OpenGLShader::setFloat3(const std::string& name, const glm::vec3& value)
+    {
+        uploadUniformFloat3(name, value);
+    }
+
+    void OpenGLShader::setFloat4(const std::string& name, const glm::vec4& value)
+    {
+        uploadUniformFloat4(name, value);
+    }
+
+    void OpenGLShader::setMat4(const std::string& name, const glm::mat4& value)
+    {
+        uploadUniformMat4(name, value);
+    }
+
     ////////////////////////////////////////////////////////////////
     // Set up Uniform for each type
     //////////////////////////////////////////////////////////////// 
 
-    void OpenGLShader::setUniform1i(const std::string& name, int32_t v1)
+    void OpenGLShader::uploadUniformInt1(const std::string& name, int32_t v1)
     {
         glUniform1i(getUniformLocation(name), v1);
     }
 
-    void OpenGLShader::setUniform1f(const std::string& name, float vec)
+    void OpenGLShader::uploadUniformFloat1(const std::string& name, float vec)
     {
         glUniform1f(getUniformLocation(name), vec);
     }
 
-    void OpenGLShader::setUniform2f(const std::string& name, glm::vec2& vec)
+    void OpenGLShader::uploadUniformFloat2(const std::string& name, const glm::vec2& vec)
     {
         glUniform2f(getUniformLocation(name), vec.x, vec.y);
     }
 
-    void OpenGLShader::setUniform3f(const std::string& name, glm::vec3& vec)
+    void OpenGLShader::uploadUniformFloat3(const std::string& name, const glm::vec3& vec)
     {
         glUniform3f(getUniformLocation(name), vec.x, vec.y, vec.z);
     }
 
-    void OpenGLShader::setUniform4f(const std::string& name, glm::vec4& vec)
+    void OpenGLShader::uploadUniformFloat4(const std::string& name, const glm::vec4& vec)
     {
         glUniform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w);
     }
 
-    void OpenGLShader::setUniformMat3(const std::string name, const glm::mat3& matrix)
+    void OpenGLShader::uploadUniformMat3(const std::string name, const glm::mat3& matrix)
     {
         glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
-    void OpenGLShader::setUniformMat4(const std::string name, const  glm::mat4& matrix)
+    void OpenGLShader::uploadUniformMat4(const std::string name, const  glm::mat4& matrix)
     {
         glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
     }

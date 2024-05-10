@@ -12,15 +12,23 @@ Arm::OrthographicCameraController::OrthographicCameraController(float aspectRati
 
 void Arm::OrthographicCameraController::onUpdate(Timestep ts)
 {
-	if (Input::isKeyPressed(Key::A))
-		m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-	else if (Input::isKeyPressed(Key::D))
-		m_CameraPosition.x += m_CameraMoveSpeed * ts;
+	if (Input::isKeyPressed(Key::A)) {
+		m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
+		m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
+	}
+	else if (Input::isKeyPressed(Key::D)) {
+		m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
+		m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
+	}
 
-	if (Input::isKeyPressed(Key::W))
-		m_CameraPosition.y += m_CameraMoveSpeed * ts;
-	else if (Input::isKeyPressed(Key::S))
-		m_CameraPosition.y -= m_CameraMoveSpeed * ts;
+	if (Input::isKeyPressed(Key::W)) {
+		m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
+		m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
+	}
+	else if (Input::isKeyPressed(Key::S)) {
+		m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
+		m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraMoveSpeed * ts;
+	}
 
 	if (m_Rotation) {
 		if (Input::isKeyPressed(Key::Q))

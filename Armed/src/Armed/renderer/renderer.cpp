@@ -1,14 +1,16 @@
 #include "ArmPCH.h"
 #include "renderer.h"
 #include "OpenGL/openGLShader.h"
+#include "renderer2D.h"
 
 namespace Arm {
 
-    Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+    Scope<Renderer::SceneData> Renderer::m_SceneData = CreateScope<Renderer::SceneData>();
 
     void Renderer::init()
     {
         RendererCommand::init();
+        Renderer2D::init();
     }
     void Renderer::onWindowResize(uint32_t width, uint32_t height)
     {
@@ -24,8 +26,8 @@ namespace Arm {
     void Renderer::submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
     {
         shader->bind();
-        std::dynamic_pointer_cast<OpenGLShader>(shader)->setUniformMat4("u_ViewProjection", m_SceneData->viewProjectionMatrix);
-        std::dynamic_pointer_cast<OpenGLShader>(shader)->setUniformMat4("u_Transform", transform);
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_ViewProjection", m_SceneData->viewProjectionMatrix);
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_Transform", transform);
 
         vertexArray->bind();
         RendererCommand::drawIndexed(vertexArray);

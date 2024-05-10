@@ -14,9 +14,9 @@ namespace Arm {
         float getRotation(float rotation) const;
         void setRotation(float rotation);
 
-        glm::mat4& getViewMatrix();
-        glm::mat4& getProjectionMatrix();
-        glm::mat4& getViewProjectionMatrix();
+        const glm::mat4& getViewMatrix() const;
+        const glm::mat4& getProjectionMatrix() const;
+        const glm::mat4& getViewProjectionMatrix() const;
     private:
         void recalculateViewMatrix();
     private:

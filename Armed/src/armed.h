@@ -12,6 +12,7 @@
 
 //---Renderer-----------
 #include "Armed/renderer/renderer.h"
+#include "Armed/renderer/renderer2D.h"
 #include "Armed/renderer/rendererCommand.h"
 
 #include "Armed/renderer/buffer.h"
@@ -22,5 +23,3 @@
 #include "Armed/renderer/orthographicCamera.h"
 #include "Armed/renderer/orthographicCameraController.h"
 
-//---EntryPoint---------
-#include "Armed/core/entryPoint.h"

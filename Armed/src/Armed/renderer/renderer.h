@@ -20,6 +20,6 @@ namespace Arm {
             glm::mat4 viewProjectionMatrix;
         };
 
-        static SceneData* m_SceneData;
+        static Scope<SceneData> m_SceneData;
     };
 }

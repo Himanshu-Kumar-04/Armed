@@ -4,12 +4,16 @@
 
 #include "imgui/imgui.h"
 #include <Armed/renderer/OpenGL/openGLShader.h>
+#include "Sandbox2D.h"
+
+//---EntryPoint---------
+#include "Armed/core/entryPoint.h"
 
 
 class ExampleLayer : public Arm::Layer {
 public:
 	ExampleLayer()
-		:m_CameraController(1280.0f/720.0f), Layer("")
+		:m_CameraController(1280.0f/720.0f, true), Layer("")
 	{
 		float squareVertices[4 * 5] = {
 			-0.5f ,-0.5f, 0.0f, 0.0f, 0.0f,
@@ -18,7 +22,7 @@ public:
 			-0.5f , 0.5f, 0.0f, 0.0f, 1.0f
 		};
 
-		m_SquareVA.reset(Arm::VertexArray::Create());
+		m_SquareVA = Arm::VertexArray::Create();
 		Arm::Ref<Arm::VertexBuffer> squareVB;
 		squareVB.reset(Arm::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->setLayout({
@@ -31,13 +35,13 @@ public:
 		squareIB.reset(Arm::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->setIndexBuffer(squareIB);
 
-		m_Shader.reset(Arm::Shader::Create("assets/shader/texture.glsl"));
+		auto textureShader = m_ShaderLib.load("assets/shader/texture.glsl");
 
 		m_Texture1 = Arm::Texture2D::Create("assets/texture/Landscape.jpg");
 		m_Texture2 = Arm::Texture2D::Create("assets/texture/Armed.jpeg");
 
-		std::dynamic_pointer_cast<Arm::OpenGLShader>(m_Shader)->bind();
-		std::dynamic_pointer_cast<Arm::OpenGLShader>(m_Shader)->setUniform1i("u_Texture", 0);
+		std::dynamic_pointer_cast<Arm::OpenGLShader>(textureShader)->bind();
+		std::dynamic_pointer_cast<Arm::OpenGLShader>(textureShader)->uploadUniformInt1("u_Texture", 0);
 	}
 
 	void onUpdate(Arm::Timestep ts) override
@@ -59,10 +63,11 @@ public:
 				Arm::Renderer::submit(m_Shader, m_SquareVA, transform);
 			}
 		}*/
+
 		m_Texture1->bind();
-		Arm::Renderer::submit(m_Shader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Arm::Renderer::submit(m_ShaderLib.get("texture"), m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		m_Texture2->bind();
-		Arm::Renderer::submit(m_Shader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)));
+		Arm::Renderer::submit(m_ShaderLib.get("texture"), m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)));
 
 		Arm::Renderer::endScene();
 	}
@@ -76,8 +81,8 @@ public:
 		ImGui::End();
 	}
 private:
+	Arm::ShaderLibrary m_ShaderLib;
 	Arm::Ref<Arm::VertexArray> m_SquareVA;
-	Arm::Ref<Arm::Shader> m_Shader;
 	Arm::Ref<Arm::Texture2D> m_Texture1;
 	Arm::Ref<Arm::Texture2D> m_Texture2;
 	Arm::OrthographicCameraController m_CameraController;
@@ -88,7 +93,8 @@ private:
 class Sandbox : public Arm::Application {
 public:
 	Sandbox() {
-		pushLayer(new ExampleLayer());
+		//pushLayer(new ExampleLayer());
+		pushLayer(new Sandbox2D());
 	}
 	~Sandbox() {
 

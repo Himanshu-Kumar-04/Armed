@@ -31,15 +31,15 @@ namespace Arm {
         m_Rotation = rotation;
         recalculateViewMatrix();
     }
-    glm::mat4& OrthographicCamera::getViewMatrix()
+    const glm::mat4& OrthographicCamera::getViewMatrix() const
     {
         return m_ViewMatrix;
     }
-    glm::mat4& OrthographicCamera::getProjectionMatrix()
+    const glm::mat4& OrthographicCamera::getProjectionMatrix() const
     {
         return m_ProjectionMatrix;
     }
-    glm::mat4& OrthographicCamera::getViewProjectionMatrix()
+    const glm::mat4& OrthographicCamera::getViewProjectionMatrix() const
     {
         return m_ViewProjectionMatrix;
     }

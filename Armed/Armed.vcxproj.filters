@@ -1393,6 +1393,7 @@
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLTexture.h" />
     <ClInclude Include="src\Armed\renderer\texture.h" />
     <ClInclude Include="src\Armed\renderer\orthographicCameraController.h" />
+    <ClInclude Include="src\Armed\renderer\renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ArmPCH.cpp">
@@ -1461,5 +1462,6 @@
     <ClCompile Include="src\Armed\renderer\OpenGL\openGLTexture.cpp" />
     <ClCompile Include="src\Armed\renderer\texture.cpp" />
     <ClCompile Include="src\Armed\renderer\orthographicCameraController.cpp" />
+    <ClCompile Include="src\Armed\renderer\renderer2D.cpp" />
   </ItemGroup>
 </Project>
