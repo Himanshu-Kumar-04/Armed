@@ -90,7 +90,7 @@
     <ClInclude Include="src\Armed\core\timestep.h">
       <Filter>src\Armed\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Armed\debug_Instrumentor\instrumentor.h">
+    <ClInclude Include="src\Armed\debug\instrumentor.h">
       <Filter>src\Armed\debug_Instrumentor</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\event\applicationEvent.h">
