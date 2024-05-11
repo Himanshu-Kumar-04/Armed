@@ -160,7 +160,7 @@
     <ClInclude Include="src\Armed\core\mouseCodes.h" />
     <ClInclude Include="src\Armed\core\timer.h" />
     <ClInclude Include="src\Armed\core\timestep.h" />
-    <ClInclude Include="src\Armed\Debug-1\instrumentor.h" />
+    <ClInclude Include="src\Armed\debug_Instrumentor\instrumentor.h" />
     <ClInclude Include="src\Armed\event\applicationEvent.h" />
     <ClInclude Include="src\Armed\event\event.h" />
     <ClInclude Include="src\Armed\event\keyEvent.h" />
@@ -604,7 +604,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Armed\Debug-1\FileName.cpp" />
     <ClCompile Include="src\ArmPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

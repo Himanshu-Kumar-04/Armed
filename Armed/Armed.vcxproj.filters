@@ -10,8 +10,8 @@
     <Filter Include="src\Armed\core">
       <UniqueIdentifier>{1DD35D36-09A1-513C-F234-C262DEA12DA1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Armed\debug">
-      <UniqueIdentifier>{DB912402-471D-92C6-502E-15BBBC38EEC6}</UniqueIdentifier>
+    <Filter Include="src\Armed\debug_Instrumentor">
+      <UniqueIdentifier>{34C32E27-207E-1ED3-C935-971DB5CF6863}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Armed\event">
       <UniqueIdentifier>{B6084002-2294-ADC6-2BA5-30BB97AF09C7}</UniqueIdentifier>
@@ -90,8 +90,8 @@
     <ClInclude Include="src\Armed\core\timestep.h">
       <Filter>src\Armed\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Armed\Debug-1\instrumentor.h">
-      <Filter>src\Armed\debug</Filter>
+    <ClInclude Include="src\Armed\debug_Instrumentor\instrumentor.h">
+      <Filter>src\Armed\debug_Instrumentor</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\event\applicationEvent.h">
       <Filter>src\Armed\event</Filter>
@@ -1493,6 +1493,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Armed\Debug-1\FileName.cpp" />
   </ItemGroup>
 </Project>
