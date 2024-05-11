@@ -147,24 +147,20 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Armed\core\log.h" />
-    <ClInclude Include="src\Armed\core\core.h" />
-    <ClInclude Include="src\Armed\core\timer.h" />
-    <ClInclude Include="src\Armed\debug\instrumentor.h" />
-    <ClInclude Include="src\Armed\renderer\OpenGL\openGLTexture.h" />
-    <ClInclude Include="src\Armed\renderer\orthographicCameraController.h" />
-    <ClInclude Include="src\Armed\renderer\renderer2D.h" />
-    <ClInclude Include="src\Armed\renderer\texture.h" />
     <ClInclude Include="src\ArmPCH.h" />
     <ClInclude Include="src\Armed\core\Application.h" />
     <ClInclude Include="src\Armed\core\appWindow.h" />
+    <ClInclude Include="src\Armed\core\core.h" />
     <ClInclude Include="src\Armed\core\entryPoint.h" />
     <ClInclude Include="src\Armed\core\input.h" />
     <ClInclude Include="src\Armed\core\keyCodes.h" />
     <ClInclude Include="src\Armed\core\layer.h" />
     <ClInclude Include="src\Armed\core\layerStack.h" />
+    <ClInclude Include="src\Armed\core\log.h" />
     <ClInclude Include="src\Armed\core\mouseCodes.h" />
+    <ClInclude Include="src\Armed\core\timer.h" />
     <ClInclude Include="src\Armed\core\timestep.h" />
+    <ClInclude Include="src\Armed\debug\instrumentor.h" />
     <ClInclude Include="src\Armed\event\applicationEvent.h" />
     <ClInclude Include="src\Armed\event\event.h" />
     <ClInclude Include="src\Armed\event\keyEvent.h" />
@@ -174,14 +170,18 @@
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLContext.h" />
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLRendererAPI.h" />
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLShader.h" />
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLTexture.h" />
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLVertexArray.h" />
     <ClInclude Include="src\Armed\renderer\buffer.h" />
     <ClInclude Include="src\Armed\renderer\graphicsContext.h" />
     <ClInclude Include="src\Armed\renderer\orthographicCamera.h" />
+    <ClInclude Include="src\Armed\renderer\orthographicCameraController.h" />
     <ClInclude Include="src\Armed\renderer\renderer.h" />
+    <ClInclude Include="src\Armed\renderer\renderer2D.h" />
     <ClInclude Include="src\Armed\renderer\rendererAPI.h" />
     <ClInclude Include="src\Armed\renderer\rendererCommand.h" />
     <ClInclude Include="src\Armed\renderer\shader.h" />
+    <ClInclude Include="src\Armed\renderer\texture.h" />
     <ClInclude Include="src\Armed\renderer\vertexArray.h" />
     <ClInclude Include="src\armed.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -604,10 +604,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Armed\renderer\OpenGL\openGLTexture.cpp" />
-    <ClCompile Include="src\Armed\renderer\orthographicCameraController.cpp" />
-    <ClCompile Include="src\Armed\renderer\renderer2D.cpp" />
-    <ClCompile Include="src\Armed\renderer\texture.cpp" />
+    <ClCompile Include="src\Armed\debug\FileName.cpp" />
     <ClCompile Include="src\ArmPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -622,13 +619,17 @@
     <ClCompile Include="src\Armed\renderer\OpenGL\openGLContext.cpp" />
     <ClCompile Include="src\Armed\renderer\OpenGL\openGLRendererAPI.cpp" />
     <ClCompile Include="src\Armed\renderer\OpenGL\openGLShader.cpp" />
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLTexture.cpp" />
     <ClCompile Include="src\Armed\renderer\OpenGL\openGLVertexArray.cpp" />
     <ClCompile Include="src\Armed\renderer\buffer.cpp" />
     <ClCompile Include="src\Armed\renderer\orthographicCamera.cpp" />
+    <ClCompile Include="src\Armed\renderer\orthographicCameraController.cpp" />
     <ClCompile Include="src\Armed\renderer\renderer.cpp" />
+    <ClCompile Include="src\Armed\renderer\renderer2D.cpp" />
     <ClCompile Include="src\Armed\renderer\rendererAPI.cpp" />
     <ClCompile Include="src\Armed\renderer\rendererCommand.cpp" />
     <ClCompile Include="src\Armed\renderer\shader.cpp" />
+    <ClCompile Include="src\Armed\renderer\texture.cpp" />
     <ClCompile Include="src\Armed\renderer\vertexArray.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>

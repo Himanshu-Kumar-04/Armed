@@ -10,6 +10,9 @@
     <Filter Include="src\Armed\core">
       <UniqueIdentifier>{1DD35D36-09A1-513C-F234-C262DEA12DA1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Armed\debug">
+      <UniqueIdentifier>{DB912402-471D-92C6-502E-15BBBC38EEC6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Armed\event">
       <UniqueIdentifier>{B6084002-2294-ADC6-2BA5-30BB97AF09C7}</UniqueIdentifier>
     </Filter>
@@ -57,6 +60,9 @@
     <ClInclude Include="src\Armed\core\appWindow.h">
       <Filter>src\Armed\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Armed\core\core.h">
+      <Filter>src\Armed\core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Armed\core\entryPoint.h">
       <Filter>src\Armed\core</Filter>
     </ClInclude>
@@ -72,11 +78,20 @@
     <ClInclude Include="src\Armed\core\layerStack.h">
       <Filter>src\Armed\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Armed\core\log.h">
+      <Filter>src\Armed\core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Armed\core\mouseCodes.h">
+      <Filter>src\Armed\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Armed\core\timer.h">
       <Filter>src\Armed\core</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\core\timestep.h">
       <Filter>src\Armed\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Armed\debug\instrumentor.h">
+      <Filter>src\Armed\debug</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\event\applicationEvent.h">
       <Filter>src\Armed\event</Filter>
@@ -105,6 +120,9 @@
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLShader.h">
       <Filter>src\Armed\renderer\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Armed\renderer\OpenGL\openGLTexture.h">
+      <Filter>src\Armed\renderer\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLVertexArray.h">
       <Filter>src\Armed\renderer\OpenGL</Filter>
     </ClInclude>
@@ -117,7 +135,13 @@
     <ClInclude Include="src\Armed\renderer\orthographicCamera.h">
       <Filter>src\Armed\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Armed\renderer\orthographicCameraController.h">
+      <Filter>src\Armed\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Armed\renderer\renderer.h">
+      <Filter>src\Armed\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Armed\renderer\renderer2D.h">
       <Filter>src\Armed\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\renderer\rendererAPI.h">
@@ -127,6 +151,9 @@
       <Filter>src\Armed\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\renderer\shader.h">
+      <Filter>src\Armed\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Armed\renderer\texture.h">
       <Filter>src\Armed\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\renderer\vertexArray.h">
@@ -1389,14 +1416,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Armed\core\core.h" />
-    <ClInclude Include="src\Armed\renderer\OpenGL\openGLTexture.h" />
-    <ClInclude Include="src\Armed\renderer\texture.h" />
-    <ClInclude Include="src\Armed\renderer\orthographicCameraController.h" />
-    <ClInclude Include="src\Armed\renderer\renderer2D.h" />
-    <ClInclude Include="src\Armed\core\timer.h" />
-    <ClInclude Include="src\Armed\core\log.h" />
-    <ClInclude Include="src\Armed\debug\instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ArmPCH.cpp">
@@ -1435,6 +1454,9 @@
     <ClCompile Include="src\Armed\renderer\OpenGL\openGLShader.cpp">
       <Filter>src\Armed\renderer\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Armed\renderer\OpenGL\openGLTexture.cpp">
+      <Filter>src\Armed\renderer\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Armed\renderer\OpenGL\openGLVertexArray.cpp">
       <Filter>src\Armed\renderer\OpenGL</Filter>
     </ClCompile>
@@ -1444,7 +1466,13 @@
     <ClCompile Include="src\Armed\renderer\orthographicCamera.cpp">
       <Filter>src\Armed\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Armed\renderer\orthographicCameraController.cpp">
+      <Filter>src\Armed\renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Armed\renderer\renderer.cpp">
+      <Filter>src\Armed\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Armed\renderer\renderer2D.cpp">
       <Filter>src\Armed\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Armed\renderer\rendererAPI.cpp">
@@ -1456,15 +1484,15 @@
     <ClCompile Include="src\Armed\renderer\shader.cpp">
       <Filter>src\Armed\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Armed\renderer\texture.cpp">
+      <Filter>src\Armed\renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Armed\renderer\vertexArray.cpp">
       <Filter>src\Armed\renderer</Filter>
     </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Armed\renderer\OpenGL\openGLTexture.cpp" />
-    <ClCompile Include="src\Armed\renderer\texture.cpp" />
-    <ClCompile Include="src\Armed\renderer\orthographicCameraController.cpp" />
-    <ClCompile Include="src\Armed\renderer\renderer2D.cpp" />
+    <ClCompile Include="src\Armed\debug\FileName.cpp" />
   </ItemGroup>
 </Project>

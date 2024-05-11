@@ -25,7 +25,7 @@ project "Armed"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links{
