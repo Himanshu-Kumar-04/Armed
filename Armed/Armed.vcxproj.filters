@@ -1394,6 +1394,9 @@
     <ClInclude Include="src\Armed\renderer\texture.h" />
     <ClInclude Include="src\Armed\renderer\orthographicCameraController.h" />
     <ClInclude Include="src\Armed\renderer\renderer2D.h" />
+    <ClInclude Include="src\Armed\core\timer.h" />
+    <ClInclude Include="src\Armed\core\log.h" />
+    <ClInclude Include="src\Armed\debug\instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ArmPCH.cpp">

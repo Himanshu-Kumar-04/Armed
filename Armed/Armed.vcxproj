@@ -147,7 +147,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Armed\core\log.h" />
     <ClInclude Include="src\Armed\core\core.h" />
+    <ClInclude Include="src\Armed\core\timer.h" />
+    <ClInclude Include="src\Armed\debug\instrumentor.h" />
     <ClInclude Include="src\Armed\renderer\OpenGL\openGLTexture.h" />
     <ClInclude Include="src\Armed\renderer\orthographicCameraController.h" />
     <ClInclude Include="src\Armed\renderer\renderer2D.h" />

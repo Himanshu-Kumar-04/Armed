@@ -19,18 +19,33 @@ void Sandbox2D::onDetach()
 
 void Sandbox2D::onUpdate(Arm::Timestep ts)
 {
-    m_CameraController.onUpdate(ts);
+    ARM_PROFILE_FUNCTION();
 
-    Arm::RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-    Arm::RendererCommand::clearColor();
 
-    Arm::Renderer2D::beginScene(m_CameraController.getCamera());
+    {
+        ARM_PROFILE_SCOPE("CameraController.onUpdate");
+        m_CameraController.onUpdate(ts);
+    }
 
-    Arm::Renderer2D::drawQuad({ -1.0f,0.0f }, { 0.4f,0.4f }, { 0.7f,0.2,0.3f,1.0f });
-    Arm::Renderer2D::drawQuad({ 0.5f,-0.5f }, { 0.2f,0.6f }, { 0.2f,0.3,0.6f,1.0f });
-    Arm::Renderer2D::drawQuad({ 0.2f,0.2f, -0.1f }, { 10.0f,10.0f }, m_Texture1);
+    {
+        ARM_PROFILE_SCOPE("Renderer:prep");
+        Arm::RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+        Arm::RendererCommand::clearColor();
+    }
 
-    Arm::Renderer2D::endScene();
+    {
+        ARM_PROFILE_SCOPE("Renderer:beginScene");
+        Arm::Renderer2D::beginScene(m_CameraController.getCamera());
+    }
+
+    {
+        ARM_PROFILE_SCOPE("Renderer:draw");
+        Arm::Renderer2D::drawQuad({ -1.0f,0.0f }, { 0.4f,0.4f }, { 0.7f,0.2,0.3f,1.0f });
+        Arm::Renderer2D::drawQuad({ 0.5f,-0.5f }, { 0.2f,0.6f }, { 0.2f,0.3,0.6f,1.0f });
+        Arm::Renderer2D::drawQuad({ 0.2f,0.2f, -0.1f }, { 10.0f,10.0f }, m_Texture1);
+        Arm::Renderer2D::endScene();
+    }
+
 }
 
 void Sandbox2D::onImGuiRender()

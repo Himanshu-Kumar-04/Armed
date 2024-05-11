@@ -143,7 +143,7 @@ namespace Arm {
             search.close();
         }
         else {
-            ARM_ERROR("could not open file: " + filepath);
+            ARM_ERROR("could not open file: %s\n", filepath);
         }
 
         return shaderString;
@@ -196,7 +196,7 @@ namespace Arm {
                 glGetShaderInfoLog(shader, length, &length, message);
                 glDeleteShader(shader);
 
-                ARM_ERROR(message);
+                ARM_ERROR("%d",message);
                 ARM_ASSERT(false, "shader compilation failure");
                 return;
             }
