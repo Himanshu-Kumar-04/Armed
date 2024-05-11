@@ -90,7 +90,7 @@
     <ClInclude Include="src\Armed\core\timestep.h">
       <Filter>src\Armed\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Armed\debug\instrumentor.h">
+    <ClInclude Include="src\Armed\Debug-1\instrumentor.h">
       <Filter>src\Armed\debug</Filter>
     </ClInclude>
     <ClInclude Include="src\Armed\event\applicationEvent.h">
@@ -1493,6 +1493,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Armed\debug\FileName.cpp" />
+    <ClCompile Include="src\Armed\Debug-1\FileName.cpp" />
   </ItemGroup>
 </Project>
