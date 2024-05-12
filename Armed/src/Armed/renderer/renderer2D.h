@@ -15,7 +15,12 @@ namespace Arm {
 
         static void const drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
         static void const drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
-        static void const drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D> texture, const glm::vec4& tintColor = glm::vec4(1.0f));
-        static void const drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture, const glm::vec4& tintColor = glm::vec4(1.0f));
+        static void const drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D> texture, const float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
+        static void const drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture, const float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
+
+        static void const drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const glm::vec4& color);
+        static void const drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const glm::vec4& color);
+        static void const drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const Ref<Texture2D> texture, const float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
+        static void const drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const Ref<Texture2D> texture, const float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
     };
 }

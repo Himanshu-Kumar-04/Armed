@@ -40,9 +40,9 @@ void Sandbox2D::onUpdate(Arm::Timestep ts)
 
     {
         ARM_PROFILE_SCOPE("Renderer:draw");
-        Arm::Renderer2D::drawQuad({ -1.0f,0.0f }, { 0.4f,0.4f }, { 0.7f,0.2,0.3f,1.0f });
-        Arm::Renderer2D::drawQuad({ 0.5f,-0.5f }, { 0.2f,0.6f }, { 0.2f,0.3,0.6f,1.0f });
-        Arm::Renderer2D::drawQuad({ 0.2f,0.2f, -0.1f }, { 10.0f,10.0f }, m_Texture1);
+        Arm::Renderer2D::drawRotatedQuad({ -1.0f,0.0f }, { 0.4f,0.4f }, 0.7f, { 0.7f,0.2f,0.3f,1.0f });
+        Arm::Renderer2D::drawQuad({ 0.5f,-0.5f }, { 0.2f,0.6f }, { 0.2f,0.3f,0.6f,1.0f });
+        Arm::Renderer2D::drawQuad({ 0.2f,0.2f, -0.1f }, { 10.0f,10.0f }, m_Texture1, 10.0f);
         Arm::Renderer2D::endScene();
     }
 
