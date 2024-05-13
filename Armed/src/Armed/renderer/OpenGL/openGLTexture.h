@@ -14,6 +14,9 @@ namespace Arm {
         virtual uint32_t getHeight() const override { return m_Height; }
         
         virtual void setData(void* data, uint32_t size) override;
+        virtual bool operator==(const Texture& other) const override {
+            return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
+        }
 
         virtual void bind(uint32_t slot = 0) const override;
     private:

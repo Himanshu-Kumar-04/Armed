@@ -67,6 +67,11 @@ namespace Arm {
         uploadUniformInt1(name, value);
     }
 
+    void OpenGLShader::setIntArray(const std::string& name, int* values, uint32_t count)
+    {
+        uploadUniformIntArray(name, values, count);
+    }
+
     void OpenGLShader::setFloat(const std::string& name, float value)
     {
         uploadUniformFloat1(name, value);
@@ -99,6 +104,11 @@ namespace Arm {
     void OpenGLShader::uploadUniformInt1(const std::string& name, int32_t v1)
     {
         glUniform1i(getUniformLocation(name), v1);
+    }
+
+    void OpenGLShader::uploadUniformIntArray(const std::string& name, int* values, uint32_t count)
+    {
+        glUniform1iv(getUniformLocation(name), count, values);
     }
 
     void OpenGLShader::uploadUniformFloat1(const std::string& name, float vec)
@@ -196,7 +206,7 @@ namespace Arm {
                 glGetShaderInfoLog(shader, length, &length, message);
                 glDeleteShader(shader);
 
-                ARM_ERROR("%d",message);
+                ARM_ERROR("%s",message);
                 ARM_ASSERT(false, "shader compilation failure");
                 return;
             }

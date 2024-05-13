@@ -10,6 +10,9 @@ namespace Arm {
         static void init();
         static void shutdown();
 
+        static void beginBatch();
+        static void flush();
+
         static void beginScene(const OrthographicCamera& camera);
         static void endScene();
 

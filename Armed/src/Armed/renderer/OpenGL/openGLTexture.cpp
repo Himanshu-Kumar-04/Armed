@@ -64,6 +64,6 @@ namespace Arm {
     }
     void OpenGLTexture2D::bind(uint32_t slot) const
     {
-        glBindTextureUnit(0, m_RendererID);
+        glBindTextureUnit(slot, m_RendererID);
     }
 }

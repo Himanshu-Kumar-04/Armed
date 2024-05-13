@@ -39,7 +39,8 @@ project "Armed"
 		systemversion "latest"
 
 		defines{
-			"ARMED_PLATFORM_WINDOWS"
+			"ARMED_PLATFORM_WINDOWS",
+			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 	filter "configurations:Debug"

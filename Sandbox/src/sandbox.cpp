@@ -23,16 +23,14 @@ public:
 		};
 
 		m_SquareVA = Arm::VertexArray::Create();
-		Arm::Ref<Arm::VertexBuffer> squareVB;
-		squareVB.reset(Arm::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		Arm::Ref<Arm::VertexBuffer> squareVB = Arm::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVB->setLayout({
 				{Arm::ShaderDataType::Float3 , "position"},
 				{Arm::ShaderDataType::Float2 , "texCoord"}
 			});
 		m_SquareVA->addVertexBuffer(squareVB);
 		uint32_t squareIndices[6] = { 0,1,2 ,2 ,3, 0 };
-		Arm::Ref<Arm::IndexBuffer> squareIB;
-		squareIB.reset(Arm::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		Arm::Ref<Arm::IndexBuffer> squareIB = Arm::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVA->setIndexBuffer(squareIB);
 
 		auto textureShader = m_ShaderLib.load("assets/shader/texture.glsl");

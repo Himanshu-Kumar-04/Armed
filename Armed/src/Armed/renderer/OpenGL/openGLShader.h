@@ -17,6 +17,7 @@ namespace Arm {
 		virtual const std::string getName() const { return m_Name; }
 		//Set Uniform
 		virtual void setInt(const std::string& name, int value) override;
+		virtual void setIntArray(const std::string& name, int* values, uint32_t count) override;
 		virtual void setFloat(const std::string& name, float value) override;
 		virtual void setFloat2(const std::string& name, const glm::vec2& value) override;
 		virtual void setFloat3(const std::string& name, const glm::vec3& value) override;
@@ -24,6 +25,7 @@ namespace Arm {
 		virtual void setMat4(const std::string& name, const glm::mat4& value) override;
 		//Upload Uniform
 		void uploadUniformInt1(const std::string& name, int32_t v1);
+		void uploadUniformIntArray(const std::string& name, int* values, uint32_t count);
 
 		void uploadUniformFloat1(const std::string& name, float vec);
 		void uploadUniformFloat2(const std::string& name, const glm::vec2& vec);
