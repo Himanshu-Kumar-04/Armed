@@ -15,9 +15,9 @@ namespace Arm {
     };
 
     struct Renderer2DData {
-        const uint32_t maxQuadCount = 10000;
-        const uint32_t maxVertexCount = maxQuadCount * 4;
-        const uint32_t maxIndexCount = maxQuadCount * 6;
+        static const uint32_t maxQuadCount = 10000;
+        static const uint32_t maxVertexCount = maxQuadCount * 4;
+        static const uint32_t maxIndexCount = maxQuadCount * 6;
         static const uint32_t maxTextureSlots = 32; // TODO: RENDER_CAPS
 
         Ref<VertexArray> quadVertexArray;
@@ -33,6 +33,8 @@ namespace Arm {
         uint32_t textureSlotIndex = 1;
 
         glm::vec4 quadVertexPositions[4];
+
+        Renderer2D::Statistics stats;
     };
 
     static Renderer2DData s_Data;
@@ -99,7 +101,9 @@ namespace Arm {
     ////////////////////////////////////// 
 
     void Renderer2D::beginBatch() {
-
+        s_Data.quadIndexCount = 0;
+        s_Data.quadVertexBufferPtr = s_Data.quadVertexBufferBase;
+        s_Data.textureSlotIndex = 1;
     }
 
     void Renderer2D::flush() {
@@ -109,6 +113,12 @@ namespace Arm {
             s_Data.textureSlots[i]->bind(i);
         }
         RendererCommand::drawIndexed(s_Data.quadVertexArray, s_Data.quadIndexCount);
+        s_Data.stats.drawCalls++;
+    }
+
+    void Renderer2D::nextBatch() {
+        endScene();
+        beginBatch();
     }
 
     //////////////////////////////////////
@@ -120,11 +130,6 @@ namespace Arm {
         ARM_PROFILE_FUNCTION();
 
         s_Data.quadShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
-
-        s_Data.quadIndexCount = 0;
-        s_Data.quadVertexBufferPtr = s_Data.quadVertexBufferBase;
-
-        s_Data.textureSlotIndex = 1;
         beginBatch();
     }
 
@@ -189,23 +194,32 @@ namespace Arm {
     void const Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color)
     {
         ARM_PROFILE_FUNCTION();
+
+        if (s_Data.quadIndexCount >= Renderer2DData::maxIndexCount)
+            nextBatch();
+
         constexpr glm::vec2 texCoords[] = {{0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f},{0.0f,1.0f}};
-        const float texIndex = 0.0f;
+        const float textureIndex = 0.0f;
         const float tilingFactor = 1.0f;
 
         for (uint8_t i = 0; i < 4; i++) {
             s_Data.quadVertexBufferPtr->position = transform * s_Data.quadVertexPositions[i];
             s_Data.quadVertexBufferPtr->color = color;
             s_Data.quadVertexBufferPtr->texCoord = texCoords[i];
-            s_Data.quadVertexBufferPtr->texIndex = texIndex;
+            s_Data.quadVertexBufferPtr->texIndex = textureIndex;
             s_Data.quadVertexBufferPtr->tilingFactor = tilingFactor;
             s_Data.quadVertexBufferPtr++;
         }
         s_Data.quadIndexCount += 6;
+        s_Data.stats.quadCount++;
     }
     void const Renderer2D::drawQuad(const glm::mat4& transform, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
     {
         ARM_PROFILE_FUNCTION();
+        
+        if (s_Data.quadIndexCount >= Renderer2DData::maxIndexCount)
+            nextBatch();
+
         constexpr glm::vec2 texCoords[] = { {0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f},{0.0f,1.0f} };
 
         float textureIndex = 0.0f;
@@ -232,6 +246,14 @@ namespace Arm {
             s_Data.quadVertexBufferPtr++;
         }
         s_Data.quadIndexCount += 6;
-
+        s_Data.stats.quadCount++;
+    }
+    Renderer2D::Statistics Renderer2D::getStats()
+    {
+        return s_Data.stats;
+    }
+    void Renderer2D::resetStats()
+    {
+        memset(&s_Data.stats, 0, sizeof(Statistics));
     }
 }
