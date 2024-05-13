@@ -11,6 +11,7 @@ namespace Arm {
         glm::vec4 color;
         glm::vec2 texCoord;
         float texIndex;
+        float tilingFactor;
     };
 
     struct Renderer2DData {
@@ -30,6 +31,8 @@ namespace Arm {
 
         std::array<Ref<Texture2D>, maxTextureSlots> textureSlots;
         uint32_t textureSlotIndex = 1;
+
+        glm::vec4 quadVertexPositions[4];
     };
 
     static Renderer2DData s_Data;
@@ -44,7 +47,8 @@ namespace Arm {
                 {ShaderDataType::Float3 , "position"},
                 {ShaderDataType::Float4 , "color"},
                 {ShaderDataType::Float2 , "texCoord"},
-                {ShaderDataType::Float , "texIndex"}
+                {ShaderDataType::Float , "texIndex"},
+                {ShaderDataType::Float , "tilingFactor"}
             });
         s_Data.quadVertexArray->addVertexBuffer(s_Data.quadVertexBuffer);
         s_Data.quadVertexBufferBase = new QuadVertex[s_Data.maxVertexCount];
@@ -77,11 +81,17 @@ namespace Arm {
         s_Data.quadShader->setIntArray("u_Textures",sampler, s_Data.maxTextureSlots);
 
         s_Data.textureSlots[0] = s_Data.whiteTexture;
+
+        s_Data.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+        s_Data.quadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+        s_Data.quadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
+        s_Data.quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
     }
     
     void Renderer2D::shutdown()
     {
         ARM_PROFILE_FUNCTION();
+        delete[] s_Data.quadVertexBufferBase;
     }
 
     //////////////////////////////////////
@@ -109,7 +119,6 @@ namespace Arm {
     {
         ARM_PROFILE_FUNCTION();
 
-        s_Data.quadShader->bind();
         s_Data.quadShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
 
         s_Data.quadIndexCount = 0;
@@ -137,46 +146,10 @@ namespace Arm {
     void const Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
     {
         ARM_PROFILE_FUNCTION();
-        const float texIndex = 0.0f;
-
-        s_Data.quadVertexBufferPtr->position = position;
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = {0.0f, 0.0f};
-        s_Data.quadVertexBufferPtr->texIndex = texIndex;
-        s_Data.quadVertexBufferPtr++;
-
-        s_Data.quadVertexBufferPtr->position = { position.x + size.x, position.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_Data.quadVertexBufferPtr->texIndex = texIndex;
-        s_Data.quadVertexBufferPtr++;
-
-        s_Data.quadVertexBufferPtr->position = { position.x + size.x, position.y + size.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_Data.quadVertexBufferPtr->texIndex = texIndex;
-        s_Data.quadVertexBufferPtr++;
-
-        s_Data.quadVertexBufferPtr->position = { position.x, position.y + size.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_Data.quadVertexBufferPtr->texIndex = texIndex;
-        s_Data.quadVertexBufferPtr++;
-
-        s_Data.quadIndexCount += 6;
-
-        /*s_Data.quadShader->bind();
-        s_Data.quadShader->setFloat4("u_Color", color);
-        s_Data.quadShader->setFloat("u_TilingFactor", 1.0f);
-        s_Data.whiteTexture->bind();
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        s_Data.quadShader->setMat4("u_Transform", transform);
-        
-        s_Data.quadVertexArray->bind();
-        RendererCommand::drawIndexed(s_Data.quadVertexArray);*/
+        drawQuad(transform, color);
     }
-
     void const Renderer2D::drawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
     {
         drawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor, tintColor);
@@ -184,7 +157,56 @@ namespace Arm {
     void const Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
     {
         ARM_PROFILE_FUNCTION();
-        glm::vec4 color = glm::vec4(1.0f);
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        drawQuad(transform, texture, tilingFactor, tintColor);
+    }
+
+
+    void const Renderer2D::drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const glm::vec4& color)
+    {
+        drawRotatedQuad({ position.x, position.y, 0.0f }, size, angle, color);
+    }
+    void const Renderer2D::drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const glm::vec4& color)
+    {
+        ARM_PROFILE_FUNCTION();
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        drawQuad(transform, color);
+    }
+    void const Renderer2D::drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
+    {
+        drawRotatedQuad({ position.x, position.y, 0.0f }, size, angle, texture, tilingFactor, tintColor);
+    }
+    void const Renderer2D::drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
+    {
+        ARM_PROFILE_FUNCTION();
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+        drawQuad(transform, texture, tilingFactor, tintColor);
+    }
+
+
+    void const Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color)
+    {
+        ARM_PROFILE_FUNCTION();
+        constexpr glm::vec2 texCoords[] = {{0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f},{0.0f,1.0f}};
+        const float texIndex = 0.0f;
+        const float tilingFactor = 1.0f;
+
+        for (uint8_t i = 0; i < 4; i++) {
+            s_Data.quadVertexBufferPtr->position = transform * s_Data.quadVertexPositions[i];
+            s_Data.quadVertexBufferPtr->color = color;
+            s_Data.quadVertexBufferPtr->texCoord = texCoords[i];
+            s_Data.quadVertexBufferPtr->texIndex = texIndex;
+            s_Data.quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_Data.quadVertexBufferPtr++;
+        }
+        s_Data.quadIndexCount += 6;
+    }
+    void const Renderer2D::drawQuad(const glm::mat4& transform, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
+    {
+        ARM_PROFILE_FUNCTION();
+        constexpr glm::vec2 texCoords[] = { {0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f},{0.0f,1.0f} };
 
         float textureIndex = 0.0f;
 
@@ -201,81 +223,15 @@ namespace Arm {
             s_Data.textureSlotIndex++;
         }
 
-        s_Data.quadVertexBufferPtr->position = position;
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_Data.quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data.quadVertexBufferPtr++;
-
-        s_Data.quadVertexBufferPtr->position = { position.x + size.x, position.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_Data.quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data.quadVertexBufferPtr++;
-
-        s_Data.quadVertexBufferPtr->position = { position.x + size.x, position.y + size.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_Data.quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data.quadVertexBufferPtr++;
-
-        s_Data.quadVertexBufferPtr->position = { position.x, position.y + size.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_Data.quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data.quadVertexBufferPtr++;
-
+        for (uint8_t i = 0; i < 4; i++) {
+            s_Data.quadVertexBufferPtr->position = transform * s_Data.quadVertexPositions[i];
+            s_Data.quadVertexBufferPtr->color = tintColor;
+            s_Data.quadVertexBufferPtr->texCoord = texCoords[i];
+            s_Data.quadVertexBufferPtr->texIndex = textureIndex;
+            s_Data.quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_Data.quadVertexBufferPtr++;
+        }
         s_Data.quadIndexCount += 6;
 
-        /*s_Data.quadShader->bind();
-        s_Data.quadShader->setFloat4("u_Color", tintColor);
-        s_Data.quadShader->setFloat("u_TilingFactor", tilingFactor);
-        texture->bind();
-
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        s_Data.quadShader->setMat4("u_Transform", transform);
-
-        s_Data.quadVertexArray->bind();
-        RendererCommand::drawIndexed(s_Data.quadVertexArray);*/
-    }
-
-
-    void const Renderer2D::drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const glm::vec4& color)
-    {
-        drawRotatedQuad({ position.x, position.y, 0.0f }, size, angle, color);
-    }
-    void const Renderer2D::drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const glm::vec4& color)
-    {
-        ARM_PROFILE_FUNCTION();
-
-        s_Data.quadShader->bind();
-        s_Data.quadShader->setFloat4("u_Color", color);
-        s_Data.quadShader->setFloat("u_TilingFactor", 1.0f);
-        s_Data.whiteTexture->bind();
-
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        s_Data.quadShader->setMat4("u_Transform", transform);
-
-        s_Data.quadVertexArray->bind();
-        RendererCommand::drawIndexed(s_Data.quadVertexArray);
-    }
-    void const Renderer2D::drawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
-    {
-        drawRotatedQuad({ position.x, position.y, 0.0f }, size, angle, texture, tilingFactor, tintColor);
-    }
-    void const Renderer2D::drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
-    {
-        ARM_PROFILE_FUNCTION();
-
-        s_Data.quadShader->bind();
-        s_Data.quadShader->setFloat4("u_Color", tintColor);
-        s_Data.quadShader->setFloat("u_TilingFactor", tilingFactor);
-        texture->bind();
-
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-        s_Data.quadShader->setMat4("u_Transform", transform);
-
-        s_Data.quadVertexArray->bind();
-        RendererCommand::drawIndexed(s_Data.quadVertexArray);
     }
 }
