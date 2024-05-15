@@ -9,7 +9,7 @@ namespace Arm {
         virtual void unbind() const = 0;
 
         virtual void addVertexBuffer(Ref<VertexBuffer>& vertexBuffer) =  0;
-        virtual void setIndexBuffer(Ref<IndexBuffer>& vertexBuffer) = 0;
+        virtual void setIndexBuffer(Ref<IndexBuffer>& indexBuffer) = 0;
 
         virtual const std::vector<Ref<VertexBuffer>>& getVertexBuffer() const = 0;
         virtual const Ref<IndexBuffer>& getIndexBuffer() const = 0;

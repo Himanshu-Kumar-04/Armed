@@ -25,6 +25,6 @@ namespace Arm {
 
         glm::vec3 m_CameraPosition = { 0.0f,0.0f,0.0f };
         float m_CameraRotation = 0.0f;
-        float m_CameraMoveSpeed = 5.0f, m_CameraRotationSpeed = 180.0f;
+        float m_CameraMoveSpeed = 5.0f, m_CameraRotationSpeed = 3.1416f;
     };
 }
