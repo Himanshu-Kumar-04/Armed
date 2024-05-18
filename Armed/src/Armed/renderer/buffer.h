@@ -32,7 +32,7 @@ namespace Arm {
         std::string Name;
         ShaderDataType Type;
         uint32_t Size;
-        size_t Offset;
+        uint32_t Offset;
         bool Normalized;
 
         BufferElement() = default;
@@ -82,7 +82,7 @@ namespace Arm {
         std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
     private:
         void calculateOffsetAndStride() {
-            size_t offset = 0;
+            uint32_t offset = 0;
             m_Stride = 0;
             for (auto& element : m_Elements) {
                 element.Offset = offset;
@@ -99,8 +99,8 @@ namespace Arm {
     public:
         virtual ~VertexBuffer() = default;
         
-        virtual void bind() const = 0;
-        virtual void unbind() const = 0;
+        virtual void bind() const {};
+        virtual void unbind() const {};
 
         virtual void setData(const void* data, uint32_t size) = 0;
 
@@ -109,14 +109,17 @@ namespace Arm {
 
         static Ref<VertexBuffer> Create(float* data, uint32_t size);
         static Ref<VertexBuffer> Create(uint32_t size);
+
+        virtual uint32_t getID() const = 0;
     };
 
     class IndexBuffer {
     public:
         virtual ~IndexBuffer() = default;
-        virtual void bind() const = 0;
-        virtual void unbind() const = 0;
+        virtual void bind() const {};
+        virtual void unbind() const {};
         static Ref<IndexBuffer> Create(uint32_t* data, uint32_t count);
         virtual uint32_t GetCount() const = 0;
+        virtual uint32_t getID() const = 0;
     };
 }

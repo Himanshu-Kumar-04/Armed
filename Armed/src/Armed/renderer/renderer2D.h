@@ -28,7 +28,6 @@ namespace Arm {
 
         static void const drawQuad(const glm::mat4& transform, const glm::vec4& color);
         static void const drawQuad(const glm::mat4& transform, const Ref<Texture2D> texture, const float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
-        
         //Stats
         struct Statistics {
             uint32_t drawCalls;

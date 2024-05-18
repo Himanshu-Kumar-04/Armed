@@ -22,6 +22,7 @@
 
 #include "Armed/renderer/orthographicCamera.h"
 #include "Armed/renderer/orthographicCameraController.h"
+#include "Armed/renderer/camera.h"
 
 //---Timer--------------------
 #include "Armed/core/timer.h"

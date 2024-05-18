@@ -72,6 +72,11 @@ namespace Arm {
         layer->onAttach();
     }
 
+    void Application::close()
+    {
+        m_Running = false;
+    }
+
     bool Application::onWindowClose(WindowCloseEvent& e)
     {
         m_Running = false;

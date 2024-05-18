@@ -220,7 +220,17 @@ namespace Arm {
         if (s_Data.quadIndexCount >= Renderer2DData::maxIndexCount)
             nextBatch();
 
-        constexpr glm::vec2 texCoords[] = { {0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f},{0.0f,1.0f} };
+        constexpr float x = 7.0f, y = 5.0f;
+        constexpr float spriteSheetWidth = 2560;
+        constexpr float spriteSheetHeight = 1664;
+        constexpr float spritewidth = 128.0f, spriteHeight = 128.0f;
+
+
+        constexpr glm::vec2 texCoords[] = {
+            {(x * spritewidth) / spriteSheetWidth,(y * spriteHeight) / spriteSheetHeight},
+            {((x+1) * spritewidth) / spriteSheetWidth,(y * spriteHeight) / spriteSheetHeight},
+            {((x+1) * spritewidth) / spriteSheetWidth,((y+1) * spriteHeight) / spriteSheetHeight},
+            {(x * spritewidth) / spriteSheetWidth,((y+1) * spriteHeight) / spriteSheetHeight} };
 
         float textureIndex = 0.0f;
 

@@ -7,6 +7,10 @@ void Arm::OpenGLRendererAPI::init()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
 }
 
 void Arm::OpenGLRendererAPI::setclearColor(const glm::vec4& color)

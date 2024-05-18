@@ -53,13 +53,19 @@ bool Arm::OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& even
 {
 	m_ZoomLevel -= event.GetYOffset() * 0.25f;
 	m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
-	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	calculateProjection();
 	return false;
 }
 
 bool Arm::OrthographicCameraController::onWindowResize(WindowResizeEvent& event)
 {
 	m_AspectRatio = (float)event.getWidth() / (float)event.getHeight();
-	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	calculateProjection();
 	return false;
 }
+
+void Arm::OrthographicCameraController::calculateProjection()
+{
+	m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+}
+

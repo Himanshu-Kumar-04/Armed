@@ -15,5 +15,5 @@ private:
     //temp
     Arm::Ref<Arm::VertexArray> m_SquareVA;
     Arm::Ref<Arm::Shader> m_Shader;
-    Arm::Ref<Arm::Texture2D> m_Texture1;
+    Arm::Ref<Arm::Texture2D> m_SpritesSheet;
 };

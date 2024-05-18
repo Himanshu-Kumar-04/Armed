@@ -14,9 +14,14 @@ namespace Arm {
 
         OrthographicCamera& getCamera() { return m_Camera; }
         const OrthographicCamera& getCamera() const { return m_Camera; }
+        const float getZoomLevel() { return m_ZoomLevel; }
+        const void setZoomLevel(float zoom) { m_ZoomLevel = zoom; calculateProjection(); }
+
     private:
         bool onMouseScrolled(MouseScrolledEvent& event);
         bool onWindowResize(WindowResizeEvent& event);
+
+        void calculateProjection();
     private:
         float m_AspectRatio;
         float m_ZoomLevel = 1.0f;

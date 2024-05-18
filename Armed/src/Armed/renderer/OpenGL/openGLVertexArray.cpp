@@ -42,20 +42,16 @@ namespace Arm {
     }
     void OpenGLVertexArray::addVertexBuffer(Ref<VertexBuffer>& vertexBuffer)
     {
-        glBindVertexArray(m_RendererID);
-        vertexBuffer->bind();
-
         ARM_ASSERT(vertexBuffer->getLayout().getElements().size(), "Vertex Buffer has no layout");
 
         uint32_t index = 0;
         for (const auto& element : vertexBuffer->getLayout()) {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index,
-                element.GetComponentCount(),
+            glEnableVertexArrayAttrib(m_RendererID, index);
+            glVertexArrayAttribBinding(m_RendererID,index, 0);
+            glVertexArrayAttribFormat(m_RendererID,index,element.GetComponentCount(),
                 ShaderDataTypeToOpenGLBaseType(element.Type),
-                element.Normalized ? GL_TRUE : GL_FALSE,
-                vertexBuffer->getLayout().getStride(),
-                (const void*)element.Offset);
+                element.Normalized ? GL_TRUE : GL_FALSE, element.Offset);
+            glVertexArrayVertexBuffer(m_RendererID,index,vertexBuffer->getID(),element.Offset, vertexBuffer->getLayout().getStride());
             index++;
         }
 
@@ -63,9 +59,7 @@ namespace Arm {
     }
     void OpenGLVertexArray::setIndexBuffer(Ref<IndexBuffer>& indexBuffer)
     {
-        glBindVertexArray(m_RendererID);
-        indexBuffer->bind();
-
+        glVertexArrayElementBuffer(m_RendererID,indexBuffer->getID());
         m_IndexBuffer = indexBuffer;
     }
 }
