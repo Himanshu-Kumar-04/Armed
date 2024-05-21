@@ -22,6 +22,12 @@ namespace Arm {
         m_SceneData->projectionMatrix = camera.getProjectionMatrix();
         m_SceneData->viewProjectionMatrix = camera.getViewProjectionMatrix();
     }
+    void Renderer::beginScene(OrthographicCamera& camera)
+    {
+        m_SceneData->viewMatrix = camera.getViewMatrix();
+        m_SceneData->projectionMatrix = camera.getProjectionMatrix();
+        m_SceneData->viewProjectionMatrix = camera.getViewProjectionMatrix();
+    }
     void Renderer::endScene()
     {
     }

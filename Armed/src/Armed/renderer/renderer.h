@@ -1,6 +1,7 @@
 #pragma once
 #include "rendererCommand.h"
 #include "camera.h"
+#include "orthographicCamera.h"
 #include "shader.h"
 
 
@@ -19,6 +20,7 @@ namespace Arm {
         static void onWindowResize(uint32_t width, uint32_t height);
 
         static void beginScene(Camera& camera);
+        static void beginScene(OrthographicCamera& camera);
         static void endScene();
         static void submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const MeshType meshType = MeshType::DYNAMIC);
         static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }

@@ -17,7 +17,13 @@ namespace Arm {
         case Arm::ShaderDataType::Int2:         return GL_INT;
         case Arm::ShaderDataType::Int3:         return GL_INT;
         case Arm::ShaderDataType::Int4:         return GL_INT;
+        case Arm::ShaderDataType::UInt:         return GL_UNSIGNED_INT;
+        case Arm::ShaderDataType::UInt2:        return GL_UNSIGNED_INT;
+        case Arm::ShaderDataType::UInt3:        return GL_UNSIGNED_INT;
+        case Arm::ShaderDataType::UInt4:        return GL_UNSIGNED_INT;
         case Arm::ShaderDataType::Bool:         return GL_BOOL;
+        case Arm::ShaderDataType::UByte:        return GL_UNSIGNED_BYTE;
+        case Arm::ShaderDataType::Byte:         return GL_BYTE;
         }
 
         ARM_ASSERT(false, "Unknown ShaderDataType");

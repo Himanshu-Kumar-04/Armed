@@ -4,7 +4,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 
 workspace "Armed"
-	startproject "Sandbox"
+	startproject "Editor"
 	architecture "x64"
 
 	configurations{
@@ -23,4 +23,5 @@ workspace "Armed"
 	include "Armed/vendor/ImGui"
 
 	include "Armed"
+	include "Editor"
 	include "Sandbox"
