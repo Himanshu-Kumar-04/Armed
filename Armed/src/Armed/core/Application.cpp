@@ -8,10 +8,10 @@
 namespace Arm {
     Application* Application::s_Instance = nullptr;
 
-    Application::Application()
+    Application::Application(const std::string& name)
     {
         s_Instance = this;
-        m_Window = Scope<Window>(Window::Create());
+        m_Window = Scope<Window>(Window::Create(WindowProperties(name)));
         m_Window->setEventCallBack(ARM_BIND_EVENT_FN(Application::onEvent));
 
         Renderer::init();

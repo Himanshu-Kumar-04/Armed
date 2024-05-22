@@ -10,7 +10,7 @@ namespace Arm {
 
     class Application {
     public:
-        Application();
+        Application(const std::string& name = "Armed App");
         ~Application();
 
         void run();

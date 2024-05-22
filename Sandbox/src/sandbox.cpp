@@ -8,7 +8,8 @@
 
 class Sandbox : public Arm::Application {
 public:
-	Sandbox() {
+	Sandbox()
+	{
 #if 0
 		pushLayer(new ExampleLayer());
 #else

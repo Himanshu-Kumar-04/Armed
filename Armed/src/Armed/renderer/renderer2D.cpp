@@ -266,4 +266,5 @@ namespace Arm {
     {
         memset(&s_Data.stats, 0, sizeof(Statistics));
     }
+
 }
