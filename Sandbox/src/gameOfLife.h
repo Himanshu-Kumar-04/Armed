@@ -1,10 +1,10 @@
 #pragma once
 #include<armed.h>
 
-class Sandbox2D : public Arm::Layer {
+class GameOfLife : public Arm::Layer {
 public:
-    Sandbox2D();
-    ~Sandbox2D() = default;
+    GameOfLife();
+    ~GameOfLife() = default;
     virtual void onAttach() override;
     virtual void onDetach() override;
     virtual void onUpdate(Arm::Timestep ts) override;
@@ -16,4 +16,10 @@ private:
     Arm::Ref<Arm::Shader> m_Shader;
     Arm::Ref<Arm::FrameBuffer> m_FrameBuffer;
     Arm::Ref<Arm::Texture2D> m_SpritesSheet;
+
+    static const uint16_t width = 300;
+    static const uint16_t height = 300;
+
+    uint8_t cells[width][height] = {};
+    uint8_t state[width][height] = {};
 };

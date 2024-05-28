@@ -1,5 +1,5 @@
 #include<armed.h>
-#include "sandbox2D.h"
+#include "gameOfLife.h"
 #include "exampleLayer.h"
 
 //---EntryPoint---------
@@ -11,9 +11,9 @@ public:
 	Sandbox()
 	{
 #if 0
-		pushLayer(new ExampleLayer());
-#else
 		pushLayer(new Sandbox2D());
+#else
+		pushLayer(new GameOfLife());
 #endif
 	}
 	~Sandbox() {
