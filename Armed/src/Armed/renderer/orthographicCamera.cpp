@@ -35,6 +35,11 @@ namespace Arm {
         m_Properties.rotation = rotation;
         recalculateViewMatrix();
     }
+    void OrthographicCamera::onResize(float width, float height)
+    {
+        m_Properties.aspectRatio = width / height;
+        SetProjection(-m_Properties.aspectRatio * m_Properties.zoomLevel, m_Properties.aspectRatio * m_Properties.zoomLevel, -m_Properties.zoomLevel, m_Properties.zoomLevel);
+    }
     const glm::mat4& OrthographicCamera::getViewMatrix() const
     {
         return m_Properties.viewMatrix;
@@ -99,8 +104,7 @@ namespace Arm {
     }
     bool OrthographicCamera::onWindowResize(WindowResizeEvent& event)
     {
-        m_Properties.aspectRatio = (float)event.getWidth() / (float)event.getHeight();
-        SetProjection(-m_Properties.aspectRatio * m_Properties.zoomLevel, m_Properties.aspectRatio * m_Properties.zoomLevel, -m_Properties.zoomLevel, m_Properties.zoomLevel);
+        onResize((float)event.getWidth(), (float)event.getHeight());
         return false;
     }
     void OrthographicCamera::recalculateViewMatrix()

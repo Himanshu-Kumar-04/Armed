@@ -18,6 +18,8 @@
     #define ARM_TRACE(x, ...)   {printf(ANSI_COLOR_GREEN x ANSI_COLOR_RESET, __VA_ARGS__);}
     #define ARM_WARNING(x, ...)   {printf(ANSI_COLOR_YELLOW x ANSI_COLOR_RESET, __VA_ARGS__);}
 #else
-    #define ARM_ASSERT(x, ...)
-    #define ARM_ERROR(x)
+    #define ARM_ASSERT(x, ...) 
+    #define ARM_ERROR(x, ...)  
+    #define ARM_TRACE(x, ...)  
+    #define ARM_WARNING(x, ...)
 #endif // ARM_DEBUG

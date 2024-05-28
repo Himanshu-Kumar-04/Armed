@@ -23,7 +23,8 @@ namespace Arm {
 
         inline static Application& get() { return *s_Instance; }
         inline Window& getWindow() { return *m_Window; }
-
+        
+        ImGuiLayer* getImGuiLayer() { return m_ImGuiLayer; }
     private:
         bool onWindowClose(WindowCloseEvent& e);
         bool onWindowResize(WindowResizeEvent& e);

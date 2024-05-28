@@ -12,10 +12,13 @@ namespace Arm {
     OpenGLFrameBuffer::~OpenGLFrameBuffer()
     {
         glDeleteFramebuffers(1, &m_RendererID);
+        glDeleteTextures(1, &m_ColorAttachment);
+        glDeleteTextures(1, &m_DepthAttachment);
     }
     void OpenGLFrameBuffer::bind()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+        glViewport(0, 0, m_Properties.width, m_Properties.height);
     }
     void OpenGLFrameBuffer::unbind()
     {
@@ -23,6 +26,11 @@ namespace Arm {
     }
     void OpenGLFrameBuffer::invalidate()
     {
+        if (m_RendererID) {
+            glDeleteFramebuffers(1, &m_RendererID);
+            glDeleteTextures(1, &m_ColorAttachment);
+            glDeleteTextures(1, &m_DepthAttachment);
+        }
         glCreateFramebuffers(1, &m_RendererID);
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
         
@@ -45,5 +53,16 @@ namespace Arm {
         ARM_ASSERT((glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE), "incomplete frame buffer");
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    void OpenGLFrameBuffer::resize(uint32_t width, uint32_t height)
+    {
+        if (width == 0 || height == 0 || width > m_Properties.screenLimit || height > m_Properties.screenLimit) {
+            ARM_WARNING("Attempted to resize frame buffer to (%d, %d)", width, height);
+            return;
+        }
+        m_Properties.width = width;
+        m_Properties.height = height;
+
+        invalidate();
     }
 }

@@ -17,5 +17,9 @@ namespace Arm {
         Ref<Shader> m_Shader;
         Ref<FrameBuffer> m_FrameBuffer;
         Ref<Texture2D> m_SpritesSheet;
+
+        bool m_ViewportFocused = false;
+        bool m_ViewportHovered = false;
+        glm::vec2 m_ViewportSize;
     };
 }

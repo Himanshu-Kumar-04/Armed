@@ -22,7 +22,7 @@ namespace Arm {
 		void Begin();
 		void End();
 		void onImGuiRender() override;
-		//void BlockEvents(bool block) { m_BlockEvents = block; }
+		void BlockEvents(bool block) { m_BlockEvents = block; }
 
 		void SetDarkThemeColors();
 

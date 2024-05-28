@@ -32,7 +32,8 @@ namespace Arm {
 
         {
             ARM_PROFILE_SCOPE("CameraController.onUpdate");
-            m_Camera.onUpdate(ts);
+            if (m_ViewportFocused)
+                m_Camera.onUpdate(ts);
         }
 
         Renderer2D::resetStats();
@@ -47,9 +48,10 @@ namespace Arm {
             ARM_PROFILE_SCOPE("Renderer:draw");
             static float rotation = 0.0f;
             rotation += ts * 9.0f;
-            Renderer2D::beginScene(m_Camera);
-            Renderer2D::drawRotatedQuad({ 0.0f, 0.0f, 0.0f }, { 1.0f,1.0f }, rotation, { 0.5f,0.3f,0.5f,1.0f });
-            Renderer2D::endScene();
+            Arm::Renderer2D::beginScene(m_Camera);
+            
+            Arm::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f }, { 1.0f,1.0f }, { 0.2f,0.7f,0.5f,1.0f });
+            Arm::Renderer2D::endScene();
             m_FrameBuffer->unbind();
         }
 
@@ -57,40 +59,27 @@ namespace Arm {
 
     void EditorLayer::onImGuiRender()
     {
-#if 1
         static bool s = false;
         bool* p = &s;
-        static bool opt_fullscreen = true;
-        static bool opt_padding = false;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-        if (opt_fullscreen)
-        {
-            const ImGuiViewport* viewport = ImGui::GetMainViewport();
-            ImGui::SetNextWindowPos(viewport->WorkPos);
-            ImGui::SetNextWindowSize(viewport->WorkSize);
-            ImGui::SetNextWindowViewport(viewport->ID);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-        }
-        else
-        {
-            dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
-        }
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->WorkPos);
+        ImGui::SetNextWindowSize(viewport->WorkSize);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
         if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
             window_flags |= ImGuiWindowFlags_NoBackground;
-        if (!opt_padding)
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        ImGui::Begin("DockSpace Demo", p, window_flags);
-        if (!opt_padding)
-            ImGui::PopStyleVar();
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        ImGui::Begin("DockSpace", p, window_flags);
 
-        if (opt_fullscreen)
-            ImGui::PopStyleVar(2);
+        ImGui::PopStyleVar();
+        ImGui::PopStyleVar(2);
 
         ImGuiIO& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
@@ -98,33 +87,17 @@ namespace Arm {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
-        else
-        {
-        }
 
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::BeginMenu("Options"))
-            {
-                ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-                ImGui::MenuItem("Padding", NULL, &opt_padding);
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Flag: NoDockingOverCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingOverCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingOverCentralNode; }
-                if (ImGui::MenuItem("Flag: NoDockingSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingSplit; }
-                if (ImGui::MenuItem("Flag: NoUndocking", "", (dockspace_flags & ImGuiDockNodeFlags_NoUndocking) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoUndocking; }
-                if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoResize; }
-                if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; }
-                if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
-                ImGui::Separator();
-
+        if (ImGui::BeginMenuBar()) {
+            if (ImGui::BeginMenu("Options")) {
+                //ImGui::Separator();
                 if (ImGui::MenuItem("Close", NULL, false, p != NULL))
                     *p = false;
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
         }
-        ImGui::Begin("Armed");
+        ImGui::Begin("Stats");
 
         auto stats = Renderer2D::getStats();
         ImGui::Text("Renderer2D Stats:");
@@ -133,12 +106,30 @@ namespace Arm {
         ImGui::Text("Vertices:       %d", stats.getTotalVertexCount());
         ImGui::Text("Indices:        %d", stats.getTotalIndexCount());
         if (ImGui::Button("Exit")) Application::get().close();
-        uint32_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
-        ImGui::Image((void*)textureId, { 1280,720 }, ImVec2(0,1), ImVec2(1,0));
         ImGui::End();
 
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        ImGui::Begin("Viewport");
+        
+        m_ViewportFocused = ImGui::IsWindowFocused();
+        m_ViewportHovered = ImGui::IsWindowHovered();
+        Application::get().getImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+
+        ImVec2 viewportPanalSize = ImGui::GetContentRegionAvail();
+        if (m_ViewportSize != *(glm::vec2*)&viewportPanalSize) {
+            m_FrameBuffer->resize((uint32_t)viewportPanalSize.x, (uint32_t)viewportPanalSize.y);
+            m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
+
+            m_Camera.onResize(viewportPanalSize.x, viewportPanalSize.y);
+        }
+
+        uint32_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
+        ImGui::Image((void*)textureId, { m_ViewportSize.x,m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
-#endif
+        
+        ImGui::PopStyleVar();
+
+        ImGui::End();
     }
 
     void EditorLayer::onEvent(Event& e)

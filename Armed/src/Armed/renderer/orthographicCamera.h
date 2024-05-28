@@ -33,6 +33,8 @@ namespace Arm {
         float getRotation() const;
         void setRotation(float rotation);
 
+        void onResize(float width, float height);
+
         const glm::mat4& getViewMatrix() const;
         const glm::mat4& getProjectionMatrix() const;
         const glm::mat4& getViewProjectionMatrix() const;
