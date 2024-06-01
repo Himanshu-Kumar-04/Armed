@@ -15,7 +15,8 @@ project "Editor"
 	includedirs{
 		"%{wks.location}/Armed/src",
 		"%{wks.location}/Armed/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links{

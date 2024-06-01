@@ -11,7 +11,7 @@ public:
 	Sandbox()
 	{
 #if 0
-		pushLayer(new Sandbox2D());
+		pushLayer(new ExampleLayer());
 #else
 		pushLayer(new GameOfLife());
 #endif

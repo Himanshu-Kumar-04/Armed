@@ -10,6 +10,10 @@
 #include"Armed/core/mouseCodes.h"
 #include"Armed/imGui/imGuiLayer.h"
 
+#include "Armed/scene/scene.h"
+#include "Armed/scene/entity.h"
+#include "Armed/scene/components.h"
+
 //---Renderer-----------
 #include "Armed/renderer/renderer.h"
 #include "Armed/renderer/renderer2D.h"

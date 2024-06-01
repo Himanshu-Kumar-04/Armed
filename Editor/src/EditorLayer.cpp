@@ -19,6 +19,11 @@ namespace Arm {
         fbProps.height = 720;
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
+        
+        m_Scene = CreateRef<Scene>();
+        Entity square = m_Scene->createEntity();
+        square.addComponent<SpriteRendererComponent>(glm::vec4{0.0f,1.0f,0.0f,1.0});
+
     }
 
     void EditorLayer::onDetach()
@@ -27,36 +32,23 @@ namespace Arm {
 
     void EditorLayer::onUpdate(Timestep ts)
     {
-        ARM_PROFILE_FUNCTION();
-
-
-        {
-            ARM_PROFILE_SCOPE("CameraController.onUpdate");
-            if (m_ViewportFocused)
-                m_Camera.onUpdate(ts);
-        }
+        t = ts;
+        if (m_ViewportFocused)
+            m_Camera.onUpdate(ts);
 
         Renderer2D::resetStats();
-        {
-            ARM_PROFILE_SCOPE("Renderer:prep");
-            m_FrameBuffer->bind();
-            RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-            RendererCommand::clearColor();
-        }
+        m_FrameBuffer->bind();
+        RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+        RendererCommand::clearColor();
 
-        {
-            ARM_PROFILE_SCOPE("Renderer:draw");
-            static float rotation = 0.0f;
-            rotation += ts * 9.0f;
-            Arm::Renderer2D::beginScene(m_Camera);
-            
-            Arm::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f }, { 1.0f,1.0f }, { 0.2f,0.7f,0.5f,1.0f });
-            Arm::Renderer2D::endScene();
-            m_FrameBuffer->unbind();
-        }
+        Arm::Renderer2D::beginScene(m_Camera);
+
+        m_Scene->onUpdate(ts);
+
+        Arm::Renderer2D::endScene();
+        m_FrameBuffer->unbind();
 
     }
-
     void EditorLayer::onImGuiRender()
     {
         static bool s = false;
@@ -101,6 +93,7 @@ namespace Arm {
 
         auto stats = Renderer2D::getStats();
         ImGui::Text("Renderer2D Stats:");
+        ImGui::Text("frame rate:     %f", 1/t);
         ImGui::Text("Draw Calls:     %d", stats.drawCalls);
         ImGui::Text("Quad:           %d", stats.quadCount);
         ImGui::Text("Vertices:       %d", stats.getTotalVertexCount());
