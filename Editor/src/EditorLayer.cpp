@@ -5,25 +5,45 @@
 
 namespace Arm {
     EditorLayer::EditorLayer()
-        :Layer("EditorLayer"), m_Camera(1280.0f / 720.0f)
+        :Layer("EditorLayer")
     {
     }
 
     void EditorLayer::onAttach()
     {
         m_SpritesSheet = Texture2D::Create("assets/game/assets/RPGpack_sheet_2X.png");
-        m_Camera.setZoomLevel(4.0f);
 
         FrameBufferProperties fbProps;
         fbProps.width = 1280;
         fbProps.height = 720;
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
-        
-        m_Scene = CreateRef<Scene>();
-        Entity square = m_Scene->createEntity();
+
+        m_Scene = CreateRef<Scene>(SceneType::__2D__);
+        Entity square = m_Scene->createEntity("green square");
+        m_CameraEntity = m_Scene->createEntity("camera entity");
+        m_CameraEntity.addComponent<CameraComponent>();
         square.addComponent<SpriteRendererComponent>(glm::vec4{0.0f,1.0f,0.0f,1.0});
 
+        class CameraController : public ScriptableEntity {
+        public:
+            virtual void onCreate() override {
+            }
+            virtual void onDestroy() override {
+            }
+            virtual void onUpdate(Timestep ts) override {
+                auto& transform = getComponent<TransformComponent>().transform;
+                float speed = 5.0f;
+
+                if (Input::isKeyPressed(Key::A)) transform[3][0] -= speed * ts;
+                if (Input::isKeyPressed(Key::D)) transform[3][0] += speed * ts;
+                if (Input::isKeyPressed(Key::W)) transform[3][1] += speed * ts;
+                if (Input::isKeyPressed(Key::S)) transform[3][1] -= speed * ts;
+            }
+        };
+
+        m_CameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
+        m_SceneHierarchyPanal.SetContext(m_Scene);
     }
 
     void EditorLayer::onDetach()
@@ -32,20 +52,19 @@ namespace Arm {
 
     void EditorLayer::onUpdate(Timestep ts)
     {
-        t = ts;
-        if (m_ViewportFocused)
-            m_Camera.onUpdate(ts);
+        //Resize
+        if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && (m_FrameBuffer->getProperties().width != m_ViewportSize.x || m_FrameBuffer->getProperties().height != m_ViewportSize.y)) {
+            m_FrameBuffer->resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+            m_Scene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        }
 
         Renderer2D::resetStats();
         m_FrameBuffer->bind();
         RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
         RendererCommand::clearColor();
 
-        Arm::Renderer2D::beginScene(m_Camera);
-
         m_Scene->onUpdate(ts);
 
-        Arm::Renderer2D::endScene();
         m_FrameBuffer->unbind();
 
     }
@@ -89,16 +108,19 @@ namespace Arm {
             }
             ImGui::EndMenuBar();
         }
+
+        m_SceneHierarchyPanal.onImGuiRender();
+
         ImGui::Begin("Stats");
 
         auto stats = Renderer2D::getStats();
         ImGui::Text("Renderer2D Stats:");
-        ImGui::Text("frame rate:     %f", 1/t);
         ImGui::Text("Draw Calls:     %d", stats.drawCalls);
         ImGui::Text("Quad:           %d", stats.quadCount);
         ImGui::Text("Vertices:       %d", stats.getTotalVertexCount());
         ImGui::Text("Indices:        %d", stats.getTotalIndexCount());
         if (ImGui::Button("Exit")) Application::get().close();
+
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -109,12 +131,7 @@ namespace Arm {
         Application::get().getImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
         ImVec2 viewportPanalSize = ImGui::GetContentRegionAvail();
-        if (m_ViewportSize != *(glm::vec2*)&viewportPanalSize) {
-            m_FrameBuffer->resize((uint32_t)viewportPanalSize.x, (uint32_t)viewportPanalSize.y);
-            m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
-
-            m_Camera.onResize(viewportPanalSize.x, viewportPanalSize.y);
-        }
+        m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
 
         uint32_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
         ImGui::Image((void*)textureId, { m_ViewportSize.x,m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
@@ -127,7 +144,6 @@ namespace Arm {
 
     void EditorLayer::onEvent(Event& e)
     {
-        m_Camera.onEvent(e);
     }
 
 }

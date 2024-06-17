@@ -1,5 +1,6 @@
 #pragma once
 #include<armed.h>
+#include "panel/sceneHierarchyPanal.h"
 
 namespace Arm {
     class EditorLayer : public Layer {
@@ -12,13 +13,15 @@ namespace Arm {
         virtual void onImGuiRender() override;
         virtual void onEvent(Event& e) override;
     private:
-        float t;
-        OrthographicCamera m_Camera;
-        Ref<VertexArray> m_SquareVA;
         Ref<Shader> m_Shader;
         Ref<FrameBuffer> m_FrameBuffer;
         Ref<Texture2D> m_SpritesSheet;
         Ref<Scene> m_Scene;
+
+        //panals.......
+        SceneHierarchyPanal m_SceneHierarchyPanal;
+
+        Entity m_CameraEntity;
 
         bool m_ViewportFocused = false;
         bool m_ViewportHovered = false;
