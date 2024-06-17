@@ -16,34 +16,18 @@ namespace Arm {
     {
         RendererCommand::setViewport(0, 0, width, height);
     }
-    void Renderer::beginScene(Camera& camera)
+    void Renderer::beginScene(const Camera& camera, const glm::mat4& transform)
     {
-        m_SceneData->viewMatrix = camera.getViewMatrix();
-        m_SceneData->projectionMatrix = camera.getProjectionMatrix();
-        m_SceneData->viewProjectionMatrix = camera.getViewProjectionMatrix();
-    }
-    void Renderer::beginScene(OrthographicCamera& camera)
-    {
-        m_SceneData->viewMatrix = camera.getViewMatrix();
-        m_SceneData->projectionMatrix = camera.getProjectionMatrix();
-        m_SceneData->viewProjectionMatrix = camera.getViewProjectionMatrix();
+        m_SceneData->projectionMatrix = camera.getProjection() * glm::inverse(transform);
     }
     void Renderer::endScene()
     {
     }
-    void Renderer::submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const MeshType meshType)
+    void Renderer::submit(const Ref<Shader>& shader, const Ref<VertexBuffer>& vertexBuffer)
     {
         shader->bind();
-        switch (meshType) {
-        case MeshType::DYNAMIC:
-            std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_ViewProjection", m_SceneData->viewProjectionMatrix);
-            break;
-        case MeshType::STATIC:
-            std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_Proj", m_SceneData->projectionMatrix);
-            std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_View", m_SceneData->viewMatrix);
-        }
-
-        RendererCommand::drawIndexed(vertexArray);
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_ViewProjection", m_SceneData->viewProjectionMatrix);
+        RendererCommand::drawIndexed(vertexBuffer);
     }
     //void const Renderer::DrawObject(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture2D, const glm::vec4& tintColor)
     //{

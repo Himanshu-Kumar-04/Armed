@@ -11,13 +11,17 @@ namespace Arm {
     Application::Application(const std::string& name)
     {
         s_Instance = this;
+        Renderer::setAPI(RendererAPI::API::OpenGL);
         m_Window = Scope<Window>(Window::Create(WindowProperties(name)));
         m_Window->setEventCallBack(ARM_BIND_EVENT_FN(Application::onEvent));
 
         Renderer::init();
+        
+        if(!isDistBuild) {
+            m_ImGuiLayer = new ImGuiLayer;
+            pushOverlay(m_ImGuiLayer);
+        }
 
-        m_ImGuiLayer = new ImGuiLayer;
-        pushOverlay(m_ImGuiLayer);
     }
 
     Application::~Application()
@@ -36,12 +40,12 @@ namespace Arm {
                 for (Layer* layer : m_LayerStack)
                 layer->onUpdate(timestep);
             }
-
-            m_ImGuiLayer->Begin();
-            for (Layer* layer : m_LayerStack)
-                layer->onImGuiRender();
-            m_ImGuiLayer->End();
-
+            if (!isDistBuild) {
+                m_ImGuiLayer->Begin();
+                for (Layer* layer : m_LayerStack)
+                    layer->onImGuiRender();
+                m_ImGuiLayer->End();
+            }
 
             m_Window->onUpdate();
         }

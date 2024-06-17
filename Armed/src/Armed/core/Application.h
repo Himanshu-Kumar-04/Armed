@@ -30,6 +30,12 @@ namespace Arm {
         bool onWindowResize(WindowResizeEvent& e);
     private:
         Scope<Window> m_Window;
+
+#if ARM_DIST
+        bool isDistBuild = true;
+#else
+        bool isDistBuild = false;
+#endif
         ImGuiLayer* m_ImGuiLayer;
 
         bool m_Running = true, m_Minimized = false;

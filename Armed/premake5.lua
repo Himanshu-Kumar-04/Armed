@@ -26,14 +26,20 @@ project "Armed"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.VulkanSDK}"
+	}
+	
+	libdirs{
+		"%{LibraryDir.VulkanSDK}"
 	}
 
 	links{
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"opengl32"
+		"opengl32",
+		"%{Library.Vulkan}"
 	}
 
 	filter "system:windows"
@@ -41,6 +47,7 @@ project "Armed"
 
 		defines{
 			"ARMED_PLATFORM_WINDOWS",
+			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 	filter "configurations:Debug"

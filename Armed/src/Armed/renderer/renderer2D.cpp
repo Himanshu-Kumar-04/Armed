@@ -20,7 +20,6 @@ namespace Arm {
         static const uint32_t maxIndexCount = maxQuadCount * 6;
         static const uint32_t maxTextureSlots = 32; // TODO: RENDER_CAPS
 
-        Ref<VertexArray> quadVertexArray;
         Ref<VertexBuffer> quadVertexBuffer;
         Ref<Shader> quadShader;
         Ref<Texture2D> whiteTexture;
@@ -43,7 +42,6 @@ namespace Arm {
     {
         ARM_PROFILE_FUNCTION();
 
-        s_Data.quadVertexArray = VertexArray::Create();
         s_Data.quadVertexBuffer = VertexBuffer::Create(s_Data.maxVertexCount * sizeof(QuadVertex));
         s_Data.quadVertexBuffer->setLayout({
                 {ShaderDataType::Float3 , "position"},
@@ -52,7 +50,6 @@ namespace Arm {
                 {ShaderDataType::Float , "texIndex"},
                 {ShaderDataType::Float , "tilingFactor"}
             });
-        s_Data.quadVertexArray->addVertexBuffer(s_Data.quadVertexBuffer);
         s_Data.quadVertexBufferBase = new QuadVertex[s_Data.maxVertexCount];
 
         uint32_t* quadIndices = new uint32_t[s_Data.maxIndexCount];
@@ -67,7 +64,7 @@ namespace Arm {
             offset += 4;
         }
         Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.maxIndexCount);
-        s_Data.quadVertexArray->setIndexBuffer(quadIB);
+        s_Data.quadVertexBuffer->setIndexBuffer(quadIB);
         delete[] quadIndices;
 
         s_Data.whiteTexture = Texture2D::Create(1, 1);
@@ -85,8 +82,8 @@ namespace Arm {
         s_Data.textureSlots[0] = s_Data.whiteTexture;
 
         s_Data.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-        s_Data.quadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
-        s_Data.quadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
+        s_Data.quadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
+        s_Data.quadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
         s_Data.quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
     }
     
@@ -112,7 +109,7 @@ namespace Arm {
         for (uint32_t i = 0; i < s_Data.textureSlotIndex; i++) {
             s_Data.textureSlots[i]->bind(i);
         }
-        RendererCommand::drawIndexed(s_Data.quadVertexArray, s_Data.quadIndexCount);
+        RendererCommand::drawIndexed(s_Data.quadVertexBuffer, s_Data.quadIndexCount);
         s_Data.stats.drawCalls++;
     }
 
@@ -125,11 +122,9 @@ namespace Arm {
     // Scenes
     ////////////////////////////////////// 
 
-    void Renderer2D::beginScene(const OrthographicCamera& camera)
+    void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
     {
-        ARM_PROFILE_FUNCTION();
-
-        s_Data.quadShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
+        s_Data.quadShader->setMat4("u_ViewProjection", camera.getProjection() * glm::inverse(transform));
         beginBatch();
     }
 

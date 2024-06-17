@@ -1,8 +1,8 @@
 #pragma once
 #include "rendererCommand.h"
-#include "orthographicCamera.h"
 #include "shader.h"
 #include "texture.h"
+#include "camera.h"
 
 namespace Arm {
     class Renderer2D {
@@ -13,7 +13,7 @@ namespace Arm {
         static void beginBatch();
         static void flush();
 
-        static void beginScene(const OrthographicCamera& camera);
+        static void beginScene(const Camera& camera, const glm::mat4& transform);
         static void endScene();
 
         static void const drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);

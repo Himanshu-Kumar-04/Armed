@@ -31,6 +31,8 @@ namespace Arm {
             glDeleteTextures(1, &m_ColorAttachment);
             glDeleteTextures(1, &m_DepthAttachment);
         }
+        glDisable(GL_DEPTH_TEST);
+
         glCreateFramebuffers(1, &m_RendererID);
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
         

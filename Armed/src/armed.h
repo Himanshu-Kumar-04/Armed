@@ -10,9 +10,10 @@
 #include"Armed/core/mouseCodes.h"
 #include"Armed/imGui/imGuiLayer.h"
 
-#include "Armed/scene/scene.h"
-#include "Armed/scene/entity.h"
 #include "Armed/scene/components.h"
+#include "Armed/scene/entity.h"
+#include "Armed/scene/scene.h"
+#include "Armed/scene/scriptableEntity.h"
 
 //---Renderer-----------
 #include "Armed/renderer/renderer.h"
@@ -20,7 +21,6 @@
 #include "Armed/renderer/rendererCommand.h"
 
 #include "Armed/renderer/buffer.h"
-#include "Armed/renderer/vertexArray.h"
 #include "Armed/renderer/shader.h"
 #include "Armed/renderer/texture.h"
 #include "Armed/renderer/frameBuffer.h"

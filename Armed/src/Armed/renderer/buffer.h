@@ -111,23 +111,6 @@ namespace Arm {
         uint32_t m_Stride = 0;
     };
 
-    class VertexBuffer {
-    public:
-        virtual ~VertexBuffer() = default;
-        
-        virtual void bind() const {};
-        virtual void unbind() const {};
-
-        virtual void setData(const void* data, uint32_t size) = 0;
-
-        virtual const BufferLayout& getLayout() const = 0;
-        virtual void setLayout(const BufferLayout& layout) = 0;
-
-        static Ref<VertexBuffer> Create(float* data, uint32_t size);
-        static Ref<VertexBuffer> Create(uint32_t size);
-
-        virtual uint32_t getID() const = 0;
-    };
 
     class IndexBuffer {
     public:
@@ -138,4 +121,27 @@ namespace Arm {
         virtual uint32_t GetCount() const = 0;
         virtual uint32_t getID() const = 0;
     };
+
+
+    class VertexBuffer {
+    public:
+        virtual ~VertexBuffer() = default;
+        
+        virtual void bind() const {};
+        virtual void unbind() const {};
+
+        virtual void setData(const void* data, uint32_t size) = 0;
+        virtual void setIndexBuffer(Ref<IndexBuffer>& indexBuffer) = 0;
+        virtual const Ref<IndexBuffer>& getIndexBuffer() const = 0;
+
+        virtual const BufferLayout& getLayout() const = 0;
+        virtual void setLayout(const BufferLayout& layout) = 0;
+
+        static Ref<VertexBuffer> Create(float* data, uint32_t size);
+        static Ref<VertexBuffer> Create(uint32_t size);
+
+        virtual uint32_t getID() const = 0;
+    };
+
+    
 }

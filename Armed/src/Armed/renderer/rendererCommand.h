@@ -11,7 +11,7 @@ namespace Arm {
             s_RendererAPI->setViewport(x, y, width, height); 
         }
 
-        inline static void drawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) { s_RendererAPI->drawIndexed(vertexArray, indexCount); }
+        inline static void drawIndexed(const Ref<VertexBuffer>& vertexBuffer, uint32_t indexCount = 0) { s_RendererAPI->drawIndexed(vertexBuffer, indexCount); }
     private:
         static Scope<RendererAPI> s_RendererAPI;
     };

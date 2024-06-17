@@ -1,5 +1,6 @@
 #pragma once
-#include<glm/glm.hpp>
+#include <glm/glm.hpp>
+#include "sceneCamera.h"
 
 namespace Arm {
     struct TagComponent {
@@ -25,9 +26,34 @@ namespace Arm {
 
     struct SpriteRendererComponent {
         glm::vec4 color = glm::vec4(1.0f);
+
         SpriteRendererComponent() = default;
         SpriteRendererComponent(const SpriteRendererComponent&) = default;
         SpriteRendererComponent(const glm::vec4& _color)
             :color(_color) {}
+    };
+
+    struct CameraComponent {
+        SceneCamera camera;
+        bool isPrimary = true;
+        bool hasFixedAspectRatio = false;
+
+        CameraComponent() = default;
+        CameraComponent(const CameraComponent&) = default;
+    };
+    
+    class ScriptableEntity;
+
+    struct NativeScriptComponent {
+        ScriptableEntity* instance = nullptr;
+
+        ScriptableEntity* (*instiateScript)();
+        void(*destroyScript)(NativeScriptComponent*);
+        
+        template<typename T>
+        void bind() {
+            instiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+            destroyScript = [](NativeScriptComponent* nsc) {delete (T*)nsc->instance; nsc->instance = nullptr; };
+        }
     };
 }

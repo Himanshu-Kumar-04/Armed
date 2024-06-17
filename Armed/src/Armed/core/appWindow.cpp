@@ -3,6 +3,8 @@
 #include<GLFW/glfw3.h>
 
 #include "Armed/renderer/OpenGL/openGLContext.h"
+#include "Armed/renderer/vk/vulkanContext.h"
+#include"Armed/renderer/renderer.h"
 
 namespace Arm {
 
@@ -64,11 +66,19 @@ namespace Arm {
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
+		if(Renderer::getAPI() == RendererAPI::API::OpenGL) {
+			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		}
+		
 		m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 
-		m_Context = new OpenGLContext(m_Window);
+		if (Renderer::getAPI() == RendererAPI::API::OpenGL)
+			m_Context = new OpenGLContext(m_Window);
+		else if (Renderer::getAPI() == RendererAPI::API::Vulkan)
+			m_Context = new VulkanContext(m_Data.Title.c_str());
 		m_Context->init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
