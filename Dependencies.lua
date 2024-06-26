@@ -5,6 +5,11 @@ IncludeDir["Glad"] = "%{wks.location}/Armed/vendor/Glad/include"
 IncludeDir["ImGui"] = "%{wks.location}/Armed/vendor/ImGui"
 IncludeDir["glm"] = "%{wks.location}/Armed/vendor/glm"
 IncludeDir["entt"] = "%{wks.location}/Armed/vendor/entt"
+IncludeDir["VulkanSDK"] = os.getenv("VULKAN_SDK") .. "/Include"
 
 LibraryDir = {}
+LibraryDir["VulkanSDK"] = os.getenv("VULKAN_SDK") .. "/Lib/"
+
 Library = {}
+Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
+

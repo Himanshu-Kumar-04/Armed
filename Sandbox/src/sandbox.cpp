@@ -1,6 +1,5 @@
 #include<armed.h>
-#include "gameOfLife.h"
-#include "exampleLayer.h"
+#include"logicSim.h"
 
 //---EntryPoint---------
 #include "Armed/core/entryPoint.h"
@@ -11,9 +10,9 @@ public:
 	Sandbox()
 	{
 #if 0
-		pushLayer(new ExampleLayer());
+		pushLayer(new Arm::ExampleLayer());
 #else
-		pushLayer(new GameOfLife());
+		pushLayer(new LOGIC_SIM());
 #endif
 	}
 	~Sandbox() {
