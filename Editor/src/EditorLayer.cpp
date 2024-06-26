@@ -20,10 +20,14 @@ namespace Arm {
         m_FrameBuffer = FrameBuffer::create(fbProps);
 
         m_Scene = CreateRef<Scene>(SceneType::__2D__);
-        Entity square = m_Scene->createEntity("green square");
+        Entity square1 = m_Scene->createEntity("green square");
+        Entity square2 = m_Scene->createEntity("red square");
+        Entity square3 = m_Scene->createEntity("blue square");
         m_CameraEntity = m_Scene->createEntity("camera entity");
         m_CameraEntity.addComponent<CameraComponent>();
-        square.addComponent<SpriteRendererComponent>(glm::vec4{0.0f,1.0f,0.0f,1.0});
+        square1.addComponent<SpriteRendererComponent>(glm::vec4{ 0.0f,1.0f,0.0f,1.0 });
+        square2.addComponent<SpriteRendererComponent>(glm::vec4{ 1.0f,0.0f,0.0f,1.0 });
+        square3.addComponent<SpriteRendererComponent>(glm::vec4{ 0.0f,0.0f,1.0f,1.0 });
 
         class CameraController : public ScriptableEntity {
         public:
