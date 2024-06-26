@@ -1,7 +1,10 @@
 #pragma once
+#include "components.h"
+
 #include"ArmPCH.h"
 #include "entt.hpp"
 #include"Armed/core/timestep.h"
+#include"glm/glm.hpp"
 
 namespace Arm {
     enum class SceneType : uint8_t{
@@ -17,7 +20,7 @@ namespace Arm {
         void onUpdate(Timestep ts);
         void onViewportResize(uint32_t width, uint32_t height);
         Entity createEntity(const std::string& name = std::string());
-
+        bool isEntityInView(const glm::mat4& transform);
         //temp
         entt::registry& reg() { return m_Registry; }
     private:

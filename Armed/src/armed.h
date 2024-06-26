@@ -10,6 +10,8 @@
 #include"Armed/core/mouseCodes.h"
 #include"Armed/imGui/imGuiLayer.h"
 
+//---ECS----------------
+
 #include "Armed/scene/components.h"
 #include "Armed/scene/entity.h"
 #include "Armed/scene/scene.h"

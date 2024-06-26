@@ -53,7 +53,7 @@ namespace Arm {
                 auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
                 for (auto entity : group) {
                     auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-                    Renderer2D::drawQuad(transform, sprite.color);
+                    if(isEntityInView(transform)) Renderer2D::drawQuad(transform, sprite.color);
                 }
 
                 Renderer2D::endScene();
@@ -93,5 +93,11 @@ namespace Arm {
         tag.tag = (name.empty()) ? "__entity__" : name;
         return entity;
     }
+
+    bool Scene::isEntityInView(const glm::mat4& transform)
+    {
+        return (m_ViewportWidth > transform[3].x) ? true : false;
+    }
+
 
 }

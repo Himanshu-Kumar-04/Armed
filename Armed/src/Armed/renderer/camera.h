@@ -4,6 +4,10 @@
 namespace Arm {
     class Camera {
     public:
+        enum class ProjectionType : uint8_t {
+            orthographic, perspective
+        };
+    public:
         Camera() = default;
         Camera(const glm::mat4& projection)
             : m_Projection(projection) {}
