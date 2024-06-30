@@ -1,5 +1,4 @@
 #include<armed.h>
-#include"logicSim.h"
 
 //---EntryPoint---------
 #include "Armed/core/entryPoint.h"
@@ -12,7 +11,6 @@ public:
 #if 0
 		pushLayer(new Arm::ExampleLayer());
 #else
-		pushLayer(new LOGIC_SIM());
 #endif
 	}
 	~Sandbox() {

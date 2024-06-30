@@ -8,6 +8,9 @@
 #include "Armed/event/mouseEvent.h"
 
 namespace Arm {
+	enum Fonts : uint8_t {
+		openSans_bold = 0, openSans_regular,
+	};
 
 	class ImGuiLayer : public Layer
 	{
@@ -28,7 +31,7 @@ namespace Arm {
 
 		uint32_t GetActiveWidgetID() const;
 	private:
-		bool m_BlockEvents = true;
+		bool m_BlockEvents = false;
 	};
 
 }
