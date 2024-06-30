@@ -14,35 +14,46 @@ namespace Arm {
         m_SpritesSheet = Texture2D::Create("assets/game/assets/RPGpack_sheet_2X.png");
 
         FrameBufferProperties fbProps;
-        fbProps.width = 1280;
-        fbProps.height = 720;
+        fbProps.width = Application::get().getWindow().getWidth();
+        fbProps.height = Application::get().getWindow().getHeight();
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
 
-        m_Scene = CreateRef<Scene>(SceneType::__2D__);
-        Entity square1 = m_Scene->createEntity("green square");
-        Entity square2 = m_Scene->createEntity("red square");
-        Entity square3 = m_Scene->createEntity("blue square");
-        m_CameraEntity = m_Scene->createEntity("camera entity");
-        m_CameraEntity.addComponent<CameraComponent>();
-        square1.addComponent<SpriteRendererComponent>(glm::vec4{ 0.0f,1.0f,0.0f,1.0 });
-        square2.addComponent<SpriteRendererComponent>(glm::vec4{ 1.0f,0.0f,0.0f,1.0 });
-        square3.addComponent<SpriteRendererComponent>(glm::vec4{ 0.0f,0.0f,1.0f,1.0 });
+        m_Scene = CreateRef<Scene>(Scene::SceneType::__2D__);
 
+        float n = 5.0f;
+        int num = 0;
+        for(float i=0.0f; i<n; i++)
+            for (float j = 0.0f; j < n; j++) {
+                num++;
+                float color = (float)(num % 2);
+                Entity square = m_Scene->createEntity("square");
+                square.addComponent<SpriteRendererComponent>(glm::vec4{color, color, color ,1.0});
+                glm::vec3& translation = square.getComponent<TransformComponent>().translation;
+                translation.x = i;
+                translation.y = j;
+            }
+        m_CameraEntity = m_Scene->createEntity("camera entity");
+
+        m_CameraEntity.addComponent<CameraComponent>();
         class CameraController : public ScriptableEntity {
         public:
             virtual void onCreate() override {
+                auto& translation = getComponent<TransformComponent>().translation;
+                translation.z = 60.0f;
+                translation.x = 1.0f;
+                translation.y = 1.0f;
             }
             virtual void onDestroy() override {
             }
             virtual void onUpdate(Timestep ts) override {
-                auto& transform = getComponent<TransformComponent>().transform;
-                float speed = 5.0f;
-
-                if (Input::isKeyPressed(Key::A)) transform[3][0] -= speed * ts;
-                if (Input::isKeyPressed(Key::D)) transform[3][0] += speed * ts;
-                if (Input::isKeyPressed(Key::W)) transform[3][1] += speed * ts;
-                if (Input::isKeyPressed(Key::S)) transform[3][1] -= speed * ts;
+                
+                auto& translation = getComponent<TransformComponent>().translation;
+                float speed = 0.1f * translation.z;
+                if (Input::isKeyPressed(Key::A)) translation.x -= speed * ts;
+                if (Input::isKeyPressed(Key::D)) translation.x += speed * ts;
+                if (Input::isKeyPressed(Key::W)) translation.y += speed * ts;
+                if (Input::isKeyPressed(Key::S)) translation.y -= speed * ts;
             }
         };
 
@@ -56,16 +67,17 @@ namespace Arm {
 
     void EditorLayer::onUpdate(Timestep ts)
     {
-        //Resize
-        if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && (m_FrameBuffer->getProperties().width != m_ViewportSize.x || m_FrameBuffer->getProperties().height != m_ViewportSize.y)) {
+        m_Scene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+        if (FrameBufferProperties props = m_FrameBuffer->getProperties();
+            m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+            (props.width != m_ViewportSize.x || props.height != m_ViewportSize.y))
+        {
             m_FrameBuffer->resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-            m_Scene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
         }
 
         Renderer2D::resetStats();
         m_FrameBuffer->bind();
-        RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-        RendererCommand::clearColor();
 
         m_Scene->onUpdate(ts);
 
@@ -130,9 +142,12 @@ namespace Arm {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("Viewport");
         
-        m_ViewportFocused = ImGui::IsWindowFocused();
-        m_ViewportHovered = ImGui::IsWindowHovered();
-        Application::get().getImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+        if (!ImGui::IsWindowFocused())
+            m_Scene->setSceneState(Scene::SceneState::paused);
+        else
+            m_Scene->setSceneState(Scene::SceneState::running);
+
+        Application::get().getImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
 
         ImVec2 viewportPanalSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };

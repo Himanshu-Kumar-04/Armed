@@ -22,9 +22,7 @@ namespace Arm {
         SceneHierarchyPanal m_SceneHierarchyPanal;
 
         Entity m_CameraEntity;
-
-        bool m_ViewportFocused = false;
-        bool m_ViewportHovered = false;
+        float t = 0.0f;
         glm::vec2 m_ViewportSize;
     };
 }

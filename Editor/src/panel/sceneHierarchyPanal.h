@@ -11,7 +11,10 @@ namespace Arm {
         void onImGuiRender();
     private:
         void drawEntityNode(Entity& entity);
-        void showComponent(Entity& entity);
+        void drawComponents(Entity& entity);
+
+        template<typename T>
+        void displayAddComponentEntry(const std::string& tag);
     private:
         Ref<Scene> m_Context;
         Entity m_SelectionContext;
