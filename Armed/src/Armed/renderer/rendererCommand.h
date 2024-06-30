@@ -11,6 +11,9 @@ namespace Arm {
             s_RendererAPI->setViewport(x, y, width, height); 
         }
 
+        inline static void enableDepthTest() { s_RendererAPI->enableDepthTest(); }
+        inline static void desableDepthTest() { s_RendererAPI->disableDepthTest(); }
+
         inline static void drawIndexed(const Ref<VertexBuffer>& vertexBuffer, uint32_t indexCount = 0) { s_RendererAPI->drawIndexed(vertexBuffer, indexCount); }
     private:
         static Scope<RendererAPI> s_RendererAPI;

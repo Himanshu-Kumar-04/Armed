@@ -19,8 +19,8 @@ namespace Arm {
 		uint16_t Height;
 
 		WindowProperties(const std::string& title = "Armed Engine",
-			uint16_t width = 1280,
-			uint16_t height = 720)
+			uint16_t width = 1600,
+			uint16_t height = 900)
 			:Title(title),Width(width),Height(height)
 		{
 		}

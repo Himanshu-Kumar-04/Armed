@@ -23,6 +23,7 @@ namespace Arm {
     void OpenGLFrameBuffer::unbind()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glDisable(GL_DEPTH_TEST);
     }
     void OpenGLFrameBuffer::invalidate()
     {

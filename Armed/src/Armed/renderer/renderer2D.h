@@ -14,6 +14,7 @@ namespace Arm {
         static void flush();
 
         static void beginScene(const Camera& camera, const glm::mat4& transform);
+        static void beginScene(const glm::mat4& transform);
         static void endScene();
 
         static void const drawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);

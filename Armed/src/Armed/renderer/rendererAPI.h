@@ -19,6 +19,9 @@ namespace Arm {
 
         virtual void drawIndexed(const Ref<VertexBuffer>& vertexBuffer, uint32_t indexCount = 0) = 0;
 
+        virtual void enableDepthTest() = 0;
+        virtual void disableDepthTest() = 0;
+
         static API getAPI() { return s_API; }
         static void setAPI(API api) { s_API = api; }
     private:

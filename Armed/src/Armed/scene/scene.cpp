@@ -12,6 +12,8 @@ namespace Arm {
     Scene::Scene(SceneType sceneType)
         :m_SceneType(sceneType)
     {
+        if (m_SceneType == SceneType::__2D__)
+            Renderer2D::init();
     }
 
     Scene::~Scene()
@@ -27,12 +29,12 @@ namespace Arm {
                     msc.instance->m_Entity = Entity{ entity, this };
                     msc.instance->onCreate();
                 }
-                msc.instance->onUpdate(ts);
+                if(m_SceneState != SceneState::paused) msc.instance->onUpdate(ts);
             });
         }
 
         Camera* mainCamera = nullptr;
-        glm::mat4* cameraTransform = nullptr;
+        glm::mat4 cameraTransform;
         {
             auto view = m_Registry.view<TransformComponent, CameraComponent>();
             for (auto entity : view) {
@@ -40,7 +42,7 @@ namespace Arm {
 
                 if (camera.isPrimary) {
                     mainCamera = &camera.camera;
-                    cameraTransform = &transform.transform;
+                    cameraTransform = transform.getTransform();
                     break;
                 }
             }
@@ -48,38 +50,51 @@ namespace Arm {
 
         if (mainCamera) {
             if (m_SceneType == SceneType::__2D__) {
-                Renderer2D::beginScene(mainCamera->getProjection(), *cameraTransform);
+                Renderer2D::beginScene(mainCamera->getProjection(), cameraTransform);
+
+                RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+                RendererCommand::clearColor();
+                RendererCommand::enableDepthTest();
 
                 auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
                 for (auto entity : group) {
-                    auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-                    if(isEntityInView(transform)) Renderer2D::drawQuad(transform, sprite.color);
+                    auto [tc, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+                    Renderer2D::drawQuad(tc.getTransform(), sprite.color);
                 }
 
                 Renderer2D::endScene();
             }
-            else {
-                /*Renderer::beginScene(mainCamera->getProjection(), *cameraTransform);
+            else if (m_SceneType == SceneType::__3D__) {
+                Renderer::beginScene(mainCamera->getProjection(), cameraTransform);
+
+                RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+                RendererCommand::clearColor();
+                RendererCommand::enableDepthTest();
 
                 auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
                 for (auto entity : group) {
                     auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-                    Renderer::submit(......---------........---------......);
                 }
 
-                Renderer::endScene();*/
+                Renderer::endScene();
             }
         }
     }
 
     void Scene::onViewportResize(uint32_t width, uint32_t height)
     {
+
+        if (m_ViewportWidth == width && m_ViewportHeight == height)
+            return;
+
         m_ViewportWidth = width;
         m_ViewportHeight = height;
-        auto view = m_Registry.view<CameraComponent>();
-        for (auto entity : view) {
-            auto& cameraComponent = view.get<CameraComponent>(entity);
 
+        // Resize our non-FixedAspectRatio cameras
+        auto view = m_Registry.view<CameraComponent>();
+        for (auto entity : view)
+        {
+            auto& cameraComponent = view.get<CameraComponent>(entity);
             if (!cameraComponent.hasFixedAspectRatio)
                 cameraComponent.camera.setViewportSize(width, height);
         }
@@ -94,10 +109,43 @@ namespace Arm {
         return entity;
     }
 
-    bool Scene::isEntityInView(const glm::mat4& transform)
+    void Scene::destroyEntity(Entity entity)
     {
-        return (m_ViewportWidth > transform[3].x) ? true : false;
+        m_Registry.destroy(entity);
     }
 
+    template<typename T>
+    void Scene::onAddComponent(Entity& entity, T& component)
+    {
+        static_assert(false);
+    }
+    template<>
+    void Scene::onAddComponent<TagComponent>(Entity& entity, TagComponent& component)
+    {
 
+    }
+
+    template<>
+    void Scene::onAddComponent<TransformComponent>(Entity& entity, TransformComponent& component)
+    {
+
+    }
+
+    template<>
+    void Scene::onAddComponent<CameraComponent>(Entity& entity, CameraComponent& component)
+    {
+        component.camera.setViewportSize(m_ViewportWidth, m_ViewportHeight);
+    }
+
+    template<>
+    void Scene::onAddComponent<SpriteRendererComponent>(Entity& entity, SpriteRendererComponent& component)
+    {
+
+    }
+
+    template<>
+    void Scene::onAddComponent<NativeScriptComponent>(Entity& entity, NativeScriptComponent& component)
+    {
+
+    }
 }

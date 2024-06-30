@@ -6,7 +6,6 @@ void Arm::OpenGLRendererAPI::init()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_DEPTH_TEST);
 
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
@@ -26,6 +25,16 @@ void Arm::OpenGLRendererAPI::setViewport(uint32_t x, uint32_t y, uint32_t width,
 void Arm::OpenGLRendererAPI::clearColor()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Arm::OpenGLRendererAPI::enableDepthTest()
+{
+    glEnable(GL_DEPTH_TEST);
+}
+
+void Arm::OpenGLRendererAPI::disableDepthTest()
+{
+    glDisable(GL_DEPTH_TEST);
 }
 
 void Arm::OpenGLRendererAPI::drawIndexed(const Ref<VertexBuffer>& vertexBuffer, uint32_t indexCount)

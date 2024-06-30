@@ -10,7 +10,6 @@ namespace Arm {
     void Renderer::init()
     {
         RendererCommand::init();
-        Renderer2D::init();
     }
     void Renderer::onWindowResize(uint32_t width, uint32_t height)
     {

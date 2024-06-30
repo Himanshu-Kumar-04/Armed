@@ -15,7 +15,7 @@ namespace Arm {
     };
 
     struct Renderer2DData {
-        static const uint32_t maxQuadCount = 10000;
+        static const uint32_t maxQuadCount = 20000;
         static const uint32_t maxVertexCount = maxQuadCount * 4;
         static const uint32_t maxIndexCount = maxQuadCount * 6;
         static const uint32_t maxTextureSlots = 32; // TODO: RENDER_CAPS
@@ -125,6 +125,12 @@ namespace Arm {
     void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
     {
         s_Data.quadShader->setMat4("u_ViewProjection", camera.getProjection() * glm::inverse(transform));
+        beginBatch();
+    }
+
+    void Renderer2D::beginScene(const glm::mat4& transform)
+    {
+        s_Data.quadShader->setMat4("u_ViewProjection", transform);
         beginBatch();
     }
 
