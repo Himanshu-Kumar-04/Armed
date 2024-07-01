@@ -1,5 +1,5 @@
 #include "ArmPCH.h"
-#include <Armed/renderer/rendererCommand.h>
+#include <Armed/renderer/RenderCommand.h>
 #include "renderer2D.h"
 #include<glm/gtc/matrix_transform.hpp>
 
@@ -109,7 +109,7 @@ namespace Arm {
         for (uint32_t i = 0; i < s_Data.textureSlotIndex; i++) {
             s_Data.textureSlots[i]->bind(i);
         }
-        RendererCommand::drawIndexed(s_Data.quadVertexBuffer, s_Data.quadIndexCount);
+        RenderCommand::drawIndexed(s_Data.quadVertexBuffer, s_Data.quadIndexCount);
         s_Data.stats.drawCalls++;
     }
 
@@ -200,6 +200,7 @@ namespace Arm {
             nextBatch();
 
         constexpr glm::vec2 texCoords[] = {{0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f},{0.0f,1.0f}};
+
         const float textureIndex = 0.0f;
         const float tilingFactor = 1.0f;
 

@@ -20,7 +20,7 @@
 //---Renderer-----------
 #include "Armed/renderer/renderer.h"
 #include "Armed/renderer/renderer2D.h"
-#include "Armed/renderer/rendererCommand.h"
+#include "Armed/renderer/RenderCommand.h"
 
 #include "Armed/renderer/buffer.h"
 #include "Armed/renderer/shader.h"
