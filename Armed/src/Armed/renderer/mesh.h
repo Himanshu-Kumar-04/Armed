@@ -11,8 +11,8 @@ namespace Arm {
         glm::vec3 position;
         glm::vec4 color = glm::vec4(1.0f);
         glm::vec2 texCoord;
-        float tilingFactor = 1.0f;
         float texIndex = 0.0f;
+        float tilingFactor = 1.0f;
     };
 
     class Mesh {
