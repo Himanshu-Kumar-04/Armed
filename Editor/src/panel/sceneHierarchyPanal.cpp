@@ -242,6 +242,13 @@ namespace Arm {
         DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component) {
             ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
             });
+
+        DrawComponent<MeshComponent>("Mesh Renderer", entity, [](auto& component) {
+            glm::vec4 color = component.mesh.vertices[0].color;
+            ImGui::ColorEdit4("Color", glm::value_ptr(color));
+            for (auto& vertexData : component.mesh.vertices)
+                vertexData.color = color;
+            });
     }
 
     template<typename T>

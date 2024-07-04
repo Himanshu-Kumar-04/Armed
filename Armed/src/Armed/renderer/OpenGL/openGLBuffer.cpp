@@ -1,6 +1,7 @@
 #include "ArmPCH.h"
 #include "openGLBuffer.h"
-#include<glad.h>
+#include <glad.h>
+#include "Armed/renderer/mesh.h"
 
 namespace Arm {
     static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
@@ -31,6 +32,16 @@ namespace Arm {
     //////////////////////////////////////////
     //            VertexBuffer              //
     //////////////////////////////////////////
+
+    OpenGLVertexBuffer::OpenGLVertexBuffer(std::vector<VertexData> vertices)
+    {
+        ARM_PROFILE_FUNCTION();
+
+        glCreateVertexArrays(1, &m_VA_RendererID);
+
+        glCreateBuffers(1, &m_VB_RendererID);
+        glNamedBufferData(m_VB_RendererID, vertices.size() * sizeof(VertexData), vertices.data(), GL_STATIC_DRAW);
+    }
 
     OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
     {

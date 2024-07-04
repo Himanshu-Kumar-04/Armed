@@ -5,31 +5,51 @@
 
 namespace Arm {
 
+    struct RendererData {
+        static const uint32_t maxTextureSlots = 32; // TODO: RENDER_CAPS
+        
+        Ref<Shader> shader;
+        Ref<Texture2D> whiteTexture;
+    };
+
+    static RendererData s_Data;
+
     Scope<Renderer::SceneData> Renderer::m_SceneData = CreateScope<Renderer::SceneData>();
 
     void Renderer::init()
     {
-        RendererCommand::init();
+        s_Data.whiteTexture = Texture2D::Create(1, 1);
+        uint32_t whiteTextureData = 0xffffffff;
+        s_Data.whiteTexture->setData(&whiteTextureData, sizeof(uint32_t));
+
+        int32_t sampler[s_Data.maxTextureSlots];
+        for (uint32_t i = 0; i < s_Data.maxTextureSlots; i++) {
+            sampler[i] = i;
+        }
+        s_Data.shader = Shader::create("assets/shader/texture.glsl");
+        s_Data.shader->bind();
+        s_Data.shader->setIntArray("u_Textures", sampler, s_Data.maxTextureSlots);
     }
+
     void Renderer::onWindowResize(uint32_t width, uint32_t height)
     {
-        RendererCommand::setViewport(0, 0, width, height);
+        RenderCommand::setViewport(0, 0, width, height);
     }
+
     void Renderer::beginScene(const Camera& camera, const glm::mat4& transform)
     {
-        m_SceneData->projectionMatrix = camera.getProjection() * glm::inverse(transform);
+        s_Data.shader->setMat4("u_ViewProjection", camera.getProjection() * glm::inverse(transform));
     }
     void Renderer::endScene()
     {
     }
-    void Renderer::submit(const Ref<Shader>& shader, const Ref<VertexBuffer>& vertexBuffer)
+
+    void Renderer::submit(const glm::mat4& transform, Mesh& mesh)
     {
-        shader->bind();
-        std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_ViewProjection", m_SceneData->viewProjectionMatrix);
-        RendererCommand::drawIndexed(vertexBuffer);
+        mesh.updateTransform(transform);
+        s_Data.whiteTexture->bind(0);
+        for (uint8_t i = 1; i < mesh.textures.size(); i++)
+            mesh.textures[i]->bind(i);
+        RenderCommand::drawIndexed(mesh.m_VertexBuffer, mesh.indices.size());
     }
-    //void const Renderer::DrawObject(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture2D, const glm::vec4& tintColor)
-    //{
-        
-    //}
 }

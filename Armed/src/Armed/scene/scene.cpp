@@ -14,6 +14,8 @@ namespace Arm {
     {
         if (m_SceneType == SceneType::__2D__)
             Renderer2D::init();
+        else
+            Renderer::init();
     }
 
     Scene::~Scene()
@@ -52,9 +54,9 @@ namespace Arm {
             if (m_SceneType == SceneType::__2D__) {
                 Renderer2D::beginScene(mainCamera->getProjection(), cameraTransform);
 
-                RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-                RendererCommand::clearColor();
-                RendererCommand::enableDepthTest();
+                RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+                RenderCommand::clearColor();
+                RenderCommand::enableDepthTest();
 
                 auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
                 for (auto entity : group) {
@@ -67,13 +69,14 @@ namespace Arm {
             else if (m_SceneType == SceneType::__3D__) {
                 Renderer::beginScene(mainCamera->getProjection(), cameraTransform);
 
-                RendererCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-                RendererCommand::clearColor();
-                RendererCommand::enableDepthTest();
+                RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+                RenderCommand::clearColor();
+                RenderCommand::enableDepthTest();
 
-                auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+                auto group = m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
                 for (auto entity : group) {
-                    auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+                    auto [tc, mc] = group.get<TransformComponent, MeshComponent>(entity);
+                    Renderer::submit(tc.getTransform(), mc.mesh);
                 }
 
                 Renderer::endScene();
@@ -131,6 +134,11 @@ namespace Arm {
 
     }
 
+    template<>
+    void Scene::onAddComponent<MeshComponent>(Entity& entity, MeshComponent& component)
+    {
+    }
+    
     template<>
     void Scene::onAddComponent<CameraComponent>(Entity& entity, CameraComponent& component)
     {

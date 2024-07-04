@@ -1,7 +1,8 @@
 #pragma once
-#include "rendererCommand.h"
+#include "RenderCommand.h"
 #include "camera.h"
 #include "shader.h"
+#include "mesh.h"
 
 
 namespace Arm {
@@ -12,7 +13,7 @@ namespace Arm {
 
         static void beginScene(const Camera& camera, const glm::mat4& transform);
         static void endScene();
-        static void submit(const Ref<Shader>& shader, const Ref<VertexBuffer>& vertexBuffer);
+        static void submit(const glm::mat4& transform, Mesh& mesh);
         static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
         static void setAPI(RendererAPI::API api) { RendererAPI::setAPI(api); }
 

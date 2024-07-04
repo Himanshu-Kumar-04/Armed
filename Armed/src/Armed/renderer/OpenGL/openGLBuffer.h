@@ -4,6 +4,7 @@
 namespace Arm {
     class OpenGLVertexBuffer : public VertexBuffer {
     public:
+        OpenGLVertexBuffer(std::vector<VertexData> vertices);
         OpenGLVertexBuffer(uint32_t size);
         OpenGLVertexBuffer(const float* data, uint32_t size);
         ~OpenGLVertexBuffer();

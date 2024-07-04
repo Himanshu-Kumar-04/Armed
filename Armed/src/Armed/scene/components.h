@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "sceneCamera.h"
+#include"Armed/renderer/mesh.h"
 
 namespace Arm {
     struct TagComponent {
@@ -32,6 +33,15 @@ namespace Arm {
                 * _rotation 
                 * glm::scale(glm::mat4(1.0f), scale);
         }
+    };
+
+    struct MeshComponent {
+        Mesh mesh;
+        MeshComponent() = default;
+        MeshComponent(const MeshComponent&) = default;
+        MeshComponent(const Mesh& _mesh)
+            :mesh(_mesh) {}
+
     };
 
     struct SpriteRendererComponent {

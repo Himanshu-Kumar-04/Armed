@@ -13,9 +13,7 @@ namespace Arm {
         virtual void onImGuiRender() override;
         virtual void onEvent(Event& e) override;
     private:
-        Ref<Shader> m_Shader;
         Ref<FrameBuffer> m_FrameBuffer;
-        Ref<Texture2D> m_SpritesSheet;
         Ref<Scene> m_Scene;
 
         //panals.......

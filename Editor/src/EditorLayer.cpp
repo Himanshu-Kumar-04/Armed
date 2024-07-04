@@ -1,7 +1,8 @@
 #include "EditorLayer.h"
+#include <vector>
 #include "imgui/imgui.h"
-#include<glm/gtc/matrix_transform.hpp>
-#include<glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Arm {
     EditorLayer::EditorLayer()
@@ -11,17 +12,27 @@ namespace Arm {
 
     void EditorLayer::onAttach()
     {
-        m_SpritesSheet = Texture2D::Create("assets/game/assets/RPGpack_sheet_2X.png");
-
         FrameBufferProperties fbProps;
         fbProps.width = Application::get().getWindow().getWidth();
         fbProps.height = Application::get().getWindow().getHeight();
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
 
-        m_Scene = CreateRef<Scene>(Scene::SceneType::__2D__);
+        m_Scene = CreateRef<Scene>(Scene::SceneType::__3D__);
 
-        float n = 5.0f;
+        Entity square2 = m_Scene->createEntity("square_V2");
+        std::vector<VertexData> vertices{
+            VertexData(glm::vec3{-0.5f,-0.5f, 1.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}, glm::vec2{0.0f, 0.0f}),
+            VertexData(glm::vec3{ 0.5f,-0.5f, 1.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}, glm::vec2{1.0f, 0.0f}),
+            VertexData(glm::vec3{ 0.5f, 0.5f, 1.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}, glm::vec2{1.0f, 1.0f}),
+            VertexData(glm::vec3{-0.5f, 0.5f, 1.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}, glm::vec2{0.0f, 1.0f})
+        };
+
+        std::vector<uint32_t> indices = { 0,1,2,3,0 };
+        
+        Mesh sqMesh = Mesh(vertices, indices);
+        square2.addComponent<MeshComponent>(sqMesh);
+        /*float n = 5.0f;
         int num = 0;
         for(float i=0.0f; i<n; i++)
             for (float j = 0.0f; j < n; j++) {
@@ -32,7 +43,7 @@ namespace Arm {
                 glm::vec3& translation = square.getComponent<TransformComponent>().translation;
                 translation.x = i;
                 translation.y = j;
-            }
+            }*/
         m_CameraEntity = m_Scene->createEntity("camera entity");
 
         m_CameraEntity.addComponent<CameraComponent>();
