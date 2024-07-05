@@ -46,7 +46,7 @@ namespace Arm {
 
     void Renderer::submit(const glm::mat4& transform, Mesh& mesh)
     {
-        mesh.updateTransform(transform);
+        mesh.m_VertexBuffer->setData(mesh.updateTransform(transform).data(), mesh.vertices.size() * sizeof(VertexData));
         s_Data.whiteTexture->bind(0);
         for (uint8_t i = 1; i < mesh.textures.size(); i++)
             mesh.textures[i]->bind(i);

@@ -25,7 +25,9 @@ namespace Arm {
         Mesh(std::vector<VertexData>& vertices, std::vector<uint32_t>& indices, std::vector<Ref<Texture2D>>& textures);
         Mesh(std::vector<VertexData>& vertices, std::vector<uint32_t>& indices);
 
-        void updateTransform(const glm::mat4& transform);
+        std::vector<VertexData> updateTransform(const glm::mat4& transform);
         Ref<VertexBuffer> m_VertexBuffer;
+    private:
+        glm::mat4 m_Transform;
     };
 }
