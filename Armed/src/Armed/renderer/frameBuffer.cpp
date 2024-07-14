@@ -6,7 +6,7 @@
 namespace Arm {
     Ref<FrameBuffer> FrameBuffer::create(const FrameBufferProperties& properties)
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         switch (Renderer::getAPI()) {
         case RendererAPI::API::None:     std::cout << "RendererAPI: None is not supported.\n"; return nullptr;

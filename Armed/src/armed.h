@@ -32,5 +32,14 @@
 
 #include "Armed/renderer/mesh.h"
 
+//---Assets--------------------
+
+#include"Armed/assetPack/fileSerializer.h"
+#include"Armed/assetPack/textSerializer.h"
+
+//---Utils--------------------
+
+#include "Armed/utils/utils.h"
+
 //---Timer--------------------
 #include "Armed/core/timer.h"

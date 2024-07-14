@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <functional>
 #include <sstream>
+#include <filesystem>
 #include <fstream>
 
 #include <string>
@@ -21,5 +22,4 @@
 #endif // ARMED_PLATFORM_WINDOWS
 
 #include "Armed/core/core.h"
-#include "Armed/debug/instrumentor.h"
 

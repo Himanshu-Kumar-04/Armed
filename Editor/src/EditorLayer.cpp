@@ -17,21 +17,10 @@ namespace Arm {
         fbProps.height = Application::get().getWindow().getHeight();
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
+        m_Scene = CreateRef<Scene>("3D Cube", Scene::SceneType::__3D__);
 
-        m_Scene = CreateRef<Scene>(Scene::SceneType::__3D__);
-
-        Entity square2 = m_Scene->createEntity("square_V2");
-        std::vector<VertexData> vertices{
-            VertexData(glm::vec3{-0.5f,-0.5f, 1.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}, glm::vec2{0.0f, 0.0f}),
-            VertexData(glm::vec3{ 0.5f,-0.5f, 1.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}, glm::vec2{1.0f, 0.0f}),
-            VertexData(glm::vec3{ 0.5f, 0.5f, 1.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}, glm::vec2{1.0f, 1.0f}),
-            VertexData(glm::vec3{-0.5f, 0.5f, 1.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}, glm::vec2{0.0f, 1.0f})
-        };
-
-        std::vector<uint32_t> indices = { 0,1,2,2,3,0 };
-        
-        Mesh sqMesh = Mesh(vertices, indices);
-        square2.addComponent<MeshComponent>(sqMesh);
+        Entity square2 = m_Scene->createEntity("Square");
+        square2.addComponent<MeshComponent>();
         /*float n = 5.0f;
         int num = 0;
         for(float i=0.0f; i<n; i++)
@@ -127,10 +116,18 @@ namespace Arm {
         }
 
         if (ImGui::BeginMenuBar()) {
-            if (ImGui::BeginMenu("Options")) {
+            if (ImGui::BeginMenu("File")) {
                 //ImGui::Separator();
                 if (ImGui::MenuItem("Close", NULL, false, p != NULL))
+                {
                     *p = false;
+                }
+                if (ImGui::MenuItem("Save", NULL, false, p != NULL))
+                {
+                    TextSerializer ts("assetPack.armed");
+                    ts.serializeAssets(m_Scene);
+                }
+                //if (ImGui::MenuItem("Save As", "Ctrl + S"));
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
@@ -163,8 +160,8 @@ namespace Arm {
         ImVec2 viewportPanalSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
 
-        uint32_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
-        ImGui::Image((void*)textureId, { m_ViewportSize.x,m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
+        uintptr_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
+        ImGui::Image((void*)textureId, {m_ViewportSize.x,m_ViewportSize.y}, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
         
         ImGui::PopStyleVar();

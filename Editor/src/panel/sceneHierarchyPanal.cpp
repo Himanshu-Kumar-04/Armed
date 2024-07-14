@@ -168,24 +168,16 @@ namespace Arm {
             char buffer[256];
             memset(buffer, 0, sizeof(buffer));
             strcpy_s(buffer, sizeof(buffer), tag.c_str());
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x*0.5);
             if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
                 tag = std::string(buffer);
+            ImGui::PopItemWidth();
         }
 
         ImGui::SameLine();
-        ImGui::PushItemWidth(-1);
-
-        if (ImGui::Button("Add Component"))
-            ImGui::OpenPopup("AddComponent");
-
-        if (ImGui::BeginPopup("AddComponent")) {
-
-            displayAddComponentEntry<CameraComponent>("Camera");
-            displayAddComponentEntry<SpriteRendererComponent>("Sprite");
-
-            ImGui::EndPopup();
+        if (entity.hasComponent<IDComponent>()) {
+            ImGui::Text("ID : %llu", entity.getComponent<IDComponent>().ID);
         }
-        ImGui::PopItemWidth();
 
         DrawComponent<TransformComponent>("Transform", entity, [](auto& component) {
             DrawVec3Control("Translation", component.translation);
@@ -244,11 +236,18 @@ namespace Arm {
             });
 
         DrawComponent<MeshComponent>("Mesh Renderer", entity, [](auto& component) {
-            glm::vec4 color = component.mesh.vertices[0].color;
-            ImGui::ColorEdit4("Color", glm::value_ptr(color));
-            for (auto& vertexData : component.mesh.vertices)
-                vertexData.color = color;
             });
+
+        if (ImGui::Button("Add Component"))
+            ImGui::OpenPopup("AddComponent");
+
+        if (ImGui::BeginPopup("AddComponent")) {
+
+            displayAddComponentEntry<CameraComponent>("Camera");
+            (m_Context->m_SceneType == Scene::SceneType::__2D__) ? displayAddComponentEntry<SpriteRendererComponent>("Sprite") : displayAddComponentEntry<MeshComponent>("Mesh");
+
+            ImGui::EndPopup();
+        }
     }
 
     template<typename T>

@@ -43,12 +43,30 @@ float Arm::SceneCamera::getNearClip()
     }
 }
 
+float Arm::SceneCamera::getNearClip(ProjectionType projectionType)
+{
+    switch (projectionType)
+    {
+    case Arm::Camera::ProjectionType::orthographic: return m_OrthographicNear;
+    case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveNear;
+    }
+}
+
 float Arm::SceneCamera::getFarClip()
 {
     switch (m_ProjectionType)
     {
     case Arm::Camera::ProjectionType::orthographic: return m_OrthographicFar;
     case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveFar;
+    }
+}
+
+float Arm::SceneCamera::getFarClip(ProjectionType projectionType)
+{
+    switch (projectionType)
+    {
+    case Arm::Camera::ProjectionType::orthographic: return m_OrthographicNear;
+    case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveNear;
     }
 }
 

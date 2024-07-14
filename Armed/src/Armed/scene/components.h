@@ -1,10 +1,21 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Armed/core/UUID.h"
 #include "sceneCamera.h"
-#include"Armed/renderer/mesh.h"
+#include "Armed/renderer/mesh.h"
 
 namespace Arm {
+    
+    struct IDComponent
+    {
+        UUID ID;
+        IDComponent() = default;
+        IDComponent(const IDComponent&) = default;
+        IDComponent(const UUID& _UUID)
+            :ID(_UUID) {}
+    };
+
     struct TagComponent {
         std::string tag;
 
@@ -77,16 +88,5 @@ namespace Arm {
         }
     };
 
-    template<typename...component>
-    struct ComponentGroup {
-
-    };
-
-    using allComponents = 
-        ComponentGroup<
-        TransformComponent,
-        CameraComponent,
-        NativeScriptComponent,
-        SpriteRendererComponent
-        >;
+    
 }

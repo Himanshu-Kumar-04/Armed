@@ -2,7 +2,8 @@
 
 namespace Arm {
     struct FrameBufferProperties {
-        uint32_t width, height;
+        uint32_t width  = 400;
+        uint32_t height = 400;
         uint32_t samples = 1;
         bool swapChainTarget = false;
         uint32_t screenLimit = 8192;

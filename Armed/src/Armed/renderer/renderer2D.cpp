@@ -40,7 +40,7 @@ namespace Arm {
 
     void Renderer2D::init()
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         s_Data.quadVertexBuffer = VertexBuffer::Create(s_Data.maxVertexCount * sizeof(QuadVertex));
         s_Data.quadVertexBuffer->setLayout({
@@ -89,7 +89,7 @@ namespace Arm {
     
     void Renderer2D::shutdown()
     {
-        ARM_PROFILE_FUNCTION();
+   
         delete[] s_Data.quadVertexBufferBase;
     }
 
@@ -136,7 +136,7 @@ namespace Arm {
 
     void Renderer2D::endScene()
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         flush();
     }
@@ -151,7 +151,7 @@ namespace Arm {
     }
     void const Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
         drawQuad(transform, color);
@@ -162,7 +162,7 @@ namespace Arm {
     }
     void const Renderer2D::drawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
     {
-        ARM_PROFILE_FUNCTION();
+   
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
         drawQuad(transform, texture, tilingFactor, tintColor);
     }
@@ -174,7 +174,7 @@ namespace Arm {
     }
     void const Renderer2D::drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const glm::vec4& color)
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
         drawQuad(transform, color);
@@ -185,7 +185,7 @@ namespace Arm {
     }
     void const Renderer2D::drawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), angle, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
         drawQuad(transform, texture, tilingFactor, tintColor);
@@ -194,7 +194,7 @@ namespace Arm {
 
     void const Renderer2D::drawQuad(const glm::mat4& transform, const glm::vec4& color)
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         if (s_Data.quadIndexCount >= Renderer2DData::maxIndexCount)
             nextBatch();
@@ -217,7 +217,7 @@ namespace Arm {
     }
     void const Renderer2D::drawQuad(const glm::mat4& transform, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
     {
-        ARM_PROFILE_FUNCTION();
+   
         
         if (s_Data.quadIndexCount >= Renderer2DData::maxIndexCount)
             nextBatch();

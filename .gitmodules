@@ -1,0 +1,3 @@
+[submodule "Armed/vendor/yaml"]
+	path = Armed/vendor/yaml
+	url = https://github.com/jbeder/yaml-cpp.git

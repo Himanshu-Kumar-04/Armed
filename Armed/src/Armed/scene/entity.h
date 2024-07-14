@@ -1,5 +1,4 @@
 #pragma once
-
 #include "scene.h"
 #include "components.h"
 #include "entt.hpp"

@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 #include "Armed/Core/Layer.h"
 

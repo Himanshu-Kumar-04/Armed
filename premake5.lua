@@ -18,10 +18,11 @@ workspace "Armed"
 		"MultiProcessorCompile"
 	}
 
+group "Dependencies"
 	include "Armed/vendor/GLFW"
 	include "Armed/vendor/Glad"
 	include "Armed/vendor/ImGui"
+group ""
 
 	include "Armed"
 	include "Editor"
-	include "Sandbox"

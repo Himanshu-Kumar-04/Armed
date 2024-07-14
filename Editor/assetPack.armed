@@ -1,0 +1,31 @@
+ARMED_ASSET_PACK
+version 1
+Scenes - [3D Cube, ]
+3D Cube - [1352922383378262194, 4898922491297060520, ]
+
+
+Square  1352922383378262194
+Components - [Tag,Transform,Mesh,]
+Position - [0, 0, 0]
+Rotation - [0, 0, 0]
+Scale    - [1, 1, 1]
+
+
+
+camera entity  4898922491297060520
+Components - [Tag,Transform,Camera,]
+Position - [1, 1, 60]
+Rotation - [0, 0, 0]
+Scale    - [1, 1, 1]
+IsPrimary          - true
+HasFixedAspectRaio - false
+ProjectionType     - false
+OrthographicSize        - 10
+OrthographicNear        - -1
+OrthographicFar         - -1
+PerspectiveVerticalFOV  - 0.25
+PerspectiveNear         - 0.01
+PerspectiveFar          - 0.01
+
+
+

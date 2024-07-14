@@ -1,16 +1,17 @@
 #include "ArmPCH.h"
-#include "scene.h"
-#include "entity.h"
-#include "components.h"
 #include "scriptableEntity.h"
+#include "components.h"
+#include "entity.h"
+#include "scene.h"
+#include "sceneSerializer.h"
 
 #include "glm/glm.hpp"
 #include "Armed/renderer/renderer2D.h"
 #include "Armed/renderer/renderer.h"
 
 namespace Arm {
-    Scene::Scene(SceneType sceneType)
-        :m_SceneType(sceneType)
+    Scene::Scene(const std::string& sceneName, SceneType sceneType)
+        :m_SceneName(sceneName),m_SceneType(sceneType)
     {
         if (m_SceneType == SceneType::__2D__)
             Renderer2D::init();
@@ -105,7 +106,14 @@ namespace Arm {
 
     Entity Scene::createEntity(const std::string& name)
     {
+        return createEntity(UUID(), name);
+    }
+
+    Entity Scene::createEntity(UUID _UUID, const std::string& name)
+    {
         Entity entity = { m_Registry.create(), this };
+        entity.addComponent<IDComponent>(_UUID);
+        m_EntityLibrary[_UUID] = entity;
         entity.addComponent<TransformComponent>();
         TagComponent& tag = entity.addComponent<TagComponent>();
         tag.tag = (name.empty()) ? "__entity__" : name;
@@ -122,6 +130,13 @@ namespace Arm {
     {
         static_assert(false);
     }
+
+    template<>
+    void Scene::onAddComponent<IDComponent>(Entity& entity, IDComponent& component)
+    {
+
+    }
+
     template<>
     void Scene::onAddComponent<TagComponent>(Entity& entity, TagComponent& component)
     {

@@ -35,7 +35,7 @@ namespace Arm {
 
     OpenGLVertexBuffer::OpenGLVertexBuffer(std::vector<VertexData> vertices)
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         glCreateVertexArrays(1, &m_VA_RendererID);
 
@@ -45,7 +45,7 @@ namespace Arm {
 
     OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         glCreateVertexArrays(1, &m_VA_RendererID);
 
@@ -55,7 +55,7 @@ namespace Arm {
 
     OpenGLVertexBuffer::OpenGLVertexBuffer(const float* data, uint32_t size)
     {
-        ARM_PROFILE_FUNCTION();
+   
         
         glCreateVertexArrays(1, &m_VA_RendererID);
 
@@ -64,7 +64,7 @@ namespace Arm {
     }
     OpenGLVertexBuffer::~OpenGLVertexBuffer()
     {
-        ARM_PROFILE_FUNCTION();
+   
         
         glDeleteVertexArrays(1, &m_VA_RendererID);
         glDeleteBuffers(1, &m_VB_RendererID);
@@ -105,14 +105,14 @@ namespace Arm {
     OpenGLIndexBuffer::OpenGLIndexBuffer(const uint32_t* data, uint32_t count)
         :m_Count(count)
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         glCreateBuffers(1, &m_RendererID);
         glNamedBufferData(m_RendererID, count * sizeof(uint32_t), data, GL_STATIC_DRAW);
     }
     OpenGLIndexBuffer::~OpenGLIndexBuffer()
     {
-        ARM_PROFILE_FUNCTION();
+   
 
         glDeleteBuffers(1, &m_RendererID);
     }

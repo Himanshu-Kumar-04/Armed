@@ -23,9 +23,11 @@ namespace Arm {
         void setProjectionType(ProjectionType projectionType) { m_ProjectionType = projectionType; recalculateProjection(); }
 
         float getNearClip();
+        float getNearClip(ProjectionType projectionType);
         void setNearClip(float nearClip);
 
         float getFarClip();
+        float getFarClip(ProjectionType projectionType);
         void setFarClip(float farClip);
     private:
         void recalculateProjection();
