@@ -15,7 +15,7 @@ namespace Arm {
         m_Window = Scope<Window>(Window::Create(WindowProperties(name)));
         m_Window->setEventCallBack(ARM_BIND_EVENT_FN(Application::onEvent));
 
-        RenderCommand::init();
+        Renderer::init();
         
         if(!isDistBuild) {
             m_ImGuiLayer = new ImGuiLayer;

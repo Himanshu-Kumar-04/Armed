@@ -7,8 +7,6 @@
 namespace Arm {
     struct AssetPack {
         std::string validationToken = "ARMED_ASSET_PACK";
-        uint32_t version = 1;
-
         struct ComponentBlock {
 
             std::vector<std::string> componentsPresent;

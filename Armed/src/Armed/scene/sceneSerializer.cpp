@@ -3,16 +3,16 @@
 #include "entity.h"
 
 namespace Arm {
-    AssetPack SceneSerializer::serialize()
+    void SceneSerializer::serialize(AssetPack& assetPack, const Ref<Scene>& scene)
     {
-        AssetPack assetPack;
         std::vector<UUID> entityList;
-        for (auto id : m_Scene->m_EntityLibrary)
+        for (auto id : scene->m_EntityLibrary)
             entityList.push_back(id.first);
-        assetPack.sceneMap[m_Scene->getSceneName()] = entityList;
+        
+        assetPack.sceneMap[scene->getSceneName()] = entityList;
 
         for (UUID _UUID : entityList) {
-            Entity entity(m_Scene->m_EntityLibrary[_UUID], m_Scene.get());
+            Entity entity(scene->m_EntityLibrary[_UUID], scene.get());
             AssetPack::ComponentBlock componentBlock;
             if (entity.hasComponent<TagComponent>()) {
                 componentBlock.componentsPresent.push_back("Tag");
@@ -45,9 +45,8 @@ namespace Arm {
             }
             assetPack.entityMap[_UUID] = componentBlock;
         }
-        return assetPack;
     }
-    bool SceneSerializer::deserialize()
+    bool SceneSerializer::deserialize(AssetPack& assetPack)
     {
         return false;
     }

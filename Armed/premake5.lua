@@ -23,9 +23,11 @@ project "Armed"
 		"src",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
+		"%{IncludeDir.gem}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.VulkanSDK}"
 	}
@@ -36,9 +38,11 @@ project "Armed"
 
 	links{
 		"GLFW",
+		"gem",
 		"Glad",
 		"ImGui",
 		"opengl32",
+		"yaml-cpp",
 		"%{Library.Vulkan}"
 	}
 

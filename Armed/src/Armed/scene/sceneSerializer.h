@@ -5,11 +5,7 @@
 namespace Arm {
     class SceneSerializer {
     public:
-        SceneSerializer(const Ref<Scene>& scene)
-            : m_Scene(scene) {}
-        AssetPack serialize();
-        bool deserialize();
-    private:
-        Ref<Scene> m_Scene;
+        static void serialize(AssetPack& assetPack, const Ref<Scene>& scene);
+        static bool deserialize(AssetPack& assetPack);
     };
 }

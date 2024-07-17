@@ -1,17 +1,14 @@
 #pragma once
 #include <filesystem>
 #include "Armed/scene/scene.h"
-#include <vector>
+#include "assetPack.h"
 
 namespace Arm {
     class TextSerializer {
     public:
-        TextSerializer(const std::filesystem::path& filePath);
         ~TextSerializer();
-        void serializeAssets(const Ref<Scene> scene);
-    private:
-        
-    private:
-        std::filesystem::path m_FilePath;
+        void serializeAssets(const std::filesystem::path& filePath, const Ref<Scene> scene);
+        bool deserializeAssets(const std::filesystem::path& filePath);
+        AssetPack m_AssetPack;
     };
 }

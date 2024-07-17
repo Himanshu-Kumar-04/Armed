@@ -244,7 +244,8 @@ namespace Arm {
         if (ImGui::BeginPopup("AddComponent")) {
 
             displayAddComponentEntry<CameraComponent>("Camera");
-            (m_Context->m_SceneType == Scene::SceneType::__2D__) ? displayAddComponentEntry<SpriteRendererComponent>("Sprite") : displayAddComponentEntry<MeshComponent>("Mesh");
+            displayAddComponentEntry<SpriteRendererComponent>("Sprite");
+            displayAddComponentEntry<MeshComponent>("Mesh");
 
             ImGui::EndPopup();
         }

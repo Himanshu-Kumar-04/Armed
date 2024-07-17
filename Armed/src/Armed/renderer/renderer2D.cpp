@@ -36,25 +36,25 @@ namespace Arm {
         Renderer2D::Statistics stats;
     };
 
-    static Renderer2DData s_Data;
+    static Renderer2DData s_R2DData;
 
     void Renderer2D::init()
     {
    
 
-        s_Data.quadVertexBuffer = VertexBuffer::Create(s_Data.maxVertexCount * sizeof(QuadVertex));
-        s_Data.quadVertexBuffer->setLayout({
+        s_R2DData.quadVertexBuffer = VertexBuffer::Create(s_R2DData.maxVertexCount * sizeof(QuadVertex));
+        s_R2DData.quadVertexBuffer->setLayout({
                 {ShaderDataType::Float3 , "position"},
                 {ShaderDataType::Float4 , "color"},
                 {ShaderDataType::Float2 , "texCoord"},
                 {ShaderDataType::Float , "texIndex"},
                 {ShaderDataType::Float , "tilingFactor"}
             });
-        s_Data.quadVertexBufferBase = new QuadVertex[s_Data.maxVertexCount];
+        s_R2DData.quadVertexBufferBase = new QuadVertex[s_R2DData.maxVertexCount];
 
-        uint32_t* quadIndices = new uint32_t[s_Data.maxIndexCount];
+        uint32_t* quadIndices = new uint32_t[s_R2DData.maxIndexCount];
         uint32_t offset = 0;
-        for (uint32_t i = 0; i < s_Data.maxIndexCount; i += 6) {
+        for (uint32_t i = 0; i < s_R2DData.maxIndexCount; i += 6) {
             quadIndices[i + 0] = offset + 0;
             quadIndices[i + 1] = offset + 1;
             quadIndices[i + 2] = offset + 2;
@@ -63,34 +63,34 @@ namespace Arm {
             quadIndices[i + 5] = offset + 0;
             offset += 4;
         }
-        Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.maxIndexCount);
-        s_Data.quadVertexBuffer->setIndexBuffer(quadIB);
+        Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_R2DData.maxIndexCount);
+        s_R2DData.quadVertexBuffer->setIndexBuffer(quadIB);
         delete[] quadIndices;
 
-        s_Data.whiteTexture = Texture2D::Create(1, 1);
+        s_R2DData.whiteTexture = Texture2D::Create(1, 1);
         uint32_t whiteTextureData = 0xffffffff;
-        s_Data.whiteTexture->setData(&whiteTextureData, sizeof(uint32_t));
+        s_R2DData.whiteTexture->setData(&whiteTextureData, sizeof(uint32_t));
 
-        int32_t sampler[s_Data.maxTextureSlots];
-        for (uint32_t i = 0; i < s_Data.maxTextureSlots; i++) {
+        int32_t sampler[s_R2DData.maxTextureSlots];
+        for (uint32_t i = 0; i < s_R2DData.maxTextureSlots; i++) {
             sampler[i] = i;
         }
-        s_Data.quadShader = Shader::create("assets/shader/texture.glsl");
-        s_Data.quadShader->bind();
-        s_Data.quadShader->setIntArray("u_Textures",sampler, s_Data.maxTextureSlots);
+        s_R2DData.quadShader = Shader::create("assets/shader/texture.glsl");
+        s_R2DData.quadShader->bind();
+        s_R2DData.quadShader->setIntArray("u_Textures",sampler, s_R2DData.maxTextureSlots);
 
-        s_Data.textureSlots[0] = s_Data.whiteTexture;
+        s_R2DData.textureSlots[0] = s_R2DData.whiteTexture;
 
-        s_Data.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-        s_Data.quadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
-        s_Data.quadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
-        s_Data.quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+        s_R2DData.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+        s_R2DData.quadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
+        s_R2DData.quadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
+        s_R2DData.quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
     }
     
     void Renderer2D::shutdown()
     {
    
-        delete[] s_Data.quadVertexBufferBase;
+        delete[] s_R2DData.quadVertexBufferBase;
     }
 
     //////////////////////////////////////
@@ -98,19 +98,19 @@ namespace Arm {
     ////////////////////////////////////// 
 
     void Renderer2D::beginBatch() {
-        s_Data.quadIndexCount = 0;
-        s_Data.quadVertexBufferPtr = s_Data.quadVertexBufferBase;
-        s_Data.textureSlotIndex = 1;
+        s_R2DData.quadIndexCount = 0;
+        s_R2DData.quadVertexBufferPtr = s_R2DData.quadVertexBufferBase;
+        s_R2DData.textureSlotIndex = 1;
     }
 
     void Renderer2D::flush() {
-        uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.quadVertexBufferPtr - (uint8_t*)s_Data.quadVertexBufferBase);
-        s_Data.quadVertexBuffer->setData(s_Data.quadVertexBufferBase, dataSize);
-        for (uint32_t i = 0; i < s_Data.textureSlotIndex; i++) {
-            s_Data.textureSlots[i]->bind(i);
+        uint32_t dataSize = (uint32_t)((uint8_t*)s_R2DData.quadVertexBufferPtr - (uint8_t*)s_R2DData.quadVertexBufferBase);
+        s_R2DData.quadVertexBuffer->setData(s_R2DData.quadVertexBufferBase, dataSize);
+        for (uint32_t i = 0; i < s_R2DData.textureSlotIndex; i++) {
+            s_R2DData.textureSlots[i]->bind(i);
         }
-        RenderCommand::drawIndexed(s_Data.quadVertexBuffer, s_Data.quadIndexCount);
-        s_Data.stats.drawCalls++;
+        RenderCommand::drawIndexed(s_R2DData.quadVertexBuffer, s_R2DData.quadIndexCount);
+        s_R2DData.stats.drawCalls++;
     }
 
     void Renderer2D::nextBatch() {
@@ -124,13 +124,13 @@ namespace Arm {
 
     void Renderer2D::beginScene(const Camera& camera, const glm::mat4& transform)
     {
-        s_Data.quadShader->setMat4("u_ViewProjection", camera.getProjection() * glm::inverse(transform));
+        s_R2DData.quadShader->setMat4("u_ViewProjection", camera.getProjection() * glm::inverse(transform));
         beginBatch();
     }
 
     void Renderer2D::beginScene(const glm::mat4& transform)
     {
-        s_Data.quadShader->setMat4("u_ViewProjection", transform);
+        s_R2DData.quadShader->setMat4("u_ViewProjection", transform);
         beginBatch();
     }
 
@@ -196,7 +196,7 @@ namespace Arm {
     {
    
 
-        if (s_Data.quadIndexCount >= Renderer2DData::maxIndexCount)
+        if (s_R2DData.quadIndexCount >= Renderer2DData::maxIndexCount)
             nextBatch();
 
         constexpr glm::vec2 texCoords[] = {{0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f},{0.0f,1.0f}};
@@ -205,58 +205,58 @@ namespace Arm {
         const float tilingFactor = 1.0f;
 
         for (uint8_t i = 0; i < 4; i++) {
-            s_Data.quadVertexBufferPtr->position = transform * s_Data.quadVertexPositions[i];
-            s_Data.quadVertexBufferPtr->color = color;
-            s_Data.quadVertexBufferPtr->texCoord = texCoords[i];
-            s_Data.quadVertexBufferPtr->texIndex = textureIndex;
-            s_Data.quadVertexBufferPtr->tilingFactor = tilingFactor;
-            s_Data.quadVertexBufferPtr++;
+            s_R2DData.quadVertexBufferPtr->position = transform * s_R2DData.quadVertexPositions[i];
+            s_R2DData.quadVertexBufferPtr->color = color;
+            s_R2DData.quadVertexBufferPtr->texCoord = texCoords[i];
+            s_R2DData.quadVertexBufferPtr->texIndex = textureIndex;
+            s_R2DData.quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_R2DData.quadVertexBufferPtr++;
         }
-        s_Data.quadIndexCount += 6;
-        s_Data.stats.quadCount++;
+        s_R2DData.quadIndexCount += 6;
+        s_R2DData.stats.quadCount++;
     }
     void const Renderer2D::drawQuad(const glm::mat4& transform, const Ref<Texture2D> texture, const float tilingFactor, const glm::vec4& tintColor)
     {
    
         
-        if (s_Data.quadIndexCount >= Renderer2DData::maxIndexCount)
+        if (s_R2DData.quadIndexCount >= Renderer2DData::maxIndexCount)
             nextBatch();
 
         constexpr glm::vec2 texCoords[] = { {0.0f,0.0f},{1.0f,0.0f},{1.0f,1.0f},{0.0f,1.0f} };
 
         float textureIndex = 0.0f;
 
-        for (uint32_t i = 1; i < s_Data.textureSlotIndex; i++) {
-            if (*s_Data.textureSlots[i].get() == *texture.get()) {
+        for (uint32_t i = 1; i < s_R2DData.textureSlotIndex; i++) {
+            if (*s_R2DData.textureSlots[i].get() == *texture.get()) {
                 textureIndex = (float)i;
                 break;
             }
         }
 
         if (textureIndex == 0) {
-            textureIndex = (float)s_Data.textureSlotIndex;
-            s_Data.textureSlots[s_Data.textureSlotIndex] = texture;
-            s_Data.textureSlotIndex++;
+            textureIndex = (float)s_R2DData.textureSlotIndex;
+            s_R2DData.textureSlots[s_R2DData.textureSlotIndex] = texture;
+            s_R2DData.textureSlotIndex++;
         }
 
         for (uint8_t i = 0; i < 4; i++) {
-            s_Data.quadVertexBufferPtr->position = transform * s_Data.quadVertexPositions[i];
-            s_Data.quadVertexBufferPtr->color = tintColor;
-            s_Data.quadVertexBufferPtr->texCoord = texCoords[i];
-            s_Data.quadVertexBufferPtr->texIndex = textureIndex;
-            s_Data.quadVertexBufferPtr->tilingFactor = tilingFactor;
-            s_Data.quadVertexBufferPtr++;
+            s_R2DData.quadVertexBufferPtr->position = transform * s_R2DData.quadVertexPositions[i];
+            s_R2DData.quadVertexBufferPtr->color = tintColor;
+            s_R2DData.quadVertexBufferPtr->texCoord = texCoords[i];
+            s_R2DData.quadVertexBufferPtr->texIndex = textureIndex;
+            s_R2DData.quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_R2DData.quadVertexBufferPtr++;
         }
-        s_Data.quadIndexCount += 6;
-        s_Data.stats.quadCount++;
+        s_R2DData.quadIndexCount += 6;
+        s_R2DData.stats.quadCount++;
     }
     Renderer2D::Statistics Renderer2D::getStats()
     {
-        return s_Data.stats;
+        return s_R2DData.stats;
     }
     void Renderer2D::resetStats()
     {
-        memset(&s_Data.stats, 0, sizeof(Statistics));
+        memset(&s_R2DData.stats, 0, sizeof(Statistics));
     }
 
 }

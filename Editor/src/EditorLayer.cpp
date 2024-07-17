@@ -17,11 +17,10 @@ namespace Arm {
         fbProps.height = Application::get().getWindow().getHeight();
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
-        m_Scene = CreateRef<Scene>("3D Cube", Scene::SceneType::__3D__);
+        m_Scene = CreateRef<Scene>("Black&White");
+        //m_Scene->createEntity("cube").addComponent<MeshComponent>();
 
-        Entity square2 = m_Scene->createEntity("Square");
-        square2.addComponent<MeshComponent>();
-        /*float n = 5.0f;
+        float n = 5.0f;
         int num = 0;
         for(float i=0.0f; i<n; i++)
             for (float j = 0.0f; j < n; j++) {
@@ -32,7 +31,7 @@ namespace Arm {
                 glm::vec3& translation = square.getComponent<TransformComponent>().translation;
                 translation.x = i;
                 translation.y = j;
-            }*/
+            }
         m_CameraEntity = m_Scene->createEntity("camera entity");
 
         m_CameraEntity.addComponent<CameraComponent>();
@@ -82,7 +81,6 @@ namespace Arm {
         m_Scene->onUpdate(ts);
 
         m_FrameBuffer->unbind();
-
     }
     void EditorLayer::onImGuiRender()
     {
@@ -124,8 +122,7 @@ namespace Arm {
                 }
                 if (ImGui::MenuItem("Save", NULL, false, p != NULL))
                 {
-                    TextSerializer ts("assetPack.armed");
-                    ts.serializeAssets(m_Scene);
+                    m_DebugSerializer.serializeAssets(m_AssetFilePath, m_Scene);
                 }
                 //if (ImGui::MenuItem("Save As", "Ctrl + S"));
                 ImGui::EndMenu();

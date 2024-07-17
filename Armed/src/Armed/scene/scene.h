@@ -11,16 +11,12 @@ namespace Arm {
 
     class Scene {
     public:
-        enum class SceneType : uint8_t {
-            __2D__ = 0,
-            __3D__
-        };
         enum class SceneState : uint8_t {
             paused = 0,
             running
         };
     public:
-        Scene(const std::string& sceneName, SceneType sceneType = SceneType::__2D__);
+        Scene(const std::string& sceneName);
         ~Scene();
 
         void onUpdate(Timestep ts);
@@ -46,7 +42,6 @@ namespace Arm {
 
     private:
         std::string m_SceneName;
-        SceneType m_SceneType;
         SceneState m_SceneState;
         entt::registry m_Registry;
         uint32_t m_ViewportWidth = 1;

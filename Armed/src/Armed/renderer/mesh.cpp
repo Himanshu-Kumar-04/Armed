@@ -6,14 +6,14 @@ namespace Arm {
     Mesh::Mesh()
     {
         std::vector<VertexData> vertices {
-            VertexData(glm::vec3{-0.5f,-0.5f, 0.5f}, glm::vec4{0.0f,1.0f,0.0f,1.0f}, glm::vec2{0.0f, 0.0f}),
-            VertexData(glm::vec3{ 0.5f,-0.5f, 0.5f}, glm::vec4{1.0f,0.0f,0.0f,1.0f}, glm::vec2{1.0f, 0.0f}),
-            VertexData(glm::vec3{ 0.5f, 0.5f, 0.5f}, glm::vec4{0.0f,1.0f,0.0f,1.0f}, glm::vec2{1.0f, 1.0f}),
-            VertexData(glm::vec3{-0.5f, 0.5f, 0.5f}, glm::vec4{0.0f,1.0f,0.0f,1.0f}, glm::vec2{0.0f, 1.0f}),
-            VertexData(glm::vec3{ 0.5f,-0.5f,-0.5f}, glm::vec4{0.0f,1.0f,0.0f,1.0f}, glm::vec2{1.0f, 0.0f}),
-            VertexData(glm::vec3{ 0.5f, 0.5f,-0.5f}, glm::vec4{0.9f,0.4f,0.5f,1.0f}, glm::vec2{1.0f, 1.0f}),
-            VertexData(glm::vec3{-0.5f,-0.5f,-0.5f}, glm::vec4{0.9f,0.4f,0.5f,1.0f}, glm::vec2{0.0f, 0.0f}),
-            VertexData(glm::vec3{-0.5f, 0.5f,-0.5f}, glm::vec4{1.0f,0.0f,0.0f,1.0f}, glm::vec2{0.0f, 1.0f})
+            VertexData(glm::vec3{-0.5f,-0.5f, 0.5f}, glm::vec4(1.0f), glm::vec2{0.0f, 0.0f}),
+            VertexData(glm::vec3{ 0.5f,-0.5f, 0.5f}, glm::vec4(1.0f), glm::vec2{1.0f, 0.0f}),
+            VertexData(glm::vec3{ 0.5f, 0.5f, 0.5f}, glm::vec4(1.0f), glm::vec2{1.0f, 1.0f}),
+            VertexData(glm::vec3{-0.5f, 0.5f, 0.5f}, glm::vec4(1.0f), glm::vec2{0.0f, 1.0f}),
+            VertexData(glm::vec3{ 0.5f,-0.5f,-0.5f}, glm::vec4(1.0f), glm::vec2{1.0f, 0.0f}),
+            VertexData(glm::vec3{ 0.5f, 0.5f,-0.5f}, glm::vec4(1.0f), glm::vec2{1.0f, 1.0f}),
+            VertexData(glm::vec3{-0.5f,-0.5f,-0.5f}, glm::vec4(1.0f), glm::vec2{0.0f, 0.0f}),
+            VertexData(glm::vec3{-0.5f, 0.5f,-0.5f}, glm::vec4(1.0f), glm::vec2{0.0f, 1.0f})
         };
         
         std::vector<uint32_t> indices { 

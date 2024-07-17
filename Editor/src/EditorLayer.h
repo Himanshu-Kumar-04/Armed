@@ -19,6 +19,9 @@ namespace Arm {
         //panals.......
         SceneHierarchyPanal m_SceneHierarchyPanal;
 
+        std::filesystem::path m_AssetFilePath = "assetPack.armd";
+        TextSerializer m_DebugSerializer;
+
         Entity m_CameraEntity;
         float t = 0.0f;
         glm::vec2 m_ViewportSize;
