@@ -153,7 +153,7 @@ namespace Arm {
             search.close();
         }
         else {
-            ARM_ERROR("could not open file: %s\n", filepath);
+            ARM_ERROR("could not open file: %s\n", filepath.c_str());
         }
 
         return shaderString;
