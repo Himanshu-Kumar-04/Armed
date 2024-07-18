@@ -9,7 +9,7 @@ namespace Arm {
         for (auto id : scene->m_EntityLibrary)
             entityList.push_back(id.first);
         
-        assetPack.sceneMap[scene->getSceneName()] = entityList;
+        assetPack.sceneMap[scene->m_SceneName] = entityList;
 
         for (UUID _UUID : entityList) {
             Entity entity(scene->m_EntityLibrary[_UUID], scene.get());
@@ -46,8 +46,39 @@ namespace Arm {
             assetPack.entityMap[_UUID] = componentBlock;
         }
     }
-    bool SceneSerializer::deserialize(AssetPack& assetPack)
+    bool SceneSerializer::deserialize(AssetPack& assetPack, Ref<Scene>& scene)
     {
-        return false;
+        if (!scene)
+            return false;
+
+        scene = CreateRef<Scene>(scene->m_SceneName);
+        for (UUID _UUID : assetPack.sceneMap[scene->m_SceneName]) {
+            auto& entityData = assetPack.entityMap[_UUID];
+            Entity e = scene->createEntity(_UUID, entityData.tag);
+            //Transform
+            TransformComponent& tc = e.getComponent<TransformComponent>();
+            tc.translation = entityData.position;
+            tc.rotation    = entityData.rotation;
+            tc.scale       = entityData.scale;
+
+            //Camera
+            for (std::string& component : entityData.componentsPresent) {
+                if (component == "Camera") {
+                    CameraComponent& cc = e.addComponent<CameraComponent>();
+                    cc.isPrimary = entityData.isPrimary;
+                    cc.hasFixedAspectRatio = entityData.hasFixedAspectRatio;
+                    cc.camera.setPerspective(entityData.perspectiveVerticalFOV, entityData.perspectiveNear, entityData.perspectiveFar);
+                    cc.camera.setOrthographic(entityData.orthographicSize, entityData.orthographicNear, entityData.orthographicFar);
+                    cc.camera.setProjectionType(entityData.projectionType);
+                }
+                if (component == "Sprite") {
+                    e.addComponent<SpriteRendererComponent>(entityData.color);
+                }
+                if (component == "Mesh") {
+                    e.addComponent<MeshComponent>();
+                }
+            }
+        }
+        return true;
     }
 }

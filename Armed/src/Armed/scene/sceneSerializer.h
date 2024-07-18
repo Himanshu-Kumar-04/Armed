@@ -6,6 +6,6 @@ namespace Arm {
     class SceneSerializer {
     public:
         static void serialize(AssetPack& assetPack, const Ref<Scene>& scene);
-        static bool deserialize(AssetPack& assetPack);
+        static bool deserialize(AssetPack& assetPack, Ref<Scene>& scene);
     };
 }

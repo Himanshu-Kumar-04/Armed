@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <Armed/scene/sceneSerializer.h>
 
 namespace Arm {
     EditorLayer::EditorLayer()
@@ -17,7 +18,10 @@ namespace Arm {
         fbProps.height = Application::get().getWindow().getHeight();
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
+
         m_Scene = CreateRef<Scene>("Black&White");
+        m_Scenes.push_back(m_Scene);
+        m_Scenes.push_back(CreateRef<Scene>("Blank"));
         //m_Scene->createEntity("cube").addComponent<MeshComponent>();
 
         float n = 5.0f;
@@ -57,7 +61,7 @@ namespace Arm {
         };
 
         m_CameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
-        m_SceneHierarchyPanal.SetContext(m_Scene);
+        m_SceneHierarchyPanal.setContext(m_Scenes[0]);
     }
 
     void EditorLayer::onDetach()
@@ -66,6 +70,7 @@ namespace Arm {
 
     void EditorLayer::onUpdate(Timestep ts)
     {
+        m_Scene = m_SceneHierarchyPanal.getContext();
         m_Scene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
         if (FrameBufferProperties props = m_FrameBuffer->getProperties();
@@ -122,7 +127,18 @@ namespace Arm {
                 }
                 if (ImGui::MenuItem("Save", NULL, false, p != NULL))
                 {
-                    m_DebugSerializer.serializeAssets(m_AssetFilePath, m_Scene);
+                    TextSerializer::serializeAssets(m_AssetFilePath, m_AssetPack);
+                }
+                if (ImGui::MenuItem("Open", NULL, false, p != NULL))
+                {
+                    TextSerializer::deserializeAssets(m_AssetFilePath, m_AssetPack);
+                    m_Scenes.clear();
+                    for (auto sc : m_AssetPack.sceneMap) {
+                        m_Scene = CreateRef<Scene>(sc.first);
+                        SceneSerializer::deserialize(m_AssetPack, m_Scene);
+                        m_Scenes.push_back(m_Scene);
+                    }
+                    m_SceneHierarchyPanal.setContext(m_Scene);
                 }
                 //if (ImGui::MenuItem("Save As", "Ctrl + S"));
                 ImGui::EndMenu();
@@ -130,7 +146,7 @@ namespace Arm {
             ImGui::EndMenuBar();
         }
 
-        m_SceneHierarchyPanal.onImGuiRender();
+        m_SceneHierarchyPanal.onImGuiRender(m_Scenes, m_AssetPack);
 
         ImGui::Begin("Stats");
 

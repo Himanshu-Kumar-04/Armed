@@ -1,6 +1,6 @@
 #pragma once
 #include "Armed/scene/scene.h"
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 
@@ -39,7 +39,7 @@ namespace Arm {
             //Mesh
         };
 
-        std::map<UUID, ComponentBlock> entityMap;
-        std::map<std::string, std::vector<UUID>> sceneMap;
+        std::unordered_map<UUID, ComponentBlock> entityMap;
+        std::unordered_map<std::string, std::vector<UUID>> sceneMap;
     };
 }

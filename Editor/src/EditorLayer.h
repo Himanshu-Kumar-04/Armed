@@ -15,12 +15,13 @@ namespace Arm {
     private:
         Ref<FrameBuffer> m_FrameBuffer;
         Ref<Scene> m_Scene;
+        std::vector<Ref<Scene>> m_Scenes;
 
         //panals.......
         SceneHierarchyPanal m_SceneHierarchyPanal;
 
-        std::filesystem::path m_AssetFilePath = "assetPack.armd";
-        TextSerializer m_DebugSerializer;
+        std::string m_AssetFilePath = "assetPack.armd";
+        AssetPack m_AssetPack;
 
         Entity m_CameraEntity;
         float t = 0.0f;

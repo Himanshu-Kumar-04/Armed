@@ -4,7 +4,7 @@
 #define YAML_CPP_STATIC_DEFINE
 #include <yaml-cpp/yaml.h>
 #include <fstream>
-
+#include "Armed/core/log.h"
 
 namespace YAML {
 
@@ -90,6 +90,13 @@ namespace YAML {
 }
 
 namespace Arm {
+    YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& vec)
+    {
+        out << YAML::Flow;
+        out << YAML::BeginSeq << vec.x << vec.y << YAML::EndSeq;
+        return out;
+    }
+
     YAML::Emitter& operator<<(YAML::Emitter& out, glm::vec3& vec) {
         out << YAML::Flow;
         out << YAML::BeginSeq << vec.x << vec.y << vec.z << YAML::EndSeq;
@@ -102,23 +109,18 @@ namespace Arm {
         return out;
     }
 
-    TextSerializer::~TextSerializer()
+    void TextSerializer::serializeAssets(const std::string& filePath, AssetPack& assetPack)
     {
-    }
-
-    void TextSerializer::serializeAssets(const std::filesystem::path& filePath, const Ref<Scene> scene)
-    {
-        SceneSerializer::serialize(m_AssetPack, scene);
-
         YAML::Emitter out;
         out << YAML::BeginMap;
-        out << YAML::Key << "ValidationToken" << YAML::Value << m_AssetPack.validationToken;
+        out << YAML::Key << "ValidationToken" << YAML::Value << assetPack.validationToken;
 
         /// Scenes and the entities they contain
         out << YAML::Key << "Scenes" << YAML::Value << YAML::BeginSeq;
-        for (auto& pair : m_AssetPack.sceneMap) {
+        for (auto& pair : assetPack.sceneMap) {
             out << YAML::BeginMap;
-            out << YAML::Key << pair.first << YAML::Value;
+            out << YAML::Key << "Name" << YAML::Value << pair.first;
+            out << YAML::Key << "Data" << YAML::Value;
             out << YAML::Flow;
             out << YAML::BeginSeq;
             for (UUID _UUID : pair.second)
@@ -131,9 +133,10 @@ namespace Arm {
         out << YAML::Key << "Entities" << YAML::Value;
 
         out << YAML::BeginSeq;
-        for (auto& entityData : m_AssetPack.entityMap) {
+        for (auto& entityData : assetPack.entityMap) {
             out << YAML::BeginMap;
             out << YAML::Key << "Entity" << YAML::Value << entityData.first;
+            out << YAML::Key << "Components" << YAML::Flow << YAML::Value << entityData.second.componentsPresent;
             for (const auto& component : entityData.second.componentsPresent) {
                 if (component == "Tag") {
                     out << YAML::Key << "TagComponent" << YAML::Value << YAML::BeginMap;
@@ -156,11 +159,11 @@ namespace Arm {
                     out << YAML::Key << "Camera" << YAML::Value;
                     out << YAML::BeginMap;
                     out << YAML::Key << "ProjectionType" << YAML::Value << (int)entityData.second.projectionType;
-                    
+
                     out << YAML::Key << "OrthographicSize" << YAML::Value << entityData.second.orthographicSize;
                     out << YAML::Key << "OrthographicNear" << YAML::Value << entityData.second.orthographicNear;
                     out << YAML::Key << "OrthographicFar" << YAML::Value << entityData.second.orthographicFar;
-                    
+
                     out << YAML::Key << "PerspectiveVerticalFOV" << YAML::Value << entityData.second.perspectiveVerticalFOV;
                     out << YAML::Key << "PerspectiveNear" << YAML::Value << entityData.second.perspectiveNear;
                     out << YAML::Key << "PerspectiveFar" << YAML::Value << entityData.second.perspectiveFar;
@@ -188,49 +191,62 @@ namespace Arm {
         std::ofstream stream(filePath);
         stream << out.c_str();
     }
-
-    bool TextSerializer::deserializeAssets(const std::filesystem::path& filePath)
+    bool TextSerializer::deserializeAssets(const std::string& filePath, AssetPack& assetPack)
     {
         std::ifstream stream(filePath);
-        std::stringstream strStream;
-        strStream << stream.rdbuf();
 
-        YAML::Node data = YAML::Load(strStream.str());
-        
+        YAML::Node data;
+        try
+        {
+            data = YAML::LoadFile(filePath);
+        }
+        catch (YAML::ParserException e)
+        {
+            ARM_ERROR("Failed to load .armed file %s\n     {%s}", filePath.c_str(), e.what());
+            return false;
+        }
+
         if (data["ValidationToken"].as<std::string>() != "ARMED_ASSET_PACK" || !data["Scenes"])
             return false;
         //Reset assetPack struct to load a new file
-        m_AssetPack.entityMap.clear();
-        m_AssetPack.sceneMap.clear();
+        assetPack.entityMap.clear();
+        assetPack.sceneMap.clear();
 
-        for (auto sceneData : data["Scenes"])
-            m_AssetPack.sceneMap[sceneData.first.as<std::string>()] = sceneData.second.as<std::vector<UUID>>();
+        auto scenes = data["Scenes"];
 
-        for (auto entityData : data["Entities"]) {
+        if (scenes) {
+            for (auto scene : scenes) {
+                assetPack.sceneMap[scene["Name"].as<std::string>()] = scene["Data"].as<std::vector<UUID>>();
+            }
+        }
+        auto entities = data["Entities"];
+        for (auto entityData : entities) {
             AssetPack::ComponentBlock components;
+
+            components.componentsPresent = entityData["Components"].as<std::vector<std::string>>();
 
             if (entityData["TagComponent"])
                 components.tag = entityData["TagComponent"]["Tag"].as<std::string>();
 
             if (entityData["TransformComponent"]) {
-                components.position                 = entityData["TransformComponent"]["Translation"].as<glm::vec3>();
-                components.rotation                 = entityData["TransformComponent"]["Rotation"].as<glm::vec3>();
-                components.scale                    = entityData["TransformComponent"]["Scale"].as<glm::vec3>();
+                components.position = entityData["TransformComponent"]["Translation"].as<glm::vec3>();
+                components.rotation = entityData["TransformComponent"]["Rotation"].as<glm::vec3>();
+                components.scale = entityData["TransformComponent"]["Scale"].as<glm::vec3>();
             }
 
             if (entityData["CameraComponent"]) {
-                components.isPrimary                = entityData["CameraComponent"]["IsPrimary"].as<bool>();
-                components.hasFixedAspectRatio      = entityData["CameraComponent"]["HasFixedAspectRatio"].as<bool>();
-                
-                components.projectionType           = (Camera::ProjectionType)entityData["CameraComponent"]["Camera"]["ProjectionType"].as<int>();
-                
-                components.orthographicSize         = entityData["CameraComponent"]["Camera"]["OrthographicSize"].as<float>();
-                components.orthographicNear         = entityData["CameraComponent"]["Camera"]["OrthographicNear"].as<float>();
-                components.orthographicFar          = entityData["CameraComponent"]["Camera"]["OrthographicFar"].as<float>();
+                components.isPrimary = entityData["CameraComponent"]["IsPrimary"].as<bool>();
+                components.hasFixedAspectRatio = entityData["CameraComponent"]["HasFixedAspectRatio"].as<bool>();
 
-                components.perspectiveVerticalFOV   = entityData["CameraComponent"]["Camera"]["PerspectiveVerticalFOV"].as<float>();
-                components.perspectiveNear          = entityData["CameraComponent"]["Camera"]["PerspectiveNear"].as<float>();
-                components.perspectiveFar           = entityData["CameraComponent"]["Camera"]["PerspectiveFar"].as<float>();
+                components.projectionType = (Camera::ProjectionType)entityData["CameraComponent"]["Camera"]["ProjectionType"].as<int>();
+
+                components.orthographicSize = entityData["CameraComponent"]["Camera"]["OrthographicSize"].as<float>();
+                components.orthographicNear = entityData["CameraComponent"]["Camera"]["OrthographicNear"].as<float>();
+                components.orthographicFar  = entityData["CameraComponent"]["Camera"]["OrthographicFar"].as<float>();
+
+                components.perspectiveVerticalFOV = entityData["CameraComponent"]["Camera"]["PerspectiveVerticalFOV"].as<float>();
+                components.perspectiveNear = entityData["CameraComponent"]["Camera"]["PerspectiveNear"].as<float>();
+                components.perspectiveFar = entityData["CameraComponent"]["Camera"]["PerspectiveFar"].as<float>();
             }
 
             if (entityData["SpriteComponent"])
@@ -239,9 +255,8 @@ namespace Arm {
             if (entityData["MeshComponent"])
                 continue;
 
-            m_AssetPack.entityMap[entityData["Entity"].as<UUID>()] = components;
+            assetPack.entityMap[entityData["Entity"].as<UUID>()] = components;
         }
-
-        return SceneSerializer::deserialize(m_AssetPack);
+        return true;
     }
 }

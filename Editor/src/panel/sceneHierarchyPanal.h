@@ -7,9 +7,11 @@ namespace Arm {
     public:
         SceneHierarchyPanal() = default;
         SceneHierarchyPanal(const Ref<Scene>& context);
-        void SetContext(const Ref<Scene>& context);
-        void onImGuiRender();
+        void setContext(const Ref<Scene>& context);
+        Ref<Scene> getContext() { return m_Context; }
+        void onImGuiRender(std::vector<Ref<Scene>> scenes, AssetPack& assetPack);
     private:
+        void drawSceneExplorerMenu(std::vector<Ref<Scene>> scenes, AssetPack& assetPack);
         void drawEntityNode(Entity& entity);
         void drawComponents(Entity& entity);
 

@@ -4,23 +4,30 @@
 #include <ImGui/imgui_internal.h>
 #include "glm/gtc/type_ptr.hpp"
 
+#include <Armed/scene/sceneSerializer.h>
+
 namespace Arm {
     SceneHierarchyPanal::SceneHierarchyPanal(const Ref<Scene>& context)
     {
-        SetContext(context);
+        setContext(context);
     }
-    void SceneHierarchyPanal::SetContext(const Ref<Scene>& context)
+    void SceneHierarchyPanal::setContext(const Ref<Scene>& context)
     {
         m_Context = context;
+        m_SelectionContext = {};
     }
-    void SceneHierarchyPanal::onImGuiRender()
+    void SceneHierarchyPanal::onImGuiRender(std::vector<Ref<Scene>> scenes, AssetPack& assetPack)
     {
-        ImGui::Begin("Scene Hierarchy", 0, ImGuiWindowFlags_NoMove);
+        ImGui::Begin("Scene Explorer", 0,  ImGuiWindowFlags_MenuBar);
+        
+        drawSceneExplorerMenu(scenes, assetPack);
+        
         auto view = m_Context->m_Registry.view<TagComponent>();
         for (auto entityHandle : view) {
             Entity entity(entityHandle, m_Context.get());
             drawEntityNode(entity);
         }
+
         if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
             m_SelectionContext = {};
 
@@ -38,6 +45,50 @@ namespace Arm {
 
         ImGui::End();
     }
+    void SceneHierarchyPanal::drawSceneExplorerMenu(std::vector<Ref<Scene>> scenes, AssetPack& assetPack)
+    {
+        if (ImGui::BeginMenuBar()) {
+            
+            //Scene Name
+            auto& tag = m_Context->getSceneName();
+            char buffer[256];
+            memset(buffer, 0, sizeof(buffer));
+            strcpy_s(buffer, sizeof(buffer), tag.c_str());
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5);
+            if (ImGui::InputText("##Scene", buffer, sizeof(buffer))) {
+                if(assetPack.sceneMap.find(m_Context->getSceneName()) != assetPack.sceneMap.end()) {
+                    std::vector<UUID> sceneData = assetPack.sceneMap[tag];
+                    assetPack.sceneMap.erase(tag);
+                    tag = std::string(buffer);
+                    assetPack.sceneMap.insert({ tag, sceneData });
+                }
+                else
+                    tag = std::string(buffer);
+            }
+            ImGui::PopItemWidth();
+
+
+            // Scenes
+            if (ImGui::BeginMenu("...")) {
+                for (Ref<Scene> scene : scenes) {
+                    if (ImGui::MenuItem(scene->getSceneName().c_str(), NULL, false)) {
+                        if (scene->getSceneName() != m_Context->getSceneName()) {
+                            setContext(scene);
+                        }
+                    }
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::Button("Save"))
+                SceneSerializer::serialize(assetPack, m_Context);
+            if (ImGui::Button("Reset")) {
+                m_SelectionContext = {};
+                SceneSerializer::deserialize(assetPack, m_Context);
+            }
+            ImGui::EndMenuBar();
+        }
+    }
+
     void SceneHierarchyPanal::drawEntityNode(Entity& entity)
     {
         auto& tag = entity.getComponent<TagComponent>().tag;
@@ -168,7 +219,7 @@ namespace Arm {
             char buffer[256];
             memset(buffer, 0, sizeof(buffer));
             strcpy_s(buffer, sizeof(buffer), tag.c_str());
-            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x*0.5);
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5);
             if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
                 tag = std::string(buffer);
             ImGui::PopItemWidth();
@@ -181,11 +232,11 @@ namespace Arm {
 
         DrawComponent<TransformComponent>("Transform", entity, [](auto& component) {
             DrawVec3Control("Translation", component.translation);
-            
+
             glm::vec3 rotation = glm::degrees(component.rotation);
             DrawVec3Control("Rotation", rotation);
             component.rotation = glm::radians(rotation);
-            
+
             DrawVec3Control("Scale", component.scale);
             }, false);
 
@@ -193,7 +244,7 @@ namespace Arm {
             auto& camera = component.camera;
             ImGui::Checkbox("Primary", &component.isPrimary);
 
-            const char* projectionTypeString[] = { "Orthographic", "Projection" };
+            const char* projectionTypeString[] = { "Orthographic", "Perspective" };
             const char* currentProjectionTypeString = projectionTypeString[(int)camera.getProjectionType()];
             if (ImGui::BeginCombo("Projection", currentProjectionTypeString)) {
                 for (uint8_t i = 0; i < 2; i++) {
