@@ -65,8 +65,8 @@ float Arm::SceneCamera::getFarClip(ProjectionType projectionType)
 {
     switch (projectionType)
     {
-    case Arm::Camera::ProjectionType::orthographic: return m_OrthographicNear;
-    case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveNear;
+    case Arm::Camera::ProjectionType::orthographic: return m_OrthographicFar;
+    case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveFar;
     }
 }
 
