@@ -25,6 +25,6 @@ namespace Arm {
 
         Entity m_CameraEntity;
         float t = 0.0f;
-        glm::vec2 m_ViewportSize;
+        glm::vec2 m_ViewportSize = {400.0f,400.0f};
     };
 }

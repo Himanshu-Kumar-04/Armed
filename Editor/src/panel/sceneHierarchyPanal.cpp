@@ -25,7 +25,31 @@ namespace Arm {
         auto view = m_Context->m_Registry.view<TagComponent>();
         for (auto entityHandle : view) {
             Entity entity(entityHandle, m_Context.get());
-            drawEntityNode(entity);
+            
+            auto& tag = entity.getComponent<TagComponent>().tag;
+            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0);
+            flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
+            bool opened = ImGui::TreeNodeEx((const void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
+
+            if (ImGui::IsItemClicked())
+                m_SelectionContext = entity;
+
+            bool entityDeleted = false;
+            if (ImGui::BeginPopupContextItem()) {
+                if (ImGui::MenuItem("Destroy Entity"))
+                    entityDeleted = true;
+                ImGui::EndPopup();
+            }
+
+            if (opened) {
+                ImGui::TreePop();
+            }
+
+            if (entityDeleted) {
+                if(m_SelectionContext == entity)
+                    m_SelectionContext = {};
+                m_Context->destroyEntity(entity);
+            }
         }
 
         if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
@@ -54,7 +78,7 @@ namespace Arm {
             char buffer[256];
             memset(buffer, 0, sizeof(buffer));
             strcpy_s(buffer, sizeof(buffer), tag.c_str());
-            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5);
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
             if (ImGui::InputText("##Scene", buffer, sizeof(buffer))) {
                 if(assetPack.sceneMap.find(m_Context->getSceneName()) != assetPack.sceneMap.end()) {
                     std::vector<UUID> sceneData = assetPack.sceneMap[tag];
@@ -91,30 +115,7 @@ namespace Arm {
 
     void SceneHierarchyPanal::drawEntityNode(Entity& entity)
     {
-        auto& tag = entity.getComponent<TagComponent>().tag;
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0);
-        flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
-        bool opened = ImGui::TreeNodeEx((const void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
-
-        if (ImGui::IsItemClicked())
-            m_SelectionContext = entity;
-
-        bool entityDeleted = false;
-        if (ImGui::BeginPopupContextItem()) {
-            if (ImGui::MenuItem("Destroy Entity"))
-                entityDeleted = true;
-            ImGui::EndPopup();
-        }
-
-        if (opened) {
-            ImGui::TreePop();
-        }
-
-        if (entityDeleted) {
-            m_Context->destroyEntity(entity);
-            if (m_SelectionContext == entity)
-                m_SelectionContext = {};
-        }
+        
     }
 
     static void DrawVec3Control(const std::string& label, glm::vec3& components, float resetValue = 0.0f, float columnWidth = 100.0f) {
@@ -219,7 +220,7 @@ namespace Arm {
             char buffer[256];
             memset(buffer, 0, sizeof(buffer));
             strcpy_s(buffer, sizeof(buffer), tag.c_str());
-            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5);
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
             if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
                 tag = std::string(buffer);
             ImGui::PopItemWidth();

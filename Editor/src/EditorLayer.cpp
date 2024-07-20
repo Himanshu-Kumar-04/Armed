@@ -21,17 +21,15 @@ namespace Arm {
 
         m_Scene = CreateRef<Scene>("Black&White");
         m_Scenes.push_back(m_Scene);
-        m_Scenes.push_back(CreateRef<Scene>("Blank"));
-        //m_Scene->createEntity("cube").addComponent<MeshComponent>();
 
         float n = 5.0f;
         int num = 0;
-        for(float i=0.0f; i<n; i++)
+        for (float i = 0.0f; i < n; i++)
             for (float j = 0.0f; j < n; j++) {
                 num++;
                 float color = (float)(num % 2);
                 Entity square = m_Scene->createEntity("square");
-                square.addComponent<SpriteRendererComponent>(glm::vec4{color, color, color ,1.0});
+                square.addComponent<SpriteRendererComponent>(glm::vec4{ color, color, color ,1.0 });
                 glm::vec3& translation = square.getComponent<TransformComponent>().translation;
                 translation.x = i;
                 translation.y = j;
@@ -50,7 +48,7 @@ namespace Arm {
             virtual void onDestroy() override {
             }
             virtual void onUpdate(Timestep ts) override {
-                
+
                 auto& translation = getComponent<TransformComponent>().translation;
                 float speed = 0.1f * translation.z;
                 if (Input::isKeyPressed(Key::A)) translation.x -= speed * ts;
@@ -61,7 +59,8 @@ namespace Arm {
         };
 
         m_CameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
-        m_SceneHierarchyPanal.setContext(m_Scenes[0]);
+        m_SceneHierarchyPanal.setContext(m_Scene);
+        SceneSerializer::serialize(m_AssetPack,m_Scene);
     }
 
     void EditorLayer::onDetach()
@@ -125,7 +124,7 @@ namespace Arm {
                 {
                     *p = false;
                 }
-                if (ImGui::MenuItem("Save", NULL, false, p != NULL))
+                if (ImGui::MenuItem("Save As", NULL, false, p != NULL))
                 {
                     TextSerializer::serializeAssets(m_AssetFilePath, m_AssetPack);
                 }
@@ -138,7 +137,8 @@ namespace Arm {
                         SceneSerializer::deserialize(m_AssetPack, m_Scene);
                         m_Scenes.push_back(m_Scene);
                     }
-                    m_SceneHierarchyPanal.setContext(m_Scene);
+                    m_Scene = m_Scenes[0];
+                    m_SceneHierarchyPanal.setContext(m_Scenes[0]);
                 }
                 //if (ImGui::MenuItem("Save As", "Ctrl + S"));
                 ImGui::EndMenu();
@@ -162,7 +162,7 @@ namespace Arm {
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("Viewport");
-        
+
         if (!ImGui::IsWindowFocused())
             m_Scene->setSceneState(Scene::SceneState::paused);
         else
@@ -174,14 +174,13 @@ namespace Arm {
         m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
 
         uintptr_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
-        ImGui::Image((void*)textureId, {m_ViewportSize.x,m_ViewportSize.y}, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void*)textureId, { m_ViewportSize.x,m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
-        
+
         ImGui::PopStyleVar();
 
         ImGui::End();
     }
-
     void EditorLayer::onEvent(Event& e)
     {
     }
