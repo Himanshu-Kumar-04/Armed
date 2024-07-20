@@ -7,6 +7,7 @@
 #include"buffer.h"
 
 namespace Arm {
+
     struct VertexData {
         glm::vec3 position;
         glm::vec4 color = glm::vec4(1.0f);
@@ -15,7 +16,15 @@ namespace Arm {
         float tilingFactor = 1.0f;
     };
 
+
     class Mesh {
+    public:
+        enum class Shape {
+            Cube,
+            Cylinder,
+            Cone,
+            Sphere
+        };
     public:
         std::vector<VertexData> vertices;
         std::vector<uint32_t> indices;

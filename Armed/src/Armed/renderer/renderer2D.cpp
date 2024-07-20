@@ -75,7 +75,7 @@ namespace Arm {
         for (uint32_t i = 0; i < s_R2DData.maxTextureSlots; i++) {
             sampler[i] = i;
         }
-        s_R2DData.quadShader = Shader::create("assets/shader/texture.glsl");
+        s_R2DData.quadShader = Shader::create("assets/shader/texture2D.glsl");
         s_R2DData.quadShader->bind();
         s_R2DData.quadShader->setIntArray("u_Textures",sampler, s_R2DData.maxTextureSlots);
 

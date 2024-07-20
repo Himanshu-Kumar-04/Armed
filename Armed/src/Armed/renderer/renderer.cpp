@@ -29,7 +29,7 @@ namespace Arm {
         for (uint32_t i = 0; i < s_R3DData.maxTextureSlots; i++) {
             sampler[i] = i;
         }
-        s_R3DData.shader = Shader::create("assets/shader/texture.glsl");
+        s_R3DData.shader = Shader::create("assets/shader/texture3D.glsl");
         s_R3DData.shader->bind();
         s_R3DData.shader->setIntArray("u_Textures", sampler, s_R3DData.maxTextureSlots);
     }
