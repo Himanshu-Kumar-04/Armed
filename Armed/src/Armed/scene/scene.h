@@ -30,6 +30,10 @@ namespace Arm {
 
         //Create and Destroy Entities
         void destroyEntity(Entity entity);
+        void destroyEntityWithUUID(UUID _UUID);
+
+        Entity getEntityWithName(std::string& name);
+        Entity getEntityWithUUID(UUID _UUID);
 
         Entity createEntity(const std::string& name = std::string());
         Entity createEntity(UUID _UUID, const std::string& name = std::string());

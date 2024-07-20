@@ -112,7 +112,34 @@ namespace Arm {
 
     void Scene::destroyEntity(Entity entity)
     {
+        m_EntityLibrary.erase(entity.getComponent<IDComponent>().ID);
         m_Registry.destroy(entity);
+    }
+
+    void Scene::destroyEntityWithUUID(UUID _UUID)
+    {
+        m_EntityLibrary.erase(_UUID);
+        m_Registry.destroy(m_EntityLibrary[_UUID]);
+    }
+
+    Entity Scene::getEntityWithName(std::string& name)
+    {
+        auto view = m_Registry.view<TagComponent>();
+        for (auto entity : view)
+        {
+            const TagComponent& tc = view.get<TagComponent>(entity);
+            if (tc.tag == name)
+                return Entity{ entity, this };
+        }
+        return {};
+    }
+
+    Entity Scene::getEntityWithUUID(UUID _UUID)
+    {
+        if (m_EntityLibrary.find(_UUID) != m_EntityLibrary.end())
+            return { m_EntityLibrary.at(_UUID), this };
+
+        return {};
     }
 
     template<typename T>

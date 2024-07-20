@@ -51,33 +51,66 @@ namespace Arm {
         if (!scene)
             return false;
 
-        scene = CreateRef<Scene>(scene->m_SceneName);
+        for (auto pair : scene->m_EntityLibrary) {
+            if (std::find(assetPack.sceneMap[scene->getSceneName()].begin(), assetPack.sceneMap[scene->getSceneName()].end(),pair.first) == assetPack.sceneMap[scene->getSceneName()].end())
+                scene->destroyEntityWithUUID(pair.first);
+        }
+
         for (UUID _UUID : assetPack.sceneMap[scene->m_SceneName]) {
+            Entity e;
             auto& entityData = assetPack.entityMap[_UUID];
-            Entity e = scene->createEntity(_UUID, entityData.tag);
+            //entity is deleated
+            if (scene->m_EntityLibrary.find(_UUID) == scene->m_EntityLibrary.end()) {
+                e = scene->createEntity(_UUID, entityData.tag);
+                //Camera
+                for (std::string& component : entityData.componentsPresent) {
+                    if (component == "Camera") {
+                        CameraComponent& cc = e.addComponent<CameraComponent>();
+                        cc.isPrimary = entityData.isPrimary;
+                        cc.hasFixedAspectRatio = entityData.hasFixedAspectRatio;
+                        cc.camera.setPerspective(entityData.perspectiveVerticalFOV, entityData.perspectiveNear, entityData.perspectiveFar);
+                        cc.camera.setOrthographic(entityData.orthographicSize, entityData.orthographicNear, entityData.orthographicFar);
+                        cc.camera.setProjectionType(entityData.projectionType);
+                    }
+                    if (component == "Sprite") {
+                        e.addComponent<SpriteRendererComponent>(entityData.color);
+                    }
+                    if (component == "Mesh") {
+                        e.addComponent<MeshComponent>();
+                    }
+                }
+            }
+            else {
+                e = scene->getEntityWithUUID(_UUID);
+                //Camera
+                for (std::string& component : entityData.componentsPresent) {
+                    if (component == "Camera") {
+                        CameraComponent& cc = e.getComponent<CameraComponent>();
+                        cc.isPrimary = entityData.isPrimary;
+                        cc.hasFixedAspectRatio = entityData.hasFixedAspectRatio;
+                        cc.camera.setPerspective(entityData.perspectiveVerticalFOV, entityData.perspectiveNear, entityData.perspectiveFar);
+                        cc.camera.setOrthographic(entityData.orthographicSize, entityData.orthographicNear, entityData.orthographicFar);
+                        cc.camera.setProjectionType(entityData.projectionType);
+                    }
+                    if (component == "Sprite") {
+                        e.getComponent<SpriteRendererComponent>().color = entityData.color;
+                    }
+                    if (component == "Mesh") {
+                        e.getComponent<MeshComponent>();
+                    }
+                }
+            }
+            //there are more entities then in asset pack
+            //TODO: entity is modified
+            //TODO: entity is unchanged
+
             //Transform
             TransformComponent& tc = e.getComponent<TransformComponent>();
             tc.translation = entityData.position;
             tc.rotation    = entityData.rotation;
             tc.scale       = entityData.scale;
 
-            //Camera
-            for (std::string& component : entityData.componentsPresent) {
-                if (component == "Camera") {
-                    CameraComponent& cc = e.addComponent<CameraComponent>();
-                    cc.isPrimary = entityData.isPrimary;
-                    cc.hasFixedAspectRatio = entityData.hasFixedAspectRatio;
-                    cc.camera.setPerspective(entityData.perspectiveVerticalFOV, entityData.perspectiveNear, entityData.perspectiveFar);
-                    cc.camera.setOrthographic(entityData.orthographicSize, entityData.orthographicNear, entityData.orthographicFar);
-                    cc.camera.setProjectionType(entityData.projectionType);
-                }
-                if (component == "Sprite") {
-                    e.addComponent<SpriteRendererComponent>(entityData.color);
-                }
-                if (component == "Mesh") {
-                    e.addComponent<MeshComponent>();
-                }
-            }
+            
         }
         return true;
     }
