@@ -23,7 +23,6 @@ project "Armed"
 		"src",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.gem}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.glm}",
@@ -38,7 +37,6 @@ project "Armed"
 
 	links{
 		"GLFW",
-		"gem",
 		"Glad",
 		"ImGui",
 		"opengl32",

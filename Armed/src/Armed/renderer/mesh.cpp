@@ -25,8 +25,8 @@ namespace Arm {
             1,0,6,6,4,1
         };
 
-        this->vertices = vertices;
-        this->indices = indices;
+        m_Vertices = vertices;
+        m_Indices = indices;
 
         m_VertexBuffer = VertexBuffer::Create(vertices);
         m_VertexBuffer->setLayout({
@@ -46,9 +46,9 @@ namespace Arm {
 
     Mesh::Mesh(std::vector<VertexData>& vertices, std::vector<uint32_t>& indices, std::vector<Ref<Texture2D>>& textures)
     {
-        this->vertices = vertices;
-        this->indices = indices;
-        this->textures = textures;
+        m_Vertices = vertices;
+        m_Indices = indices;
+        m_Textures = textures;
 
         m_VertexBuffer = VertexBuffer::Create(vertices);
         m_VertexBuffer->setLayout({
@@ -65,8 +65,8 @@ namespace Arm {
 
     Mesh::Mesh(std::vector<VertexData>& vertices, std::vector<uint32_t>& indices)
     {
-        this->vertices = vertices;
-        this->indices = indices;
+        m_Vertices = vertices;
+        m_Indices = indices;
 
         m_VertexBuffer = VertexBuffer::Create((uint32_t)vertices.size() * sizeof(VertexData));
         m_VertexBuffer->setLayout({
@@ -83,13 +83,19 @@ namespace Arm {
 
     void Mesh::draw(const glm::mat4& transform)
     {
-        std::vector<VertexData> newVertices = vertices;
+        int i = 1;
+        for (Ref<Texture2D> texture : m_Textures) {
+            texture->bind(i);
+            i++;
+        }
+
+        std::vector<VertexData> newVertices = m_Vertices;
         for (auto& vertex : newVertices) {
             vertex.position = transform * glm::vec4{ vertex.position, 1.0f };
         }
-        for (uint8_t i = 1; i < textures.size(); i++)
-            textures[i]->bind(i);
-        m_VertexBuffer->setData(newVertices.data(), static_cast<uint32_t>(vertices.size() * sizeof(VertexData)));
-        RenderCommand::drawIndexed(m_VertexBuffer, static_cast<uint32_t>(indices.size()));
+        for (uint8_t i = 1; i < m_Textures.size(); i++)
+            m_Textures[i]->bind(i);
+        m_VertexBuffer->setData(newVertices.data(), static_cast<uint32_t>(m_Vertices.size() * sizeof(VertexData)));
+        RenderCommand::drawIndexed(m_VertexBuffer, static_cast<uint32_t>(m_Indices.size()));
     }
 }

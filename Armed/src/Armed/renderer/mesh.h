@@ -26,9 +26,9 @@ namespace Arm {
             Sphere
         };
     public:
-        std::vector<VertexData> vertices;
-        std::vector<uint32_t> indices;
-        std::vector<Ref<Texture2D>> textures;
+        std::vector<VertexData> m_Vertices;
+        std::vector<uint32_t> m_Indices;
+        std::vector<Ref<Texture2D>> m_Textures;
 
         Mesh();
         Mesh(const std::string& file);
