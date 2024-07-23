@@ -21,7 +21,7 @@ namespace Arm {
 
         void close();
 
-        inline static Application& get() { return *s_Instance; }
+        inline static Application& Get() { return *s_Instance; }
         inline Window& getWindow() { return *m_Window; }
         
         ImGuiLayer* getImGuiLayer() { return m_ImGuiLayer; }

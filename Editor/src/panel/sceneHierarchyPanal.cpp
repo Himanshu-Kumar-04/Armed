@@ -16,7 +16,7 @@ namespace Arm {
         m_Context = context;
         m_SelectionContext = {};
     }
-    void SceneHierarchyPanal::onImGuiRender(std::vector<Ref<Scene>> scenes, AssetPack& assetPack)
+    void SceneHierarchyPanal::onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack)
     {
         ImGui::Begin("Scene Explorer", 0,  ImGuiWindowFlags_MenuBar);
         
@@ -69,37 +69,46 @@ namespace Arm {
 
         ImGui::End();
     }
-    void SceneHierarchyPanal::drawSceneExplorerMenu(std::vector<Ref<Scene>> scenes, AssetPack& assetPack)
+    void SceneHierarchyPanal::drawSceneExplorerMenu(Ref<SceneLibrary> scenes, AssetPack& assetPack)
     {
         if (ImGui::BeginMenuBar()) {
             
-            //Scene Name
+            //Name
             auto& tag = m_Context->getSceneName();
             char buffer[256];
             memset(buffer, 0, sizeof(buffer));
             strcpy_s(buffer, sizeof(buffer), tag.c_str());
+
             ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
-            if (ImGui::InputText("##Scene", buffer, sizeof(buffer))) {
-                if(assetPack.sceneMap.find(m_Context->getSceneName()) != assetPack.sceneMap.end()) {
-                    std::vector<UUID> sceneData = assetPack.sceneMap[tag];
-                    assetPack.sceneMap.erase(tag);
-                    tag = std::string(buffer);
-                    assetPack.sceneMap.insert({ tag, sceneData });
+            if (ImGui::InputText("##Scene", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue) && std::string(buffer).size() != 0) {
+                if ((std::string)buffer != tag) {
+
+                    if (!scenes->get().count((std::string)buffer)) {
+                        std::vector<UUID> sceneData = assetPack.sceneMap[tag];
+                        Ref<Scene> scene            = scenes->get()[tag];
+
+                        assetPack.sceneMap.erase(tag);
+                        scenes->get().erase(tag);
+                        
+                        tag = std::string(buffer);
+                        scenes->get()[tag] = scene;
+                        assetPack.sceneMap.insert({ tag, sceneData });
+                    }
                 }
-                else
-                    tag = std::string(buffer);
             }
             ImGui::PopItemWidth();
 
-
             // Scenes
             if (ImGui::BeginMenu("...")) {
-                for (Ref<Scene> scene : scenes) {
-                    if (ImGui::MenuItem(scene->getSceneName().c_str(), NULL, false)) {
-                        if (scene->getSceneName() != m_Context->getSceneName()) {
-                            setContext(scene);
-                        }
+                for (auto& scene : scenes->get())
+                    if (ImGui::MenuItem(scene.first.c_str(), NULL, false) && scene.first != m_Context->getSceneName()) {
+                        setContext(scene.second);
+                        scenes->setActiveScene(scene.second);
                     }
+
+                ImGui::Separator();
+                if (ImGui::MenuItem("+", NULL, false)) {
+                    SceneSerializer::serialize(assetPack, scenes->createNewScene());
                 }
                 ImGui::EndMenu();
             }
@@ -221,7 +230,7 @@ namespace Arm {
             memset(buffer, 0, sizeof(buffer));
             strcpy_s(buffer, sizeof(buffer), tag.c_str());
             ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
-            if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
+            if (ImGui::InputText("##Tag", buffer, sizeof(buffer),ImGuiInputTextFlags_EnterReturnsTrue) && std::string(buffer).size() != 0)
                 tag = std::string(buffer);
             ImGui::PopItemWidth();
         }

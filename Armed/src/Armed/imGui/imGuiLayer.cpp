@@ -51,7 +51,7 @@ namespace Arm {
 
 		SetDarkThemeColors();
 
-		Application& app = Application::get();
+		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.getWindow().getNativeWindow());
 
 		// Setup Platform/Renderer bindings
@@ -86,7 +86,7 @@ namespace Arm {
 	void ImGuiLayer::End()
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		Application& app = Application::get();
+		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.getWindow().getWidth(), (float)app.getWindow().getHeight());
 
 		// Rendering

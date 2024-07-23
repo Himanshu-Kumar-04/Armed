@@ -48,30 +48,29 @@ namespace Arm {
         }
 
         if (mainCamera) {
-            if (!m_Registry.view<MeshComponent>().size()) {
-                Renderer2D::beginScene(mainCamera->getProjection(), cameraTransform);
-                RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-                RenderCommand::clearColor();
-                RenderCommand::enableDepthTest();
-                auto group1 = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-                for (auto entity : group1) {
-                    auto [tc, sprite] = group1.get<TransformComponent, SpriteRendererComponent>(entity);
+            Renderer::beginScene(mainCamera->getProjection(), cameraTransform);
+            RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+            RenderCommand::clearColor();
+            RenderCommand::enableDepthTest();
+
+            if (m_Registry.view<MeshComponent>().empty()) {
+                Renderer2D::beginBatch();
+                auto group = m_Registry.group<SpriteRendererComponent>(entt::get<TransformComponent>);
+                for (auto entity : group) {
+                    auto [tc, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
                     Renderer2D::drawQuad(tc.getTransform(), sprite.color);
                 }
-                Renderer2D::endScene();
+                Renderer2D::flush();
             }
             else {
-                Renderer::beginScene(mainCamera->getProjection(), cameraTransform);
-                RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-                RenderCommand::clearColor();
-                RenderCommand::enableDepthTest();
-                auto group2 = m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
-                for (auto entity : group2) {
-                    auto [tc, mc] = group2.get<TransformComponent, MeshComponent>(entity);
+                auto group = m_Registry.group<MeshComponent>(entt::get<TransformComponent>);
+                for (auto entity : group) {
+                    auto [tc, mc] = group.get<TransformComponent, MeshComponent>(entity);
                     Renderer::submit(tc.getTransform(), mc.mesh);
                 }
-                Renderer::endScene();
             }
+
+            Renderer::endScene();
         }
     }
 

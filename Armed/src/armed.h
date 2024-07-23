@@ -15,6 +15,7 @@
 #include "Armed/scene/components.h"
 #include "Armed/scene/entity.h"
 #include "Armed/scene/scene.h"
+#include "Armed/scene/sceneLibrary.h"
 #include "Armed/scene/scriptableEntity.h"
 
 //---Renderer-----------

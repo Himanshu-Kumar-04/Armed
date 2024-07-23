@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <Armed/scene/sceneSerializer.h>
+#include <Armed/utils/utils.h>
 
 namespace Arm {
     EditorLayer::EditorLayer()
@@ -14,53 +15,15 @@ namespace Arm {
     void EditorLayer::onAttach()
     {
         FrameBufferProperties fbProps;
-        fbProps.width = Application::get().getWindow().getWidth();
-        fbProps.height = Application::get().getWindow().getHeight();
+        fbProps.width = Application::Get().getWindow().getWidth();
+        fbProps.height = Application::Get().getWindow().getHeight();
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
 
-        m_Scene = CreateRef<Scene>("Black&White");
-        m_Scenes.push_back(m_Scene);
+        m_ActiveScene = m_Scenes->createNewScene();
 
-        float n = 5.0f;
-        int num = 0;
-        for (float i = 0.0f; i < n; i++)
-            for (float j = 0.0f; j < n; j++) {
-                num++;
-                float color = (float)(num % 2);
-                Entity square = m_Scene->createEntity("square");
-                square.addComponent<SpriteRendererComponent>(glm::vec4{ color, color, color ,1.0 });
-                glm::vec3& translation = square.getComponent<TransformComponent>().translation;
-                translation.x = i;
-                translation.y = j;
-            }
-        m_CameraEntity = m_Scene->createEntity("camera entity");
-
-        m_CameraEntity.addComponent<CameraComponent>();
-        class CameraController : public ScriptableEntity {
-        public:
-            virtual void onCreate() override {
-                auto& translation = getComponent<TransformComponent>().translation;
-                translation.z = 60.0f;
-                translation.x = 1.0f;
-                translation.y = 1.0f;
-            }
-            virtual void onDestroy() override {
-            }
-            virtual void onUpdate(Timestep ts) override {
-
-                auto& translation = getComponent<TransformComponent>().translation;
-                float speed = 0.1f * translation.z;
-                if (Input::isKeyPressed(Key::A)) translation.x -= speed * ts;
-                if (Input::isKeyPressed(Key::D)) translation.x += speed * ts;
-                if (Input::isKeyPressed(Key::W)) translation.y += speed * ts;
-                if (Input::isKeyPressed(Key::S)) translation.y -= speed * ts;
-            }
-        };
-
-        m_CameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
-        m_SceneHierarchyPanal.setContext(m_Scene);
-        SceneSerializer::serialize(m_AssetPack,m_Scene);
+        m_SceneHierarchyPanal.setContext(m_ActiveScene);
+        SceneSerializer::serialize(m_AssetPack, m_ActiveScene);
     }
 
     void EditorLayer::onDetach()
@@ -69,8 +32,7 @@ namespace Arm {
 
     void EditorLayer::onUpdate(Timestep ts)
     {
-        m_Scene = m_SceneHierarchyPanal.getContext();
-        m_Scene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        m_ActiveScene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
         if (FrameBufferProperties props = m_FrameBuffer->getProperties();
             m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
@@ -82,7 +44,7 @@ namespace Arm {
         Renderer2D::resetStats();
         m_FrameBuffer->bind();
 
-        m_Scene->onUpdate(ts);
+        m_ActiveScene->onUpdate(ts);
 
         m_FrameBuffer->unbind();
     }
@@ -119,28 +81,21 @@ namespace Arm {
 
         if (ImGui::BeginMenuBar()) {
             if (ImGui::BeginMenu("File")) {
-                //ImGui::Separator();
-                if (ImGui::MenuItem("Close", NULL, false, p != NULL))
-                {
-                    *p = false;
+                if (ImGui::MenuItem("New", "Ctrl+N")) {
+                    //TODO: save previous file if existed
+                    newFile();
                 }
-                if (ImGui::MenuItem("Save As", NULL, false, p != NULL))
+                ImGui::Separator();
+                if (ImGui::MenuItem("Open", "Ctrl+O"))
                 {
-                    TextSerializer::serializeAssets(m_AssetFilePath, m_AssetPack);
+                    //TODO: save previous file if existed
+                    openFile();
                 }
-                if (ImGui::MenuItem("Open", NULL, false, p != NULL))
+                ImGui::Separator();
+                if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
                 {
-                    TextSerializer::deserializeAssets(m_AssetFilePath, m_AssetPack);
-                    m_Scenes.clear();
-                    for (auto sc : m_AssetPack.sceneMap) {
-                        m_Scene = CreateRef<Scene>(sc.first);
-                        SceneSerializer::deserialize(m_AssetPack, m_Scene);
-                        m_Scenes.push_back(m_Scene);
-                    }
-                    m_Scene = m_Scenes[0];
-                    m_SceneHierarchyPanal.setContext(m_Scenes[0]);
+                    saveFile();
                 }
-                //if (ImGui::MenuItem("Save As", "Ctrl + S"));
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
@@ -156,7 +111,7 @@ namespace Arm {
         ImGui::Text("Quad:           %d", stats.quadCount);
         ImGui::Text("Vertices:       %d", stats.getTotalVertexCount());
         ImGui::Text("Indices:        %d", stats.getTotalIndexCount());
-        if (ImGui::Button("Exit")) Application::get().close();
+        if (ImGui::Button("Exit")) Application::Get().close();
 
         ImGui::End();
 
@@ -164,11 +119,11 @@ namespace Arm {
         ImGui::Begin("Viewport");
 
         if (!ImGui::IsWindowFocused())
-            m_Scene->setSceneState(Scene::SceneState::paused);
+            m_ActiveScene->setSceneState(Scene::SceneState::paused);
         else
-            m_Scene->setSceneState(Scene::SceneState::running);
+            m_ActiveScene->setSceneState(Scene::SceneState::running);
 
-        Application::get().getImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
+        Application::Get().getImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
 
         ImVec2 viewportPanalSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
@@ -183,6 +138,64 @@ namespace Arm {
     }
     void EditorLayer::onEvent(Event& e)
     {
+        EventDispatcher dispatcher(e);
+
+        dispatcher.dispatch<KeyPressedEvent>(ARM_BIND_EVENT_FN(EditorLayer::onKeyPressed));
+    }
+    bool EditorLayer::onKeyPressed(KeyPressedEvent& e)
+    {
+        if (e.IsRepeat())
+            return false;
+
+        bool control = Input::isKeyPressed(Key::LeftControl) || Input::isKeyPressed(Key::RightControl);
+        bool shift   = Input::isKeyPressed(Key::LeftShift) || Input::isKeyPressed(Key::RightShift);
+
+        switch (e.getKeyCode())
+        {
+        case Key::N:
+            if (control)
+                newFile();
+            break;
+        case Key::O:
+            if (control)
+                openFile();
+            break;
+        case Key::S:
+            if (control && shift)
+                saveFile();
+            break;
+        default:
+            break;
+        }
+        return true;
     }
 
+    void EditorLayer::newFile() {
+        m_Scenes->clearScenes();
+        m_ActiveScene = m_Scenes->createNewScene();
+        m_SceneHierarchyPanal.setContext(m_ActiveScene);
+    }
+
+    void EditorLayer::openFile() {
+        std::string filepath = FileDialog::OpenFile("Armed Asset (*.armed)\0*.armed\0");
+        if (!filepath.empty()) {
+            TextSerializer::deserializeAssets(filepath, m_AssetPack);
+            m_Scenes->clearScenes();
+            for (auto sc : m_AssetPack.sceneMap) {
+                m_Scenes->createNewScene(sc.first);
+                SceneSerializer::deserialize(m_AssetPack, m_Scenes->getScene(sc.first));
+            }
+            m_ActiveScene = m_Scenes->getActiveScene();
+            m_SceneHierarchyPanal.setContext(m_ActiveScene);
+        }
+    }
+
+    void EditorLayer::saveFile() {
+        for (auto& scene : m_Scenes->get())
+            SceneSerializer::serialize(m_AssetPack, scene.second);
+
+        std::string filepath = FileDialog::SaveFile("Armed Asset (*.armed)\0*.armed\0");
+        if (!filepath.empty())
+            TextSerializer::serializeAssets(filepath, m_AssetPack);
+    }
 }

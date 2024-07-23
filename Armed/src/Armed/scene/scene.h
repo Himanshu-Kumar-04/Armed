@@ -16,7 +16,7 @@ namespace Arm {
             running
         };
     public:
-        Scene(const std::string& sceneName);
+        Scene(const std::string& sceneName = "Untitled");
         ~Scene();
 
         void onUpdate(Timestep ts);

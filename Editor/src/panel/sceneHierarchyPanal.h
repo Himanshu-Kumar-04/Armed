@@ -2,6 +2,7 @@
 #include<armed.h>
 #include"Armed/core/core.h"
 
+
 namespace Arm {
     class SceneHierarchyPanal{
     public:
@@ -9,9 +10,9 @@ namespace Arm {
         SceneHierarchyPanal(const Ref<Scene>& context);
         void setContext(const Ref<Scene>& context);
         Ref<Scene> getContext() { return m_Context; }
-        void onImGuiRender(std::vector<Ref<Scene>> scenes, AssetPack& assetPack);
+        void onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack);
     private:
-        void drawSceneExplorerMenu(std::vector<Ref<Scene>> scenes, AssetPack& assetPack);
+        void drawSceneExplorerMenu(Ref<SceneLibrary> scenes, AssetPack& assetPack);
         void drawEntityNode(Entity& entity);
         void drawComponents(Entity& entity);
 

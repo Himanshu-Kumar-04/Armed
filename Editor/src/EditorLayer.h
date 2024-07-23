@@ -12,15 +12,20 @@ namespace Arm {
         virtual void onUpdate(Timestep ts) override;
         virtual void onImGuiRender() override;
         virtual void onEvent(Event& e) override;
+
+    private:
+        bool onKeyPressed(KeyPressedEvent& e);
+        void newFile();
+        void openFile();
+        void saveFile();
     private:
         Ref<FrameBuffer> m_FrameBuffer;
-        Ref<Scene> m_Scene;
-        std::vector<Ref<Scene>> m_Scenes;
+        Ref<Scene> m_ActiveScene;
+        Ref<SceneLibrary> m_Scenes = CreateRef<SceneLibrary>();
 
         //panals.......
         SceneHierarchyPanal m_SceneHierarchyPanal;
 
-        std::string m_AssetFilePath = "assetPack.armd";
         AssetPack m_AssetPack;
 
         Entity m_CameraEntity;
