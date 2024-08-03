@@ -121,6 +121,18 @@ namespace Arm {
         m_Registry.destroy(m_EntityLibrary[_UUID]);
     }
 
+    Entity Scene::getPrimaryCameraEntity()
+    {
+        auto view = m_Registry.view<CameraComponent>();
+        for (auto entity : view)
+        {
+            const CameraComponent& cc = view.get<CameraComponent>(entity);
+            if (cc.isPrimary)
+                return Entity{ entity, this };
+        }
+        return {};
+    }
+
     Entity Scene::getEntityWithName(std::string& name)
     {
         auto view = m_Registry.view<TagComponent>();

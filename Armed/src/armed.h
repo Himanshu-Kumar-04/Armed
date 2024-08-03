@@ -28,7 +28,6 @@
 #include "Armed/renderer/texture.h"
 #include "Armed/renderer/frameBuffer.h"
 
-#include "Armed/renderer/orthographicCamera.h"
 #include "Armed/renderer/camera.h"
 
 #include "Armed/renderer/mesh.h"

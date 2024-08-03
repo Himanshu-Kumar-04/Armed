@@ -11,9 +11,11 @@ namespace Arm {
     Application::Application(const std::string& name)
     {
         s_Instance = this;
+
         Renderer::setAPI(RendererAPI::API::OpenGL);
-        m_Window = Scope<Window>(Window::Create(WindowProperties(name)));
-        m_Window->setEventCallBack(ARM_BIND_EVENT_FN(Application::onEvent));
+        
+        m_Window = Scope<Window>(Window::create(WindowProperties(name)));
+        m_Window->setEventCallback(ARM_BIND_EVENT_FN(Application::onEvent));
 
         Renderer::init();
         
