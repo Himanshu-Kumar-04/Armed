@@ -32,6 +32,7 @@ namespace Arm {
         void destroyEntity(Entity entity);
         void destroyEntityWithUUID(UUID _UUID);
 
+        Entity getPrimaryCameraEntity();
         Entity getEntityWithName(std::string& name);
         Entity getEntityWithUUID(UUID _UUID);
 
