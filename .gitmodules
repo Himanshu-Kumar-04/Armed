@@ -1,3 +1,6 @@
 [submodule "Armed/vendor/yaml-cpp"]
 	path = Armed/vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "Armed/vendor/ImGuizmo"]
+	path = Armed/vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git
