@@ -6,6 +6,8 @@
 #include <Armed/scene/sceneSerializer.h>
 #include <Armed/utils/utils.h>
 
+#include <ImGuizmo.h>
+
 namespace Arm {
     EditorLayer::EditorLayer()
         :Layer("EditorLayer")
@@ -48,6 +50,7 @@ namespace Arm {
 
         m_FrameBuffer->unbind();
     }
+
     void EditorLayer::onImGuiRender()
     {
         static bool s = false;
@@ -81,21 +84,14 @@ namespace Arm {
 
         if (ImGui::BeginMenuBar()) {
             if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("New", "Ctrl+N")) {
-                    //TODO: save previous file if existed
+                if (ImGui::MenuItem("New", "Ctrl+N"))
                     newFile();
-                }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Open", "Ctrl+O"))
-                {
-                    //TODO: save previous file if existed
                     openFile();
-                }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
-                {
                     saveFile();
-                }
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
@@ -116,20 +112,55 @@ namespace Arm {
         ImGui::End();
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
         ImGui::Begin("Viewport");
 
-        if (!ImGui::IsWindowFocused())
-            m_ActiveScene->setSceneState(Scene::SceneState::paused);
-        else
-            m_ActiveScene->setSceneState(Scene::SceneState::running);
-
-        Application::Get().getImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
 
         ImVec2 viewportPanalSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
 
         uintptr_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
-        ImGui::Image((void*)textureId, { m_ViewportSize.x,m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image(reinterpret_cast<void*>(textureId),{ m_ViewportSize.x,m_ViewportSize.y },ImVec2(0, 1),ImVec2(1, 0));
+
+        ///ImGuizmo 
+        if (m_SceneHierarchyPanal.getSelectedEntity() && m_GuizmoType != -1) {
+            ImGuizmo::SetOrthographic(false);
+            ImGuizmo::SetDrawlist();
+            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
+            //Camera
+            Entity cameraEntity               = m_ActiveScene->getPrimaryCameraEntity();
+            const glm::mat4& cameraProjection = cameraEntity.getComponent<CameraComponent>().camera.getProjection();
+            glm::mat4 cameraView              = glm::inverse(cameraEntity.getComponent<TransformComponent>().getTransform());
+            //Entity
+            TransformComponent& tc            = m_SceneHierarchyPanal.getSelectedEntity().getComponent<TransformComponent>();
+            glm::mat4 transform               = tc.getTransform();
+
+            // Snapping
+            bool snap = Input::isKeyPressed(Key::LeftControl);
+            float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+            // Snap to 45 degrees for rotation
+            if (m_GuizmoType == ImGuizmo::OPERATION::ROTATE)
+                snapValue = 45.0f;
+
+            float snapValues[3] = { snapValue, snapValue, snapValue };
+
+            ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+                (ImGuizmo::OPERATION)m_GuizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+                nullptr, snap ? snapValues : nullptr);
+
+            if (ImGuizmo::IsUsing())
+            {
+                glm::vec3 translation, rotation, scale;
+                Math::DecomposeTransform(transform, translation, rotation, scale);
+                glm::vec3 deltaRotation = rotation - tc.rotation;
+
+                tc.translation = translation;
+                tc.rotation += deltaRotation;
+                tc.scale = scale;
+            }
+        }
+
         ImGui::End();
 
         ImGui::PopStyleVar();
@@ -148,34 +179,29 @@ namespace Arm {
             return false;
 
         bool control = Input::isKeyPressed(Key::LeftControl) || Input::isKeyPressed(Key::RightControl);
-        bool shift   = Input::isKeyPressed(Key::LeftShift) || Input::isKeyPressed(Key::RightShift);
+        bool shift = Input::isKeyPressed(Key::LeftShift) || Input::isKeyPressed(Key::RightShift);
 
         switch (e.getKeyCode())
         {
-        case Key::N:
-            if (control)
-                newFile();
-            break;
-        case Key::O:
-            if (control)
-                openFile();
-            break;
-        case Key::S:
-            if (control && shift)
-                saveFile();
-            break;
+        case Key::N: if (control) newFile(); break;
+        case Key::O: if (control) openFile(); break;
+        case Key::S: if (control && shift) saveFile(); break;
+
+        case Key::Q: m_GuizmoType = -1; break;
+        case Key::W: m_GuizmoType = ImGuizmo::OPERATION::TRANSLATE; break;
+        case Key::E: m_GuizmoType = ImGuizmo::OPERATION::ROTATE;    break;
+        case Key::R: m_GuizmoType = ImGuizmo::OPERATION::SCALE;     break;
+
         default:
             break;
         }
         return true;
     }
-
     void EditorLayer::newFile() {
         m_Scenes->clearScenes();
         m_ActiveScene = m_Scenes->createNewScene();
         m_SceneHierarchyPanal.setContext(m_ActiveScene);
     }
-
     void EditorLayer::openFile() {
         std::string filepath = FileDialog::OpenFile("Armed Asset (*.armed)\0*.armed\0");
         if (!filepath.empty()) {
@@ -189,7 +215,6 @@ namespace Arm {
             m_SceneHierarchyPanal.setContext(m_ActiveScene);
         }
     }
-
     void EditorLayer::saveFile() {
         for (auto& scene : m_Scenes->get())
             SceneSerializer::serialize(m_AssetPack, scene.second);

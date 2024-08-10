@@ -17,13 +17,19 @@ project "Armed"
 		"vendor/stb_image/**.cpp",
 		"vendor/glm/glm/**.hpp",
 		"vendor/glm/glm/**.inl",
+
+		"vendor/ImGuizmo/ImGuizmo.h",
+		"vendor/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	includedirs{
 		"src",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
+		
 		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImGuizmo}",
+		
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.yaml_cpp}",
@@ -44,6 +50,9 @@ project "Armed"
 		"%{Library.Vulkan}"
 	}
 
+	filter "files:vendor/ImGuizmo/**.cpp"
+	flags { "NoPCH" }
+	
 	filter "system:windows"
 		systemversion "latest"
 

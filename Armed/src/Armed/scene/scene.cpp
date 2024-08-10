@@ -28,7 +28,7 @@ namespace Arm {
                     msc.instance->m_Entity = Entity{ entity, this };
                     msc.instance->onCreate();
                 }
-                if (m_SceneState != SceneState::paused) msc.instance->onUpdate(ts);
+                msc.instance->onUpdate(ts);
                 });
         }
 
@@ -181,7 +181,7 @@ namespace Arm {
     void Scene::onAddComponent<MeshComponent>(Entity& entity, MeshComponent& component)
     {
     }
-    
+
     template<>
     void Scene::onAddComponent<CameraComponent>(Entity& entity, CameraComponent& component)
     {

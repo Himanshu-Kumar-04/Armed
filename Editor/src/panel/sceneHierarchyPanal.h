@@ -10,6 +10,7 @@ namespace Arm {
         SceneHierarchyPanal(const Ref<Scene>& context);
         void setContext(const Ref<Scene>& context);
         Ref<Scene> getContext() { return m_Context; }
+        Entity getSelectedEntity() const { return m_SelectionContext; }
         void onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack);
     private:
         void drawSceneExplorerMenu(Ref<SceneLibrary> scenes, AssetPack& assetPack);

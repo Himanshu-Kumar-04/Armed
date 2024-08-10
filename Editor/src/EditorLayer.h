@@ -22,14 +22,14 @@ namespace Arm {
         Ref<FrameBuffer> m_FrameBuffer;
         Ref<Scene> m_ActiveScene;
         Ref<SceneLibrary> m_Scenes = CreateRef<SceneLibrary>();
+        Entity m_EditorCamera;
+        AssetPack m_AssetPack;
 
         //panals.......
         SceneHierarchyPanal m_SceneHierarchyPanal;
 
-        AssetPack m_AssetPack;
 
-        Entity m_CameraEntity;
-        float t = 0.0f;
-        glm::vec2 m_ViewportSize = {400.0f,400.0f};
+        glm::vec2 m_ViewportSize = { 400.0f,400.0f };
+        int m_GuizmoType = -1;
     };
 }

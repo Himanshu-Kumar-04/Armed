@@ -16,7 +16,8 @@ project "Editor"
 		"%{wks.location}/Armed/src",
 		"%{wks.location}/Armed/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links{

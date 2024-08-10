@@ -5,7 +5,6 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 #include "Armed/Core/Application.h"
-
 #include "ImGuizmo.h"
 
 // TEMPORARY
@@ -70,7 +69,7 @@ namespace Arm {
 
 	void ImGuiLayer::onEvent(Event& e)
 	{
-		if (!m_BlockEvents)
+		if (m_BlockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
 			e.handled |= e.isInCategory(EventCategoryMouse) & io.WantCaptureMouse;
