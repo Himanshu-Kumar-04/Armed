@@ -1,0 +1,64 @@
+ValidationToken: ARMED_ASSET_PACK
+Scenes:
+  - Name: Untitled
+    Data: [252659328136550916, 9881894900199457774]
+Entities:
+  - Entity: 252659328136550916
+    Components: [Tag, Transform, Camera]
+    TagComponent:
+      Tag: __entity__
+    TransformComponent:
+      Translation: [0, 0, 42.2999992]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      IsPrimary: true
+      HasFixedAspectRatio: false
+      Camera:
+        ProjectionType: 1
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+        PerspectiveVerticalFOV: 0.25
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+  - Entity: 16567257471380338912
+    Components: [Tag, Transform, Sprite]
+    TagComponent:
+      Tag: blue
+    TransformComponent:
+      Translation: [-1.98360181, 0.655099273, 0]
+      Rotation: [-1.36536276, 0.0759102106, 1.47309661]
+      Scale: [24.1515808, 6.08755684, 0.0010090759]
+    SpriteComponent:
+      Color: [0.0414722674, 0.253575712, 0.826254845, 1]
+  - Entity: 16452875650825373115
+    Components: [Tag, Transform, Sprite]
+    TagComponent:
+      Tag: __entity__
+    TransformComponent:
+      Translation: [0, 2.24000001, 0]
+      Rotation: [-0.590414941, -0.732116401, 0.153306812]
+      Scale: [6.4999938, 6.49995518, 2.59999728]
+    SpriteComponent:
+      Color: [0.214964002, 0.223927781, 0.795366764, 1]
+  - Entity: 9162350579636116935
+    Components: [Tag, Transform, Sprite]
+    TagComponent:
+      Tag: __entity__
+    TransformComponent:
+      Translation: [1.89999998, 0.699999988, 0]
+      Rotation: [-0.398474306, 0.0421024561, 1.87333333]
+      Scale: [1.99500287, 9.57600975, 3.99000525]
+    SpriteComponent:
+      Color: [0.11970602, 0.414563566, 0.563706577, 1]
+  - Entity: 9881894900199457774
+    Components: [Tag, Transform, Sprite]
+    TagComponent:
+      Tag: __entity__
+    TransformComponent:
+      Translation: [-0.438659042, -0.0373746157, 0]
+      Rotation: [-0.921498299, -0.396892339, -0.124691606]
+      Scale: [1.95040512, 3.16637802, 7.55456877]
+    SpriteComponent:
+      Color: [0.0562305301, 0.275560856, 0.355212331, 1]

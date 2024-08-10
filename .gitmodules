@@ -3,4 +3,4 @@
 	url = https://github.com/jbeder/yaml-cpp.git
 [submodule "Armed/vendor/ImGuizmo"]
 	path = Armed/vendor/ImGuizmo
-	url = https://github.com/CedricGuillemet/ImGuizmo.git
+	url = https://github.com/TheCherno/ImGuizmo.git
