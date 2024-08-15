@@ -4,3 +4,6 @@
 [submodule "Armed/vendor/yaml-cpp"]
 	path = Armed/vendor/yaml-cpp
 	url = https://github.com/Himanshu-Kumar-04/yaml-cpp.git
+[submodule "Armed/vendor/ImGui"]
+	path = Armed/vendor/ImGui
+	url = https://github.com/Himanshu-Kumar-04/imgui.git
