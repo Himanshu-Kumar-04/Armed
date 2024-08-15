@@ -49,6 +49,7 @@ namespace Arm {
         m_ActiveScene->onUpdate(ts);
 
         m_FrameBuffer->unbind();
+
     }
 
     void EditorLayer::onImGuiRender()
@@ -97,7 +98,7 @@ namespace Arm {
             ImGui::EndMenuBar();
         }
 
-        m_SceneHierarchyPanal.onImGuiRender(m_Scenes, m_AssetPack);
+        m_SceneHierarchyPanal.onImGuiRender(m_Scenes, m_AssetPack, m_SelectedEntity);
 
         ImGui::Begin("Stats");
 
@@ -123,7 +124,7 @@ namespace Arm {
         ImGui::Image(reinterpret_cast<void*>(textureId),{ m_ViewportSize.x,m_ViewportSize.y },ImVec2(0, 1),ImVec2(1, 0));
 
         ///ImGuizmo 
-        if (m_SceneHierarchyPanal.getSelectedEntity() && m_GuizmoType != -1) {
+        if (m_SelectedEntity && m_GuizmoType != -1) {
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
@@ -133,13 +134,12 @@ namespace Arm {
             const glm::mat4& cameraProjection = cameraEntity.getComponent<CameraComponent>().camera.getProjection();
             glm::mat4 cameraView              = glm::inverse(cameraEntity.getComponent<TransformComponent>().getTransform());
             //Entity
-            TransformComponent& tc            = m_SceneHierarchyPanal.getSelectedEntity().getComponent<TransformComponent>();
+            TransformComponent& tc            = m_SelectedEntity.getComponent<TransformComponent>();
             glm::mat4 transform               = tc.getTransform();
 
             // Snapping
             bool snap = Input::isKeyPressed(Key::LeftControl);
-            float snapValue = 0.5f; // Snap to 0.5m for translation/scale
-            // Snap to 45 degrees for rotation
+            float snapValue = 0.5f; // Snap to 0.5m for translation/scale // Snap to 45 degrees for rotation
             if (m_GuizmoType == ImGuizmo::OPERATION::ROTATE)
                 snapValue = 45.0f;
 
@@ -153,11 +153,14 @@ namespace Arm {
             {
                 glm::vec3 translation, rotation, scale;
                 Math::DecomposeTransform(transform, translation, rotation, scale);
-                glm::vec3 deltaRotation = rotation - tc.rotation;
+                const glm::vec3 deltaRotation = rotation - tc.rotation;
 
-                tc.translation = translation;
-                tc.rotation += deltaRotation;
-                tc.scale = scale;
+                if (m_GuizmoType == ImGuizmo::TRANSLATE)
+                    tc.translation = translation;
+                else if (m_GuizmoType == ImGuizmo::ROTATE)
+                    tc.rotation += deltaRotation;
+                else if (m_GuizmoType == ImGuizmo::SCALE)
+                    tc.scale = scale;
             }
         }
 

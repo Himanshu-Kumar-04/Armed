@@ -16,7 +16,7 @@ namespace Arm {
         m_Context = context;
         m_SelectionContext = {};
     }
-    void SceneHierarchyPanal::onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack)
+    void SceneHierarchyPanal::onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack, Entity& selectedEntity)
     {
         ImGui::Begin("Scene Explorer", 0,  ImGuiWindowFlags_MenuBar);
         
@@ -31,8 +31,10 @@ namespace Arm {
             flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
             bool opened = ImGui::TreeNodeEx((const void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
-            if (ImGui::IsItemClicked())
+            if (ImGui::IsItemClicked()) {
                 m_SelectionContext = entity;
+                selectedEntity = entity;
+            }
 
             bool entityDeleted = false;
             if (ImGui::BeginPopupContextItem()) {

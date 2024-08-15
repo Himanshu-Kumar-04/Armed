@@ -19,11 +19,13 @@ namespace Arm {
         void openFile();
         void saveFile();
     private:
-        Ref<FrameBuffer> m_FrameBuffer;
-        Ref<Scene> m_ActiveScene;
-        Ref<SceneLibrary> m_Scenes = CreateRef<SceneLibrary>();
-        Entity m_EditorCamera;
         AssetPack m_AssetPack;
+        Ref<FrameBuffer> m_FrameBuffer;
+        Ref<SceneLibrary> m_Scenes = CreateRef<SceneLibrary>();
+
+        Ref<Scene> m_ActiveScene;
+        Entity m_SelectedEntity;
+        Entity m_EditorCamera;
 
         //panals.......
         SceneHierarchyPanal m_SceneHierarchyPanal;

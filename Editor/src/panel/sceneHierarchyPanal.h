@@ -11,7 +11,7 @@ namespace Arm {
         void setContext(const Ref<Scene>& context);
         Ref<Scene> getContext() { return m_Context; }
         Entity getSelectedEntity() const { return m_SelectionContext; }
-        void onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack);
+        void onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack,  Entity& selectedEntity);
     private:
         void drawSceneExplorerMenu(Ref<SceneLibrary> scenes, AssetPack& assetPack);
         void drawEntityNode(Entity& entity);

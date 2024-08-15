@@ -1,0 +1,34 @@
+ValidationToken: ARMED_ASSET_PACK
+Scenes:
+  - Name: Untitled
+    Data: [9778804027646173725, 11294106176769152283]
+Entities:
+  - Entity: 9778804027646173725
+    Components: [Tag, Transform, Camera]
+    TagComponent:
+      Tag: __entity__
+    TransformComponent:
+      Translation: [0, 0, 20.1000004]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      IsPrimary: true
+      HasFixedAspectRatio: false
+      Camera:
+        ProjectionType: 1
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+        PerspectiveVerticalFOV: 0.25
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+  - Entity: 11294106176769152283
+    Components: [Tag, Transform, Sprite]
+    TagComponent:
+      Tag: __entity__
+    TransformComponent:
+      Translation: [0.664325774, 0.231968522, -0.425856173]
+      Rotation: [-1.27919805, -0.672407031, -1.50320327]
+      Scale: [2.0291996, 2.85546732, 2.02919984]
+    SpriteComponent:
+      Color: [0.772200763, 0.235536158, 0.235536158, 1]

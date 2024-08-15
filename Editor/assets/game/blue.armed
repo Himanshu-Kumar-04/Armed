@@ -55,10 +55,10 @@ Entities:
   - Entity: 9881894900199457774
     Components: [Tag, Transform, Sprite]
     TagComponent:
-      Tag: __entity__
+      Tag: awewdwewadaww
     TransformComponent:
-      Translation: [-0.438659042, -0.0373746157, 0]
-      Rotation: [-0.921498299, -0.396892339, -0.124691606]
-      Scale: [1.95040512, 3.16637802, 7.55456877]
+      Translation: [0.854765356, 0.406974554, -22.7827396]
+      Rotation: [-1.01927233, 0, 1.5760324]
+      Scale: [16.3310146, 12.6975098, 9.0367794]
     SpriteComponent:
       Color: [0.0562305301, 0.275560856, 0.355212331, 1]
