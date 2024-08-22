@@ -7,6 +7,7 @@
 #include <Armed/utils/utils.h>
 
 #include <ImGuizmo.h>
+#include "panel/mainMenuBar/mainMenuBar.h"
 
 namespace Arm {
     EditorLayer::EditorLayer()
@@ -21,11 +22,11 @@ namespace Arm {
         fbProps.height = Application::Get().getWindow().getHeight();
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
-
         m_ActiveScene = m_Scenes->createNewScene();
-
-        m_SceneHierarchyPanal.setContext(m_ActiveScene);
+        
+        m_SceneExplorer.setContext(m_ActiveScene);
         SceneSerializer::serialize(m_AssetPack, m_ActiveScene);
+        m_EditorCamera = EditorCamera();
     }
 
     void EditorLayer::onDetach()
@@ -34,19 +35,34 @@ namespace Arm {
 
     void EditorLayer::onUpdate(Timestep ts)
     {
-        m_ActiveScene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-
         if (FrameBufferProperties props = m_FrameBuffer->getProperties();
             m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
             (props.width != m_ViewportSize.x || props.height != m_ViewportSize.y))
         {
             m_FrameBuffer->resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+            if(m_SceneState == SceneState::Edit)
+                m_EditorCamera.setViewportSize(m_ViewportSize.x, m_ViewportSize.y);
+
+            m_ActiveScene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
         }
 
         Renderer2D::resetStats();
         m_FrameBuffer->bind();
 
-        m_ActiveScene->onUpdate(ts);
+        switch (m_SceneState)
+        {
+        case SceneState::Edit:
+            m_EditorCamera.onUpdate(ts);
+            m_ActiveScene->onUpdateEditor(ts,m_EditorCamera);
+            break;
+        case SceneState::Simulate:
+            break;
+        case SceneState::Runtime:
+            m_ActiveScene->onUpdateRuntime(ts);
+            break;
+        default:
+            break;
+        }
 
         m_FrameBuffer->unbind();
 
@@ -54,27 +70,26 @@ namespace Arm {
 
     void EditorLayer::onImGuiRender()
     {
-        static bool s = false;
-        bool* p = &s;
-        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+        ImGuiStyle& style = ImGui::GetStyle();
+        static bool options_flag = false;
 
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+            ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
         ImGui::SetNextWindowViewport(viewport->ID);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+        style.WindowRounding = 0.0f;
+        style.WindowBorderSize = 0.0f;
+        style.WindowPadding = ImVec2(0.0f, 0.0f);
 
         if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
             window_flags |= ImGuiWindowFlags_NoBackground;
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        ImGui::Begin("DockSpace", p, window_flags);
 
-        ImGui::PopStyleVar();
-        ImGui::PopStyleVar(2);
+        ImGui::Begin("DockSpace", 0, window_flags);
 
         ImGuiIO& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
@@ -83,45 +98,58 @@ namespace Arm {
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
-        if (ImGui::BeginMenuBar()) {
+        ///////////////MainMenuBar////////////////
+
+        if (ImGui::BeginMainMenuBar()) {
+
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("New", "Ctrl+N"))
                     newFile();
-                ImGui::Separator();
-                if (ImGui::MenuItem("Open", "Ctrl+O"))
+                else if (ImGui::MenuItem("Open", "Ctrl+O"))
                     openFile();
-                ImGui::Separator();
-                if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
+                else if (ImGui::MenuItem("Save", "Ctrl+S"))
+                    saveFile();
+                else if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
                     saveFile();
                 ImGui::EndMenu();
             }
-            ImGui::EndMenuBar();
+
+            if (ImGui::BeginMenu("Edit")) {
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("View")) {
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Tool")) {
+                if (ImGui::MenuItem("Options", "Ctrl+N"))
+                    options_flag = true;
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Help")) {
+                if (ImGui::MenuItem("Keyboard Shortcut References")) {
+
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMainMenuBar();
         }
 
-        m_SceneHierarchyPanal.onImGuiRender(m_Scenes, m_AssetPack, m_SelectedEntity);
+        options(options_flag);
 
-        ImGui::Begin("Stats");
 
-        auto stats = Renderer2D::getStats();
-        ImGui::Text("Renderer2D Stats:");
-        ImGui::Text("Draw Calls:     %d", stats.drawCalls);
-        ImGui::Text("Quad:           %d", stats.quadCount);
-        ImGui::Text("Vertices:       %d", stats.getTotalVertexCount());
-        ImGui::Text("Indices:        %d", stats.getTotalIndexCount());
-        if (ImGui::Button("Exit")) Application::Get().close();
-
-        ImGui::End();
-
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        m_SceneExplorer.onImGuiRender(m_Scenes, m_AssetPack, m_SelectedEntity);
 
         ImGui::Begin("Viewport");
-
+        Application::Get().getImGuiLayer()->BlockEvents(!ImGui::IsWindowHovered() && !ImGui::IsWindowFocused());
 
         ImVec2 viewportPanalSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
 
         uintptr_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
-        ImGui::Image(reinterpret_cast<void*>(textureId),{ m_ViewportSize.x,m_ViewportSize.y },ImVec2(0, 1),ImVec2(1, 0));
+        ImGui::Image(reinterpret_cast<void*>(textureId), { m_ViewportSize.x,m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
 
         ///ImGuizmo 
         if (m_SelectedEntity && m_GuizmoType != -1) {
@@ -129,13 +157,9 @@ namespace Arm {
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
 
-            //Camera
-            Entity cameraEntity               = m_ActiveScene->getPrimaryCameraEntity();
-            const glm::mat4& cameraProjection = cameraEntity.getComponent<CameraComponent>().camera.getProjection();
-            glm::mat4 cameraView              = glm::inverse(cameraEntity.getComponent<TransformComponent>().getTransform());
             //Entity
-            TransformComponent& tc            = m_SelectedEntity.getComponent<TransformComponent>();
-            glm::mat4 transform               = tc.getTransform();
+            TransformComponent& tc = m_SelectedEntity.getComponent<TransformComponent>();
+            glm::mat4 transform = tc.getTransform();
 
             // Snapping
             bool snap = Input::isKeyPressed(Key::LeftControl);
@@ -145,7 +169,8 @@ namespace Arm {
 
             float snapValues[3] = { snapValue, snapValue, snapValue };
 
-            ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+            ImGuizmo::Manipulate(glm::value_ptr(glm::inverse(m_EditorCamera.getTransform())),
+                glm::value_ptr(m_EditorCamera.getProjection()),
                 (ImGuizmo::OPERATION)m_GuizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
                 nullptr, snap ? snapValues : nullptr);
 
@@ -166,15 +191,13 @@ namespace Arm {
 
         ImGui::End();
 
-        ImGui::PopStyleVar();
-
         ImGui::End();
     }
     void EditorLayer::onEvent(Event& e)
     {
         EventDispatcher dispatcher(e);
-
         dispatcher.dispatch<KeyPressedEvent>(ARM_BIND_EVENT_FN(EditorLayer::onKeyPressed));
+        m_EditorCamera.onEvent(e);
     }
     bool EditorLayer::onKeyPressed(KeyPressedEvent& e)
     {
@@ -203,7 +226,7 @@ namespace Arm {
     void EditorLayer::newFile() {
         m_Scenes->clearScenes();
         m_ActiveScene = m_Scenes->createNewScene();
-        m_SceneHierarchyPanal.setContext(m_ActiveScene);
+        m_SceneExplorer.setContext(m_ActiveScene);
     }
     void EditorLayer::openFile() {
         std::string filepath = FileDialog::OpenFile("Armed Asset (*.armed)\0*.armed\0");
@@ -215,7 +238,7 @@ namespace Arm {
                 SceneSerializer::deserialize(m_AssetPack, m_Scenes->getScene(sc.first));
             }
             m_ActiveScene = m_Scenes->getActiveScene();
-            m_SceneHierarchyPanal.setContext(m_ActiveScene);
+            m_SceneExplorer.setContext(m_ActiveScene);
         }
     }
     void EditorLayer::saveFile() {

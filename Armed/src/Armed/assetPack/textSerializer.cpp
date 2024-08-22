@@ -238,7 +238,7 @@ namespace Arm {
                 components.isPrimary = entityData["CameraComponent"]["IsPrimary"].as<bool>();
                 components.hasFixedAspectRatio = entityData["CameraComponent"]["HasFixedAspectRatio"].as<bool>();
 
-                components.projectionType = (Camera::ProjectionType)entityData["CameraComponent"]["Camera"]["ProjectionType"].as<int>();
+                components.projectionType = (SceneCamera::ProjectionType)entityData["CameraComponent"]["Camera"]["ProjectionType"].as<int>();
 
                 components.orthographicSize = entityData["CameraComponent"]["Camera"]["OrthographicSize"].as<float>();
                 components.orthographicNear = entityData["CameraComponent"]["Camera"]["OrthographicNear"].as<float>();

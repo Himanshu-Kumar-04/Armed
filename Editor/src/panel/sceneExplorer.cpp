@@ -1,4 +1,4 @@
-#include "sceneHierarchyPanal.h"
+#include "sceneExplorer.h"
 
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_internal.h>
@@ -7,16 +7,16 @@
 #include <Armed/scene/sceneSerializer.h>
 
 namespace Arm {
-    SceneHierarchyPanal::SceneHierarchyPanal(const Ref<Scene>& context)
+    SceneExplorer::SceneExplorer(const Ref<Scene>& context)
     {
         setContext(context);
     }
-    void SceneHierarchyPanal::setContext(const Ref<Scene>& context)
+    void SceneExplorer::setContext(const Ref<Scene>& context)
     {
         m_Context = context;
         m_SelectionContext = {};
     }
-    void SceneHierarchyPanal::onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack, Entity& selectedEntity)
+    void SceneExplorer::onImGuiRender(Ref<SceneLibrary> scenes, AssetPack& assetPack, Entity& selectedEntity)
     {
         ImGui::Begin("Scene Explorer", 0,  ImGuiWindowFlags_MenuBar);
         
@@ -71,7 +71,7 @@ namespace Arm {
 
         ImGui::End();
     }
-    void SceneHierarchyPanal::drawSceneExplorerMenu(Ref<SceneLibrary> scenes, AssetPack& assetPack)
+    void SceneExplorer::drawSceneExplorerMenu(Ref<SceneLibrary> scenes, AssetPack& assetPack)
     {
         if (ImGui::BeginMenuBar()) {
             
@@ -124,7 +124,7 @@ namespace Arm {
         }
     }
 
-    void SceneHierarchyPanal::drawEntityNode(Entity& entity)
+    void SceneExplorer::drawEntityNode(Entity& entity)
     {
         
     }
@@ -151,10 +151,12 @@ namespace Arm {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
+        
         ImGui::PushFont(boldFont);
         if (ImGui::Button("X", buttonSize))
             components.x = resetValue;
         ImGui::PopFont();
+        
         ImGui::SameLine();
         ImGui::DragFloat("##X", &components.x, 0.1f);
         ImGui::PopItemWidth();
@@ -164,10 +166,12 @@ namespace Arm {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.08f, 0.67f, 0.2f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.06f, 0.8f, 0.2f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.08f, 0.67f, 0.2f, 1.0f });
+        
         ImGui::PushFont(boldFont);
         if (ImGui::Button("Y", buttonSize))
             components.y = resetValue;
         ImGui::PopFont();
+        
         ImGui::SameLine();
         ImGui::DragFloat("##Y", &components.y, 0.1f);
         ImGui::PopItemWidth();
@@ -177,10 +181,12 @@ namespace Arm {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f, 0.2f, 0.8f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.1f, 0.3f, 0.9f, 1.0f });
         ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f, 0.2f, 0.8f, 1.0f });
+        
         ImGui::PushFont(boldFont);
         if (ImGui::Button("Z", buttonSize))
             components.z = resetValue;
         ImGui::PopFont();
+        
         ImGui::SameLine();
         ImGui::DragFloat("##Z", &components.z, 0.1f);
         ImGui::PopItemWidth();
@@ -224,7 +230,7 @@ namespace Arm {
         }
     }
 
-    void SceneHierarchyPanal::drawComponents(Entity& entity)
+    void SceneExplorer::drawComponents(Entity& entity)
     {
         if (entity.hasComponent<TagComponent>()) {
             auto& tag = entity.getComponent<TagComponent>().tag;
@@ -263,7 +269,7 @@ namespace Arm {
                     bool isSelected = currentProjectionTypeString == projectionTypeString[i];
                     if (ImGui::Selectable(projectionTypeString[i], isSelected)) {
                         currentProjectionTypeString = projectionTypeString[i];
-                        camera.setProjectionType((Camera::ProjectionType)i);
+                        camera.setProjectionType((SceneCamera::ProjectionType)i);
                     }
 
                     if (isSelected)
@@ -315,7 +321,7 @@ namespace Arm {
     }
 
     template<typename T>
-    void SceneHierarchyPanal::displayAddComponentEntry(const std::string& tag)
+    void SceneExplorer::displayAddComponentEntry(const std::string& tag)
     {
         if (!m_SelectionContext.hasComponent<T>())
             if (ImGui::MenuItem(tag.c_str())) {

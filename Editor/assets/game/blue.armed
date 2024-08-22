@@ -57,8 +57,8 @@ Entities:
     TagComponent:
       Tag: awewdwewadaww
     TransformComponent:
-      Translation: [0.854765356, 0.406974554, -22.7827396]
-      Rotation: [-1.01927233, 0, 1.5760324]
-      Scale: [16.3310146, 12.6975098, 9.0367794]
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
     SpriteComponent:
       Color: [0.0562305301, 0.275560856, 0.355212331, 1]

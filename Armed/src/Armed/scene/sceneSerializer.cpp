@@ -30,11 +30,11 @@ namespace Arm {
                 componentBlock.hasFixedAspectRatio      = entity.getComponent<CameraComponent>().hasFixedAspectRatio;
                 componentBlock.projectionType           = entity.getComponent<CameraComponent>().camera.getProjectionType();
                 componentBlock.orthographicSize         = entity.getComponent<CameraComponent>().camera.getOrthographicSize();
-                componentBlock.orthographicNear         = entity.getComponent<CameraComponent>().camera.getNearClip(Camera::ProjectionType::orthographic);
-                componentBlock.orthographicFar          = entity.getComponent<CameraComponent>().camera.getFarClip(Camera::ProjectionType::orthographic);
+                componentBlock.orthographicNear         = entity.getComponent<CameraComponent>().camera.getNearClip(SceneCamera::ProjectionType::orthographic);
+                componentBlock.orthographicFar          = entity.getComponent<CameraComponent>().camera.getFarClip(SceneCamera::ProjectionType::orthographic);
                 componentBlock.perspectiveVerticalFOV   = entity.getComponent<CameraComponent>().camera.getPerspectiveVerticalFOV();
-                componentBlock.perspectiveNear          = entity.getComponent<CameraComponent>().camera.getNearClip(Camera::ProjectionType::perspective);
-                componentBlock.perspectiveFar           = entity.getComponent<CameraComponent>().camera.getFarClip(Camera::ProjectionType::perspective);
+                componentBlock.perspectiveNear          = entity.getComponent<CameraComponent>().camera.getNearClip(SceneCamera::ProjectionType::perspective);
+                componentBlock.perspectiveFar           = entity.getComponent<CameraComponent>().camera.getFarClip(SceneCamera::ProjectionType::perspective);
             }
             if (entity.hasComponent<SpriteRendererComponent>()) {
                 componentBlock.componentsPresent.push_back("Sprite");

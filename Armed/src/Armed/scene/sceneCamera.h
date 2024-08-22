@@ -5,6 +5,10 @@ namespace Arm {
 
     class SceneCamera : public Camera {
     public:
+        enum class ProjectionType : uint8_t {
+            orthographic, perspective
+        };
+    public:
         SceneCamera();
         virtual ~SceneCamera() = default;
 

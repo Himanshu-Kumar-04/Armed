@@ -8,9 +8,11 @@ namespace Arm {
 	{
 		switch (Renderer::getAPI())
 		{
-		case RendererAPI::API::None:	break;
+		case RendererAPI::API::None:	return nullptr;
 		case RendererAPI::API::OpenGL:	return CreateScope<GLFW_Window>(props);
 		case RendererAPI::API::Vulkan:  return CreateScope<GLFW_Window>(props);
+		default:
+			return nullptr;
 		}
 	}
 

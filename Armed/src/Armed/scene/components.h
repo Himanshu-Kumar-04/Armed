@@ -5,6 +5,8 @@
 #include "sceneCamera.h"
 #include "Armed/renderer/mesh.h"
 
+#include <glm/gtc/quaternion.hpp>
+
 namespace Arm {
     
     struct IDComponent
@@ -38,9 +40,7 @@ namespace Arm {
         glm::mat4 getTransform() const {
             return glm::translate(glm::mat4(1.0f), translation)
                 
-                * glm::rotate(glm::mat4(1.0f), rotation.x, { 1,0,0 })
-                * glm::rotate(glm::mat4(1.0f), rotation.y, { 0,1,0 })
-                * glm::rotate(glm::mat4(1.0f), rotation.z, { 0,0,1 })
+                * glm::mat4_cast(glm::quat(rotation))
                 
                 * glm::scale(glm::mat4(1.0f), scale);
         }

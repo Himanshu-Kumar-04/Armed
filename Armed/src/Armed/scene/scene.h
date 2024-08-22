@@ -4,9 +4,10 @@
 #include "entt.hpp"
 #include "Armed/core/timestep.h"
 #include "glm/glm.hpp"
+#include "Armed/renderer/editorCamera.h"
 
 namespace Arm {
-    
+
     class Entity;
 
     class Scene {
@@ -14,7 +15,8 @@ namespace Arm {
         Scene(const std::string& sceneName = "Untitled");
         ~Scene();
 
-        void onUpdate(Timestep ts);
+        void onUpdateEditor(Timestep ts, EditorCamera& camera);
+        void onUpdateRuntime(Timestep ts);
         void onViewportResize(uint32_t width, uint32_t height);
 
         std::string& getSceneName() { return m_SceneName; }
@@ -45,9 +47,9 @@ namespace Arm {
 
         friend class Entity;
         friend class SceneSerializer;
-        friend class SceneHierarchyPanal;
+        friend class SceneExplorer;
 
         std::unordered_map<UUID, entt::entity> m_EntityLibrary;
     };
-    
+
 }

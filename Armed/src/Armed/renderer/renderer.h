@@ -11,7 +11,7 @@ namespace Arm {
         static void init();
         static void onWindowResize(uint32_t width, uint32_t height);
 
-        static void beginScene(const Camera& camera, const glm::mat4& transform);
+        static void beginScene(const glm::mat4& projection, const glm::mat4& transform);
         static void endScene();
         static void submit(const glm::mat4& transform, Mesh& mesh);
         static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }

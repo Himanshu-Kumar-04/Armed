@@ -38,8 +38,8 @@ float Arm::SceneCamera::getNearClip()
 {
     switch (m_ProjectionType)
     {
-    case Arm::Camera::ProjectionType::orthographic: return m_OrthographicNear;
-    case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveNear;
+    case Arm::SceneCamera::ProjectionType::orthographic: return m_OrthographicNear;
+    case Arm::SceneCamera::ProjectionType::perspective:  return m_PerspectiveNear;
     }
 }
 
@@ -47,8 +47,8 @@ float Arm::SceneCamera::getNearClip(ProjectionType projectionType)
 {
     switch (projectionType)
     {
-    case Arm::Camera::ProjectionType::orthographic: return m_OrthographicNear;
-    case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveNear;
+    case Arm::SceneCamera::ProjectionType::orthographic: return m_OrthographicNear;
+    case Arm::SceneCamera::ProjectionType::perspective:  return m_PerspectiveNear;
     }
 }
 
@@ -56,8 +56,8 @@ float Arm::SceneCamera::getFarClip()
 {
     switch (m_ProjectionType)
     {
-    case Arm::Camera::ProjectionType::orthographic: return m_OrthographicFar;
-    case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveFar;
+    case Arm::SceneCamera::ProjectionType::orthographic: return m_OrthographicFar;
+    case Arm::SceneCamera::ProjectionType::perspective:  return m_PerspectiveFar;
     }
 }
 
@@ -65,8 +65,8 @@ float Arm::SceneCamera::getFarClip(ProjectionType projectionType)
 {
     switch (projectionType)
     {
-    case Arm::Camera::ProjectionType::orthographic: return m_OrthographicFar;
-    case Arm::Camera::ProjectionType::perspective:  return m_PerspectiveFar;
+    case Arm::SceneCamera::ProjectionType::orthographic: return m_OrthographicFar;
+    case Arm::SceneCamera::ProjectionType::perspective:  return m_PerspectiveFar;
     }
 }
 
@@ -74,11 +74,11 @@ void Arm::SceneCamera::setNearClip(float nearClip)
 {
     switch (m_ProjectionType)
     {
-    case Arm::Camera::ProjectionType::orthographic:
+    case Arm::SceneCamera::ProjectionType::orthographic:
         m_OrthographicNear = nearClip;
         recalculateProjection();
         break;
-    case Arm::Camera::ProjectionType::perspective:
+    case Arm::SceneCamera::ProjectionType::perspective:
         m_PerspectiveNear = nearClip;
         recalculateProjection();
         break;
@@ -89,11 +89,11 @@ void Arm::SceneCamera::setFarClip(float farClip)
 {
     switch (m_ProjectionType)
     {
-    case Arm::Camera::ProjectionType::orthographic:
+    case Arm::SceneCamera::ProjectionType::orthographic:
         m_OrthographicFar = farClip;
         recalculateProjection();
         break;
-    case Arm::Camera::ProjectionType::perspective:
+    case Arm::SceneCamera::ProjectionType::perspective:
         m_PerspectiveFar = farClip;
         recalculateProjection();
         break;

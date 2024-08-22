@@ -4,10 +4,10 @@
 
 
 namespace Arm {
-    class SceneHierarchyPanal{
+    class SceneExplorer{
     public:
-        SceneHierarchyPanal() = default;
-        SceneHierarchyPanal(const Ref<Scene>& context);
+        SceneExplorer() = default;
+        SceneExplorer(const Ref<Scene>& context);
         void setContext(const Ref<Scene>& context);
         Ref<Scene> getContext() { return m_Context; }
         Entity getSelectedEntity() const { return m_SelectionContext; }

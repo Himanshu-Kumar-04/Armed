@@ -1,6 +1,6 @@
 #pragma once
 #include<armed.h>
-#include "panel/sceneHierarchyPanal.h"
+#include "panel/sceneExplorer.h"
 
 namespace Arm {
     class EditorLayer : public Layer {
@@ -19,16 +19,19 @@ namespace Arm {
         void openFile();
         void saveFile();
     private:
+        enum class SceneState {
+            Edit = 0, Simulate = 1, Runtime = 2
+        };
+    private:
         AssetPack m_AssetPack;
         Ref<FrameBuffer> m_FrameBuffer;
         Ref<SceneLibrary> m_Scenes = CreateRef<SceneLibrary>();
-
+        EditorCamera m_EditorCamera;
         Ref<Scene> m_ActiveScene;
         Entity m_SelectedEntity;
-        Entity m_EditorCamera;
-
+        SceneState m_SceneState = SceneState::Edit;
         //panals.......
-        SceneHierarchyPanal m_SceneHierarchyPanal;
+        SceneExplorer m_SceneExplorer;
 
 
         glm::vec2 m_ViewportSize = { 400.0f,400.0f };

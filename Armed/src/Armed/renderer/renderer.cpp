@@ -39,9 +39,9 @@ namespace Arm {
         RenderCommand::setViewport(0, 0, width, height);
     }
 
-    void Renderer::beginScene(const Camera& camera, const glm::mat4& transform)
+    void Renderer::beginScene(const glm::mat4& projection, const glm::mat4& transform)
     {
-        s_R3DData.shader->setMat4("u_ViewProjection", camera.getProjection() * glm::inverse(transform));
+        s_R3DData.shader->setMat4("u_ViewProjection", projection * glm::inverse(transform));
     }
     void Renderer::endScene()
     {

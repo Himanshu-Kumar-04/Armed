@@ -19,7 +19,35 @@ namespace Arm {
     {
     }
 
-    void Scene::onUpdate(Timestep ts)
+    void Scene::onUpdateEditor(Timestep ts, EditorCamera& camera)
+    {
+        Renderer::beginScene(camera.getProjection(), camera.getTransform());
+        RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+        RenderCommand::clearColor();
+        RenderCommand::enableDepthTest();
+        
+
+        if (m_Registry.view<MeshComponent>().empty()) {
+            Renderer2D::beginBatch();
+            auto group = m_Registry.group<SpriteRendererComponent>(entt::get<TransformComponent>);
+            for (auto entity : group) {
+                auto [tc, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+                Renderer2D::drawQuad(tc.getTransform(), sprite.color);
+            }
+            Renderer2D::flush();
+        }
+        else {
+            auto group = m_Registry.group<MeshComponent>(entt::get<TransformComponent>);
+            for (auto entity : group) {
+                auto [tc, mc] = group.get<TransformComponent, MeshComponent>(entity);
+                Renderer::submit(tc.getTransform(), mc.mesh);
+            }
+        }
+
+        Renderer::endScene();
+    }
+
+    void Scene::onUpdateRuntime(Timestep ts)
     {
         {
             m_Registry.view<NativeScriptComponent>().each([&](auto entity, auto& msc) {
