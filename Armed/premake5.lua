@@ -58,7 +58,6 @@ project "Armed"
 
 		defines{
 			"ARMED_PLATFORM_WINDOWS",
-			"_CRT_SECURE_NO_WARNINGS"
 		}
 
 	filter "configurations:Debug"
