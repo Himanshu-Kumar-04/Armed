@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Armed/core/core.h"
-#include"Armed/core/Application.h"
+#include "Armed/core/Application.h"
 
 #include "Armed/core/timestep.h"
-#include"Armed/core/layer.h"
-#include"Armed/core/input.h"
-#include"Armed/core/keyCodes.h"
-#include"Armed/core/mouseCodes.h"
-#include"Armed/imGui/imGuiLayer.h"
+#include "Armed/core/layer.h"
+#include "Armed/core/input.h"
+#include "Armed/core/keyCodes.h"
+#include "Armed/core/mouseCodes.h"
+#include "Armed/imGui/imGuiLayer.h"
 
 //---ECS----------------
 

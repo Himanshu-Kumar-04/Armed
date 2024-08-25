@@ -136,8 +136,6 @@ namespace Arm {
 
     void Renderer2D::endScene()
     {
-   
-
         flush();
     }
 

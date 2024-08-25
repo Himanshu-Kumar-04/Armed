@@ -1,5 +1,6 @@
 #pragma once
 #include "Armed/renderer/texture.h"
+#include "Armed/core/core.h"
 #include <glad.h>
 
 namespace Arm {
@@ -22,7 +23,7 @@ namespace Arm {
     private:
         std::string m_Path;
         uint32_t m_Width, m_Height;
-        uint32_t m_RendererID;
+        RendererID m_RendererID;
         GLenum m_InternalFormat, m_DataFormat;
     };
 }

@@ -13,6 +13,7 @@ namespace Arm {
     Scene::Scene(const std::string& sceneName)
         :m_SceneName(sceneName)
     {
+        RenderCommand::enableDepthTest();
     }
 
     Scene::~Scene()
@@ -24,7 +25,6 @@ namespace Arm {
         Renderer::beginScene(camera.getProjection(), camera.getTransform());
         RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
         RenderCommand::clearColor();
-        RenderCommand::enableDepthTest();
         
 
         if (m_Registry.view<MeshComponent>().empty()) {
@@ -79,7 +79,6 @@ namespace Arm {
             Renderer::beginScene(mainCamera->getProjection(), cameraTransform);
             RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
             RenderCommand::clearColor();
-            RenderCommand::enableDepthTest();
 
             if (m_Registry.view<MeshComponent>().empty()) {
                 Renderer2D::beginBatch();

@@ -1,6 +1,8 @@
 #pragma once
-#include"Armed/renderer/shader.h"
+#include "Armed/renderer/shader.h"
+#include "Armed/core/core.h"
 #include <glm/glm.hpp>
+
 
 typedef unsigned int GLenum;
 
@@ -36,7 +38,7 @@ namespace Arm {
 		void uploadUniformMat4(const std::string name, const glm::mat4& matrix);
 
 	private:
-		uint32_t m_RendererID;
+		RendererID m_RendererID;
 		std::string m_Name;
 		std::unordered_map<std::string, int32_t> m_UniformLocationCache;
 		const std::string m_FilePath;

@@ -18,8 +18,9 @@ namespace Arm {
     void EditorLayer::onAttach()
     {
         FrameBufferProperties fbProps;
-        fbProps.width = Application::Get().getWindow().getWidth();
-        fbProps.height = Application::Get().getWindow().getHeight();
+        fbProps.attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::Depth };
+        fbProps.width = 1080;
+        fbProps.height = 720;
 
         m_FrameBuffer = FrameBuffer::create(fbProps);
         m_ActiveScene = m_Scenes->createNewScene();
@@ -85,6 +86,8 @@ namespace Arm {
         style.WindowRounding = 0.0f;
         style.WindowBorderSize = 0.0f;
         style.WindowPadding = ImVec2(0.0f, 0.0f);
+        style.TabBarOverlineSize = 0.0f;
+        style.TabRounding = 0.0f;
 
         if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
             window_flags |= ImGuiWindowFlags_NoBackground;
@@ -193,12 +196,14 @@ namespace Arm {
 
         ImGui::End();
     }
+
     void EditorLayer::onEvent(Event& e)
     {
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<KeyPressedEvent>(ARM_BIND_EVENT_FN(EditorLayer::onKeyPressed));
         m_EditorCamera.onEvent(e);
     }
+
     bool EditorLayer::onKeyPressed(KeyPressedEvent& e)
     {
         if (e.IsRepeat())
@@ -223,11 +228,13 @@ namespace Arm {
         }
         return true;
     }
+
     void EditorLayer::newFile() {
         m_Scenes->clearScenes();
         m_ActiveScene = m_Scenes->createNewScene();
         m_SceneExplorer.setContext(m_ActiveScene);
     }
+
     void EditorLayer::openFile() {
         std::string filepath = FileDialog::OpenFile("Armed Asset (*.armed)\0*.armed\0");
         if (!filepath.empty()) {
@@ -241,6 +248,7 @@ namespace Arm {
             m_SceneExplorer.setContext(m_ActiveScene);
         }
     }
+
     void EditorLayer::saveFile() {
         for (auto& scene : m_Scenes->get())
             SceneSerializer::serialize(m_AssetPack, scene.second);

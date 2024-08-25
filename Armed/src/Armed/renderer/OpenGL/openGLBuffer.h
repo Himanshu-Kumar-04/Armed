@@ -1,5 +1,6 @@
 #pragma once
-#include"Armed/renderer/buffer.h"
+#include "Armed/renderer/buffer.h"
+#include "Armed/core/core.h"
 
 namespace Arm {
     class OpenGLVertexBuffer : public VertexBuffer {
@@ -18,8 +19,8 @@ namespace Arm {
         virtual void setLayout(const BufferLayout& layout) override;
         virtual uint32_t getID() const override { return m_VA_RendererID; }
     private:
-        uint32_t m_VB_RendererID;
-        uint32_t m_VA_RendererID;
+        RendererID m_VB_RendererID;
+        RendererID m_VA_RendererID;
         BufferLayout m_Layout;
         Ref<IndexBuffer> m_IndexBuffer;
     };
@@ -31,6 +32,7 @@ namespace Arm {
         virtual uint32_t GetCount() const override { return m_Count; }
         virtual uint32_t getID() const override { return m_RendererID; }
     private:
-        uint32_t m_RendererID,m_Count;
+        RendererID m_RendererID; 
+        uint32_t m_Count;
     };
 }
