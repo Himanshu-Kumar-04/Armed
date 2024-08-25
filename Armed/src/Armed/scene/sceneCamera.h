@@ -6,7 +6,7 @@ namespace Arm {
     class SceneCamera : public Camera {
     public:
         enum class ProjectionType : uint8_t {
-            orthographic, perspective
+            orthographic = 2, perspective = 3
         };
     public:
         SceneCamera();
