@@ -62,11 +62,11 @@ namespace Arm {
                 {
                 case FrameBufferTextureFormat::RGBA8:
                     if (m_Properties.samples > 1) {
-                        glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, (int32_t)m_ColorAttachments.size(), m_ColorAttachments.data());
+                        glCreateTextures(GL_TEXTURE_2D_MULTISAMPLE, static_cast<GLsizei>(m_ColorAttachments.size()), m_ColorAttachments.data());
                         glTextureStorage2DMultisample(m_ColorAttachments[i], m_Properties.samples, GL_RGBA8, m_Properties.width, m_Properties.height, GL_FALSE);
                     }
                     else {
-                        glCreateTextures(GL_TEXTURE_2D, (int32_t)m_ColorAttachments.size(), m_ColorAttachments.data());
+                        glCreateTextures(GL_TEXTURE_2D, static_cast<GLsizei>(m_ColorAttachments.size()), m_ColorAttachments.data());
                         glTextureStorage2D(m_ColorAttachments[i], 1, GL_RGBA8, m_Properties.width, m_Properties.height);
 
                         glTextureParameteri(m_ColorAttachments[i], GL_TEXTURE_MIN_FILTER, GL_LINEAR);
