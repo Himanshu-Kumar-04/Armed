@@ -2,6 +2,8 @@ ValidationToken: ARMED_ASSET_PACK
 Scenes:
   - Name: Untitled
     Data: [9778804027646173725, 11294106176769152283]
+  - Name: Untitled2
+    Data: [8775499009530319526]
 Entities:
   - Entity: 9778804027646173725
     Components: [Tag, Transform, Camera]
@@ -32,3 +34,13 @@ Entities:
       Scale: [2.0291996, 2.85546732, 2.02919984]
     SpriteComponent:
       Color: [0.772200763, 0.235536158, 0.235536158, 1]
+  - Entity: 8775499009530319526
+    Components: [Tag, Transform, Sprite]
+    TagComponent:
+      Tag: __entity__
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteComponent:
+      Color: [1, 1, 1, 1]
