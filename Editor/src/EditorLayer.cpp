@@ -36,6 +36,7 @@ namespace Arm {
 
     void EditorLayer::onUpdate(Timestep ts)
     {
+        m_ActiveScene = m_SceneExplorer.getContext();
         if (FrameBufferProperties props = m_FrameBuffer->getProperties();
             m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
             (props.width != m_ViewportSize.x || props.height != m_ViewportSize.y))
@@ -154,7 +155,8 @@ namespace Arm {
         uintptr_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
         ImGui::Image(reinterpret_cast<void*>(textureId), { m_ViewportSize.x,m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
 
-        ///ImGuizmo 
+        //ImGuizmo 
+        
         if (m_SelectedEntity && m_GuizmoType != -1) {
             ImGuizmo::SetOrthographic(false);
             ImGuizmo::SetDrawlist();
@@ -214,9 +216,9 @@ namespace Arm {
 
         switch (e.getKeyCode())
         {
-        case Key::N: if (control) newFile(); break;
-        case Key::O: if (control) openFile(); break;
-        case Key::S: if (control && shift) saveFile(); break;
+        case Key::N: if (control)           newFile();  break;
+        case Key::O: if (control)           openFile(); break;
+        case Key::S: if (control && shift)  saveFile(); break;
 
         case Key::Q: m_GuizmoType = -1; break;
         case Key::W: m_GuizmoType = ImGuizmo::OPERATION::TRANSLATE; break;
