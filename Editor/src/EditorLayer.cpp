@@ -143,6 +143,7 @@ namespace Arm {
 
         options(options_flag);
 
+        ImGui::ShowDemoWindow();
 
         m_SceneExplorer.onImGuiRender(m_Scenes, m_AssetPack, m_SelectedEntity);
 
@@ -152,7 +153,7 @@ namespace Arm {
         ImVec2 viewportPanalSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanalSize.x, viewportPanalSize.y };
 
-        uintptr_t textureId = m_FrameBuffer->getColorAttachmentRendererID();
+        uintptr_t textureId = m_FrameBuffer->getColorAttachmentRendererID(0);
         ImGui::Image(reinterpret_cast<void*>(textureId), { m_ViewportSize.x,m_ViewportSize.y }, ImVec2(0, 1), ImVec2(1, 0));
 
         //ImGuizmo 

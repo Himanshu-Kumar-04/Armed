@@ -17,7 +17,7 @@ namespace Arm {
         :m_Properties(properties)
     {
         for (FrameBufferTextureProperties props : m_Properties.attachments.attachments) {
-            if (!isDepthFormat(props))
+            if (!isDepthFormat(props.textureFormat))
                 m_ColorAttachmentProperties.emplace_back(props);
             else
                 m_DepthAttachmentProprty = props;
@@ -28,7 +28,7 @@ namespace Arm {
     OpenGLFrameBuffer::~OpenGLFrameBuffer()
     {
         glDeleteFramebuffers(1, &m_RendererID);
-        glDeleteTextures((int32_t)m_ColorAttachments.size(), m_ColorAttachments.data());
+        glDeleteTextures(static_cast<GLsizei>(m_ColorAttachments.size()), m_ColorAttachments.data());
         glDeleteTextures(1, &m_DepthAttachment);
     }
     void OpenGLFrameBuffer::bind()
@@ -40,11 +40,18 @@ namespace Arm {
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+
+    inline uint32_t OpenGLFrameBuffer::getColorAttachmentRendererID(uint32_t index) const 
+    {
+        ARM_ASSERT(index < m_ColorAttachments.size(), "too many color attachments");
+        return m_ColorAttachments[index]; 
+    }
+    
     void OpenGLFrameBuffer::invalidate()
     {
         if (m_RendererID) {
             glDeleteFramebuffers(1, &m_RendererID);
-            glDeleteTextures((int32_t)m_ColorAttachments.size(), m_ColorAttachments.data());
+            glDeleteTextures(static_cast<GLsizei>(m_ColorAttachments.size()), m_ColorAttachments.data());
             glDeleteTextures(1, &m_DepthAttachment);
 
             m_ColorAttachments.clear();
@@ -57,7 +64,7 @@ namespace Arm {
         if (m_ColorAttachmentProperties.size()) {
             m_ColorAttachments.resize(m_ColorAttachmentProperties.size());
 
-            for (uint16_t i = 0; i < m_ColorAttachments.size(); i++) {
+            for (uint32_t i = 0; i < m_ColorAttachments.size(); i++) {
                 switch (m_ColorAttachmentProperties[i].textureFormat)
                 {
                 case FrameBufferTextureFormat::RGBA8:

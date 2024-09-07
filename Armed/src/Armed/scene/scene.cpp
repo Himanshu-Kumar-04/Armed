@@ -32,7 +32,7 @@ namespace Arm {
             auto group = m_Registry.group<SpriteRendererComponent>(entt::get<TransformComponent>);
             for (auto entity : group) {
                 auto [tc, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-                Renderer2D::drawQuad(tc.getTransform(), sprite.color);
+                Renderer2D::drawQuad(tc.getTransform(),sprite.color);
             }
             Renderer2D::flush();
         }

@@ -24,4 +24,12 @@ namespace Arm {
         ARM_ASSERT(false, "Unknown Renderer API");
         return nullptr;
     }
+
+    void TextureLibrary::add(std::string filepath)
+    {
+        for (std::string path : m_Textures)
+            if (path == filepath)
+                return;
+        m_Textures.push_back(filepath);
+    }
 }

@@ -34,20 +34,14 @@ project "Armed"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.VulkanSDK}"
 	}
 	
-	libdirs{
-		"%{LibraryDir.VulkanSDK}"
-	}
-
 	links{
 		"GLFW",
 		"Glad",
 		"ImGui",
 		"opengl32",
 		"yaml-cpp",
-		"%{Library.Vulkan}"
 	}
 
 	filter "files:vendor/ImGuizmo/**.cpp"

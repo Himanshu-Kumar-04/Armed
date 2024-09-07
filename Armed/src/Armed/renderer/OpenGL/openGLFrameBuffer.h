@@ -10,7 +10,7 @@ namespace Arm {
         
         virtual void bind() override;
         virtual void unbind() override;
-        virtual uint32_t getColorAttachmentRendererID(uint32_t index = 0) const override { ARM_ASSERT(index < m_ColorAttachments.size(),"too many color attachments"); return m_ColorAttachments[index]; }
+        virtual uint32_t getColorAttachmentRendererID(uint32_t index = 0) const override;
         virtual const FrameBufferProperties& getProperties() const override { return m_Properties; }
 
         void invalidate();

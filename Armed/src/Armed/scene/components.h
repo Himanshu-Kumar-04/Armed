@@ -58,9 +58,10 @@ namespace Arm {
     struct SpriteRendererComponent {
         glm::vec4 color = glm::vec4(1.0f);
 
+
         SpriteRendererComponent() = default;
         SpriteRendererComponent(const SpriteRendererComponent&) = default;
-        SpriteRendererComponent(const glm::vec4& _color)
+        SpriteRendererComponent(const glm::vec4& _color )
             :color(_color) {}
     };
 
